@@ -3,6 +3,7 @@ package driver;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screens.MainMenu;
@@ -68,17 +69,17 @@ public class Driver extends StateBasedGame{
 	 * 
 	 * @param args - command line arguments
 	 */
-	public static void main(String[] args){
-		AppGameContainer container;
+	public static void main(String Args[]) throws SlickException {
+		Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);
+		AppGameContainer app = new AppGameContainer(new Driver("TEST"));
+		app.setVSync(true);
+		app.setTargetFrameRate(60);
+		app.setMinimumLogicUpdateInterval(30);
 		try{
-			container = new AppGameContainer(new Driver("TEST"));
-			container.setDisplayMode(container.getScreenWidth(), container.getScreenHeight(), true);
-			container.setShowFPS(false);
-			container.setTargetFrameRate(60);
-			container.setAlwaysRender(true);
-			container.start();
-		}catch(Exception e){
-			e.printStackTrace();
+			app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
+		}catch(SlickException e){
+			app.setDisplayMode(1280, 800, true);
 		}
+		app.start();
 	}
 }

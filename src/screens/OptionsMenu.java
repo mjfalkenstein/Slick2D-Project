@@ -105,6 +105,12 @@ public class OptionsMenu extends BasicGameState{
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		int counter = 1;
 		
+		buttonWidth = 220;
+		buttonHeight = 30;
+		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
+		buttonYOffset = (int)(gc.getHeight() * 0.5f);
+		buttonYGap = (int)(gc.getHeight() * 0.075f);
+		
 		mouseX = gc.getInput().getMouseX();
 		mouseY = gc.getInput().getMouseY();
 		

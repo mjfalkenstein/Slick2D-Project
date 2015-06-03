@@ -7,6 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import screens.MainMenu;
 import screens.OptionsMenu;
+import screens.ResolutionsMenu;
 import screens.VideoOptionsMenu;
 
 /**
@@ -20,6 +21,7 @@ public class Driver extends StateBasedGame{
 	public static final int MAIN_MENU = 0;
 	public static final int OPTIONS_MENU = 1;
 	public static final int VIDEO_OPTIONS_MENU = 2;
+	public static final int RESOLUTIONS_MENU = 3;
 
 	/**
 	 * Constructor
@@ -53,6 +55,7 @@ public class Driver extends StateBasedGame{
 		addState(mainMenu);
 		addState(new OptionsMenu(mainMenu));
 		addState(new VideoOptionsMenu(mainMenu));
+		addState(new ResolutionsMenu(mainMenu));
 		
 		enterState(MAIN_MENU);
 	}

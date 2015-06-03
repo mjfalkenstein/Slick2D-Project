@@ -1,9 +1,13 @@
-package drivers;
+package driver;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import screens.MainMenu;
+import screens.OptionsMenu;
+import screens.VideoOptionsMenu;
 
 /**
  * The main driver class, initializes all the game states and handles the initial display mode
@@ -12,6 +16,10 @@ public class Driver extends StateBasedGame{
 	
 	StateBasedGame game;
 	GameContainer gc;
+	
+	public static final int MAIN_MENU = 0;
+	public static final int OPTIONS_MENU = 1;
+	public static final int VIDEO_OPTIONS_MENU = 2;
 
 	/**
 	 * Constructor
@@ -41,9 +49,12 @@ public class Driver extends StateBasedGame{
 	 * Used to initialize all of the other screens in the game
 	 */
 	public void initStatesList(GameContainer gc) throws SlickException {
-		addState(new MainMenu());
+		MainMenu mainMenu = new MainMenu();
+		addState(mainMenu);
+		addState(new OptionsMenu(mainMenu));
+		addState(new VideoOptionsMenu(mainMenu));
 		
-		enterState(new MainMenu().getID());
+		enterState(MAIN_MENU);
 	}
 	
 	/**

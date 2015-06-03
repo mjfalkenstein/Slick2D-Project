@@ -1,4 +1,4 @@
-package drivers;
+package screens;
 
 import java.awt.Font;
 import java.io.InputStream;
@@ -13,6 +13,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
+import driver.Driver;
 import utils.BackgroundBarsAnimation;
 import utils.SimpleButton;
 
@@ -20,28 +21,31 @@ import utils.SimpleButton;
  * The Main Menu screen for the game
  */
 public class MainMenu extends BasicGameState {
-	
+
 	//all buttons to be displayed on the Main Menu
 	SimpleButton newGame, loadGame, options, quit;
-	
+
 	//the background color and the text color of the buttons
 	Color background = Color.black;
 	Color textColor = Color.lightGray;
-	
+
 	//various formatting helpers for the buttons
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
-	
+
 	TrueTypeFont font;
 	float fontSize = 24f;
-	
+
 	//a container for all the buttons on the screen
 	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-	
+
 	//it's handy to have a global pointer to the game object
-	GameContainer game;
-	
+	GameContainer gc;
+	StateBasedGame sbg;
+
 	//the bars that float in the background
-	BackgroundBarsAnimation backgroundAnimation;
+	public BackgroundBarsAnimation backgroundAnimation;
+
+	int mouseX, mouseY;
 
 	/**
 	 * Called on program start-up
@@ -49,8 +53,10 @@ public class MainMenu extends BasicGameState {
 	 * Used to initialize all necessary data for the screen to run
 	 */
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
-		game = gc;
-		
+		this.gc = gc;
+		this.sbg = sbg;
+
+		//loading the font
 		try{
 			InputStream is = ResourceLoader.getResourceAsStream("Squared Display.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -59,20 +65,20 @@ public class MainMenu extends BasicGameState {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
-		
+
 		buttonWidth = 220;
 		buttonHeight = 30;
 		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
 		buttonYOffset = (int)(gc.getHeight() * 0.5f);
 		buttonYGap = (int)(gc.getHeight() * 0.075f);
-		
+
 		newGame = new SimpleButton(0, 0, buttonWidth, buttonHeight, "New Game");
 		loadGame = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Load Game");
 		options = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Options");
 		quit = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Quit");
-		
+
 		buttons.add(newGame);
 		buttons.add(loadGame);
 		buttons.add(options);
@@ -86,13 +92,12 @@ public class MainMenu extends BasicGameState {
 	 */
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		backgroundAnimation.draw(g);
-		
+
 		g.setFont(font);
-		
-		newGame.draw(g, background, textColor);
-		loadGame.draw(g, background, textColor);
-		options.draw(g, background, textColor);
-		quit.draw(g, background, textColor);
+
+		for(SimpleButton b : buttons){
+			b.draw(g, background, textColor);
+		}
 	}
 
 	/**
@@ -101,19 +106,22 @@ public class MainMenu extends BasicGameState {
 	 * Used to update all necessary data, ie mouse position
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
-		int mouseX, mouseY;
 		int counter = 1;
-		
+
 		mouseX = gc.getInput().getMouseX();
 		mouseY = gc.getInput().getMouseY();
-		
+
 		for(SimpleButton b : buttons){
 			b.move(buttonXOffset, buttonYOffset + (counter * buttonYGap));
+			if(b == quit){
+				counter++;
+				b.move(buttonXOffset, buttonYOffset + (counter * buttonYGap));
+			}
 			counter++;
 			b.hover(mouseX, mouseY);
 		}
 	}
-	
+
 	/**
 	 * Called upon mouse button release (as opposed to mouse button press)
 	 * 
@@ -121,13 +129,13 @@ public class MainMenu extends BasicGameState {
 	 */
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
-			for(SimpleButton b : buttons){
-				if(b.hover(x, y)){
-					System.out.println("You clicked: " + b.getText());
-					if(b == quit){
-						game.exit();
-					}
+			if(quit.hover(x, y)){
+				gc.exit();
+			}else if(options.hover(x, y)){
+				for(SimpleButton b2 : buttons){
+					b2.reset();
 				}
+				sbg.enterState(Driver.OPTIONS_MENU);
 			}
 		}
 	}

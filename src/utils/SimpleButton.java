@@ -110,6 +110,13 @@ public class SimpleButton {
 		if(highlight.getWidth() <= 0)
 			highlight.setLocation(body.getX() + body.getWidth()/2, y);
 	}
+	
+	/**
+	 * Called upon leaving a screen to reset the highlight animation
+	 */
+	public void reset(){
+		highlight.setWidth(0);
+	}
 
 	/**
 	 * Accessor

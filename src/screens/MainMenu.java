@@ -120,6 +120,8 @@ public class MainMenu extends BasicGameState {
 			counter++;
 			b.hover(mouseX, mouseY);
 		}
+		
+		System.out.printf("Mouse pos: (%d, %d)\n", mouseX, mouseY);
 	}
 
 	/**

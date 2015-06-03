@@ -120,7 +120,7 @@ public class ResolutionsMenu extends BasicGameState{
 		
 		back.draw(g, background, textColor);
 		
-		g.drawString("Select Resolution", buttonXOffset + buttonWidth - g.getFont().getWidth("SelectResolution"), buttonYOffset);
+		g.drawString("Select Resolution", buttonXOffset + buttonWidth - g.getFont().getWidth("Select Resolution"), buttonYOffset);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class ResolutionsMenu extends BasicGameState{
 			}
 		}
 
-		back.move(buttonXOffset, buttonYOffset + ((yCounter + 1) * buttonYGap));
+		back.move(buttonXOffset, buttonYOffset + (yCounter * buttonYGap));
 		back.hover(mouseX, mouseY);
 	}
 

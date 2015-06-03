@@ -98,6 +98,8 @@ public class VideoOptionsMenu extends BasicGameState{
 		for(SimpleButton b : buttons){
 			b.draw(g, background, textColor);
 		}
+		
+		g.drawString("Video Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Video Options"), buttonYOffset);
 	}
 
 	/**

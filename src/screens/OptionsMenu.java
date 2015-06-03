@@ -95,6 +95,8 @@ public class OptionsMenu extends BasicGameState{
 		for(SimpleButton b : buttons){
 			b.draw(g, background, textColor);
 		}
+		
+		g.drawString("Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Options"), buttonYOffset);
 	}
 
 	/**

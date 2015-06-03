@@ -1,13 +1,17 @@
 package drivers;
 
+import java.awt.Font;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 import utils.BackgroundBarsAnimation;
 import utils.SimpleButton;
@@ -27,6 +31,9 @@ public class MainMenu extends BasicGameState {
 	//various formatting helpers for the buttons
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 	
+	TrueTypeFont font;
+	float fontSize = 24f;
+	
 	//a container for all the buttons on the screen
 	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
 	
@@ -44,9 +51,18 @@ public class MainMenu extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
 		game = gc;
 		
+		try{
+			InputStream is = ResourceLoader.getResourceAsStream("Squared Display.ttf");
+			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
+			awtFont = awtFont.deriveFont(fontSize);
+			font = new TrueTypeFont(awtFont, false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 		
-		buttonWidth = 200;
+		buttonWidth = 220;
 		buttonHeight = 30;
 		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
 		buttonYOffset = (int)(gc.getHeight() * 0.5f);
@@ -70,6 +86,8 @@ public class MainMenu extends BasicGameState {
 	 */
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		backgroundAnimation.draw(g);
+		
+		g.setFont(font);
 		
 		newGame.draw(g, background, textColor);
 		loadGame.draw(g, background, textColor);

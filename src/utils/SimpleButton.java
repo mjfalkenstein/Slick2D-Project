@@ -35,8 +35,8 @@ public class SimpleButton {
 	public SimpleButton(int x, int y, int width, int height, String text) {
 		this.text = text;
 		body      = new Rectangle(x, y, width, height);
-		bodyL     = new Rectangle(x, y, width/3, height);
-		bodyR     = new Rectangle(x + 2 * width/3, y, width/3 + 1, height);
+		bodyL     = new Rectangle(x, y, width/5, height);
+		bodyR     = new Rectangle(x + 4 * width/5, y, width/5 + 1, height);
 		top       = new Rectangle(x, y, width, height/10);
 		bottom    = new Rectangle(x, y + 9 * body.getHeight()/10, width, height/10);
 		highlight = new Rectangle(x + body.getWidth()/2, y, 0, height);
@@ -68,7 +68,7 @@ public class SimpleButton {
 		g.fill(bodyR, new GradientFill(bodyR.getX(), bodyR.getY(), Color.transparent, bodyR.getX() + bodyR.getWidth(), bodyR.getY(), background));
 
 		g.setColor(textColor);
-		g.drawString(text, body.getX() + body.getWidth()/2 - g.getFont().getWidth(text)/2, body.getY() + body.getHeight()/2 - g.getFont().getHeight(text) + 6);
+		g.drawString(text, body.getX() + body.getWidth()/2 - g.getFont().getWidth(text)/2, body.getY() + body.getHeight()/2 - g.getFont().getHeight(text)/2);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public class SimpleButton {
 	public void move(int x, int y){
 		body.setLocation(x, y);
 		bodyL.setLocation(x, y);
-		bodyR.setLocation(body.getX() + body.getWidth() * 2/3, y);
+		bodyR.setLocation(body.getX() + body.getWidth() * 4/5, y);
 		top.setLocation(x, y);
 		bottom.setLocation(x, y + 9 * body.getHeight()/10);
 		if(highlight.getWidth() <= 0)

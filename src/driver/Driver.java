@@ -72,6 +72,7 @@ public class Driver extends StateBasedGame{
 	public static void main(String Args[]) throws SlickException {
 		Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);
 		AppGameContainer app = new AppGameContainer(new Driver("TEST"));
+		app.setShowFPS(false);
 		app.setVSync(true);
 		app.setTargetFrameRate(60);
 		app.setMinimumLogicUpdateInterval(30);

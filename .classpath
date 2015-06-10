@@ -4,12 +4,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Slick2D">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Mike/Documents/Workspace/Slick2D-Project/lwjgl-2.9.3/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Slick2D-Project/lwjgl-2.9.3/native/linux"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Mike/Documents/Workspace/Slick2D-Project/Slick/lib/jinput.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Mike/Documents/Workspace/Slick2D-Project/Slick/lib/lwjgl.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Mike/Documents/Workspace/Slick2D-Project/Slick/lib/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Mike/Documents/Workspace/Slick2D-Project/Slick/lib/slick.jar"/>
+	<classpathentry kind="lib" path="Slick/lib/slick.jar"/>
+	<classpathentry kind="lib" path="Slick/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="Slick/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="Slick/lib/lwjgl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

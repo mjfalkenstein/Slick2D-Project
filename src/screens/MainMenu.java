@@ -110,6 +110,10 @@ public class MainMenu extends BasicGameState {
 
 		mouseX = gc.getInput().getMouseX();
 		mouseY = gc.getInput().getMouseY();
+		
+		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
+		buttonYOffset = (int)(gc.getHeight() * 0.5f);
+		buttonYGap = (int)(gc.getHeight() * 0.075f);
 
 		for(SimpleButton b : buttons){
 			b.move(buttonXOffset, buttonYOffset + (counter * buttonYGap));
@@ -121,7 +125,7 @@ public class MainMenu extends BasicGameState {
 			b.hover(mouseX, mouseY);
 		}
 		
-		System.out.printf("Mouse pos: (%d, %d)\n", mouseX, mouseY);
+		//System.out.printf("Mouse pos: (%d, %d)\n", mouseX, mouseY);
 	}
 
 	/**
@@ -146,7 +150,7 @@ public class MainMenu extends BasicGameState {
 	 * The unique ID for this screen, must be different for all over BasicGameStates
 	 */
 	public int getID() {
-		return 0;
+		return Driver.MAIN_MENU;
 	}
 
 }

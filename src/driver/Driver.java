@@ -10,6 +10,7 @@ import screens.MainMenu;
 import screens.OptionsMenu;
 import screens.ResolutionsMenu;
 import screens.VideoOptionsMenu;
+import screens.SoundMenu;
 
 /**
  * The main driver class, initializes all the game states and handles the initial display mode
@@ -23,6 +24,7 @@ public class Driver extends StateBasedGame{
 	public static final int OPTIONS_MENU = 1;
 	public static final int VIDEO_OPTIONS_MENU = 2;
 	public static final int RESOLUTIONS_MENU = 3;
+	public static final int SOUND_MENU = 4;
 
 	/**
 	 * Constructor
@@ -57,6 +59,7 @@ public class Driver extends StateBasedGame{
 		addState(new OptionsMenu(mainMenu));
 		addState(new VideoOptionsMenu(mainMenu));
 		addState(new ResolutionsMenu(mainMenu));
+		addState(new SoundMenu(mainMenu));
 		
 		enterState(MAIN_MENU);
 	}
@@ -74,6 +77,7 @@ public class Driver extends StateBasedGame{
 		AppGameContainer app = new AppGameContainer(new Driver("TEST"));
 		app.setShowFPS(false);
 		app.setVSync(true);
+		app.setAlwaysRender(true);
 		app.setTargetFrameRate(60);
 		app.setMinimumLogicUpdateInterval(30);
 		try{

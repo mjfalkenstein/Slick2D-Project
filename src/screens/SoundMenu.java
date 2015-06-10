@@ -13,39 +13,38 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
-import driver.Driver;
+import utils.SlideBar;
 import utils.SimpleButton;
+import driver.Driver;
 
-/**
- * This is a simple options menu with buttons that lead to other menus with the actual options
- */
-public class VideoOptionsMenu extends BasicGameState{
+public class SoundMenu extends BasicGameState{
 	
 	MainMenu mainMenu;
-	
-	SimpleButton toggleFPS, toggleFullscreen, resolutions, back;
-	
-	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
-
+	SlideBar master, sfx, music;
+	ArrayList<SlideBar> bars = new ArrayList<SlideBar>();
+	int barWidth, barHeight, barGap, barXOffset, barYOffset;
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
+	SimpleButton back;
 	
 	Color background = Color.black;
 	Color textColor = Color.lightGray;
 	
-	int mouseX, mouseY;
+	float masterVolume, sfxVolume, musicVolume;
+	
+	Font awtFont;
+	TrueTypeFont font;
+	
+	float fontSize = 24f;
 	
 	GameContainer gc;
 	StateBasedGame sbg;
-	
-	TrueTypeFont font;
-	float fontSize = 24f;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param mainMenu - an instance of the Main Menu
 	 */
-	public VideoOptionsMenu(MainMenu mainMenu){
+	public SoundMenu(MainMenu mainMenu){
 		this.mainMenu = mainMenu;
 	}
 
@@ -55,8 +54,8 @@ public class VideoOptionsMenu extends BasicGameState{
 	 * Used to initialize all necessary data for the screen to run
 	 */
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
-		this.sbg = sbg;
 		this.gc = gc;
+		this.sbg = sbg;
 		
 		//loading the font
 		try{
@@ -67,22 +66,28 @@ public class VideoOptionsMenu extends BasicGameState{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		 
+		
 		buttonWidth = 220;
 		buttonHeight = 30;
 		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
 		buttonYOffset = (int)(gc.getHeight() * 0.5f);
 		buttonYGap = (int)(gc.getHeight() * 0.075f);
 		
-		toggleFPS = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Toggle FPS");
-		toggleFullscreen = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Toggle Fullscreen");
-		resolutions = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Set Resolution");
-		back = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
+		barWidth = gc.getWidth() * 1/3;
+		barHeight = gc.getHeight() * 1/50;
+		barGap = barHeight * 2;
+		barXOffset = gc.getWidth() * 5/10;
+		barYOffset = gc.getHeight() * 1/2;
 		
-		buttons.add(toggleFPS);
-		buttons.add(toggleFullscreen);
-		buttons.add(resolutions);
-		buttons.add(back);
+		master = new SlideBar(0, 0, barWidth, barHeight);
+		sfx = new SlideBar(0, 0, barWidth, barHeight);
+		music = new SlideBar(0, 0, barWidth, barHeight);
+		
+		bars.add(master);
+		bars.add(sfx);
+		bars.add(music);
+		
+		back = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 	}
 
 	/**
@@ -95,35 +100,39 @@ public class VideoOptionsMenu extends BasicGameState{
 		
 		g.setFont(font);
 		
-		for(SimpleButton b : buttons){
-			b.draw(g, background, textColor);
+		g.setColor(textColor);
+		g.drawString("Master Volume: " + (int)(master.getValue() * 100) + "%", master.getX(), master.getY()-g.getFont().getLineHeight());
+		g.drawString("SFX Volume: " + (int)(sfx.getValue() * 100) + "%", sfx.getX(), sfx.getY()-g.getFont().getLineHeight());
+		g.drawString("Music Volume: " + (int)(music.getValue() * 100) + "%", music.getX(), music.getY()-g.getFont().getLineHeight());
+		
+		for(SlideBar b : bars){
+			b.draw(g);
 		}
 		
-		g.drawString("Video Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Video Options"), buttonYOffset);
+		back.draw(g, background, textColor);
 	}
 
 	/**
 	 * Called once every frame
 	 * 
-	 * Used to update all necessary data, ie mouse position
+	 * Used to update all necessary data, ie mouse positionbarXOffset
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		int counter = 1;
 		
-		buttonWidth = 220;
-		buttonHeight = 30;
-		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
-		buttonYOffset = (int)(gc.getHeight() * 0.5f);
-		buttonYGap = (int)(gc.getHeight() * 0.075f);
+		int mouseX = gc.getInput().getMouseX();
+		int mouseY = gc.getInput().getMouseY();
 		
-		mouseX = gc.getInput().getMouseX();
-		mouseY = gc.getInput().getMouseY();
-		
-		for(SimpleButton b : buttons){
-			b.move(buttonXOffset, buttonYOffset + (counter * buttonYGap));
+		for(SlideBar b : bars){
+			b.move(buttonXOffset - (barWidth - buttonWidth), barYOffset + (counter * (barGap + barHeight)));
+			if(b.getValue() > 0.99){
+				b.setValue(1);
+			}
 			counter++;
-			b.hover(mouseX, mouseY);
 		}
+		
+		back.move(buttonXOffset, buttonYOffset + (4 * buttonYGap));
+		back.hover(mouseX, mouseY);
 	}
 	
 	/**
@@ -134,23 +143,14 @@ public class VideoOptionsMenu extends BasicGameState{
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
 			if(back.hover(x, y)){
-				for(SimpleButton b : buttons){
-					b.reset();
-				}
+				back.reset();
 				sbg.enterState(Driver.OPTIONS_MENU);
-			}else if(toggleFPS.hover(x, y)){
-				gc.setShowFPS(!gc.isShowingFPS());
-			}else if(toggleFullscreen.hover(x, y)){
-				try {
-					gc.setFullscreen(!gc.isFullscreen());
-				} catch (SlickException e) {
-					e.printStackTrace();
-				}
-			}else if(resolutions.hover(x, y)){
-				for(SimpleButton b : buttons){
-					b.reset();
-				}
-				sbg.enterState(Driver.RESOLUTIONS_MENU);
+			}else if(master.hover(x, y)){
+				masterVolume = master.getValue();
+			}else if(sfx.hover(x, y)){
+				sfxVolume = sfx.getValue();
+			}else if(music.hover(x, y)){
+				musicVolume = music.getValue();
 			}
 		}
 	}
@@ -159,7 +159,7 @@ public class VideoOptionsMenu extends BasicGameState{
 	 * The unique ID for this screen, must be different for all over BasicGameStates
 	 */
 	public int getID() {
-		return Driver.VIDEO_OPTIONS_MENU;
+		return Driver.SOUND_MENU;
 	}
 
 }

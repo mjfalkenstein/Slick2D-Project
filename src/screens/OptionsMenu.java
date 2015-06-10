@@ -128,7 +128,7 @@ public class OptionsMenu extends BasicGameState{
 	 * 
 	 * Used as an event handler
 	 */
-	public void mousePressed(int button, int x, int y){
+	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
 			if(back.hover(x, y)){
 				for(SimpleButton b : buttons){
@@ -140,6 +140,11 @@ public class OptionsMenu extends BasicGameState{
 					b.reset();
 				}
 				sbg.enterState(Driver.VIDEO_OPTIONS_MENU);
+			}else if(soundOptions.hover(x, y)){
+				for(SimpleButton b : buttons){
+					b.reset();
+				}
+				sbg.enterState(Driver.SOUND_MENU);
 			}
 		}
 	}
@@ -148,7 +153,7 @@ public class OptionsMenu extends BasicGameState{
 	 * The unique ID for this screen, must be different for all over BasicGameStates
 	 */
 	public int getID() {
-		return 1;
+		return Driver.OPTIONS_MENU;
 	}
 
 }

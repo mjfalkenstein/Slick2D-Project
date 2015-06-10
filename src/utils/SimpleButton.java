@@ -17,10 +17,6 @@ public class SimpleButton {
 	private String text;
 	
 	//The various rectangles that make up the button
-	//body - invisible, but represents the clickable area of the button
-	//bodyL/bodyR - used for the gradient affect on the sides of the button
-	//highlight - the rectangle that grows and shrinks when the user highlights the button
-	//top/bottom - the white borders at the top and bottom respectively
 	private Rectangle body, bodyL, bodyR, highlight, top, bottom;
 	
 	/**

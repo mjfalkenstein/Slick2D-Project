@@ -1,7 +1,5 @@
-package screens;
+package menuScreens;
 
-import java.awt.Font;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -11,7 +9,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 import driver.Driver;
 import utils.SimpleButton;
@@ -28,8 +25,8 @@ public class OptionsMenu extends BasicGameState{
 
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 	
-	Color background = Color.black;
 	Color textColor = Color.lightGray;
+	Color background;
 	
 	int mouseX, mouseY;
 	
@@ -54,16 +51,6 @@ public class OptionsMenu extends BasicGameState{
 	 */
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
 		this.sbg = sbg;
-		
-		//loading the font
-		try{
-			InputStream is = ResourceLoader.getResourceAsStream("Squared Display.ttf");
-			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
-			awtFont = awtFont.deriveFont(fontSize);
-			font = new TrueTypeFont(awtFont, false);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 		 
 		buttonWidth = 220;
 		buttonHeight = 30;
@@ -89,8 +76,10 @@ public class OptionsMenu extends BasicGameState{
 	 */
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		mainMenu.backgroundAnimation.draw(g);
+
+		background = mainMenu.background;
 		
-		g.setFont(font);
+		g.setFont(mainMenu.font);
 		
 		for(SimpleButton b : buttons){
 			b.draw(g, background, textColor);

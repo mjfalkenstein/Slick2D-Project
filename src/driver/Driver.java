@@ -1,16 +1,17 @@
 package driver;
 
+import levels.Level0;
+import menuScreens.MainMenu;
+import menuScreens.OptionsMenu;
+import menuScreens.ResolutionsMenu;
+import menuScreens.SoundMenu;
+import menuScreens.VideoOptionsMenu;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.state.StateBasedGame;
-
-import screens.MainMenu;
-import screens.OptionsMenu;
-import screens.ResolutionsMenu;
-import screens.VideoOptionsMenu;
-import screens.SoundMenu;
 
 /**
  * The main driver class, initializes all the game states and handles the initial display mode
@@ -20,11 +21,12 @@ public class Driver extends StateBasedGame{
 	StateBasedGame game;
 	GameContainer gc;
 	
-	public static final int MAIN_MENU = 0;
-	public static final int OPTIONS_MENU = 1;
-	public static final int VIDEO_OPTIONS_MENU = 2;
-	public static final int RESOLUTIONS_MENU = 3;
-	public static final int SOUND_MENU = 4;
+	public static final int MAIN_MENU         	 	= 0;
+	public static final int OPTIONS_MENU 			= 1;
+	public static final int VIDEO_OPTIONS_MENU		= 2;
+	public static final int RESOLUTIONS_MENU 		= 3;
+	public static final int SOUND_MENU 				= 4;
+	public static final int LEVEL_0					= 5;
 
 	/**
 	 * Constructor
@@ -60,6 +62,7 @@ public class Driver extends StateBasedGame{
 		addState(new VideoOptionsMenu(mainMenu));
 		addState(new ResolutionsMenu(mainMenu));
 		addState(new SoundMenu(mainMenu));
+		addState(new Level0());
 		
 		enterState(MAIN_MENU);
 	}
@@ -70,7 +73,7 @@ public class Driver extends StateBasedGame{
 	 * Used to initialize everything in the window, including title, size, etc.
 	 * Will eventually be used for loading saved games, user settings, etc.
 	 * 
-	 * @param args - command line arguments
+	 * @param args - command line arguments, not used
 	 */
 	public static void main(String Args[]) throws SlickException {
 		Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);

@@ -1,7 +1,6 @@
-package screens;
+package menuScreens;
 
 import java.awt.Font;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -11,7 +10,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 import utils.SlideBar;
 import utils.SimpleButton;
@@ -26,7 +24,7 @@ public class SoundMenu extends BasicGameState{
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 	SimpleButton back;
 	
-	Color background = Color.black;
+	Color background;
 	Color textColor = Color.lightGray;
 	
 	float masterVolume, sfxVolume, musicVolume;
@@ -56,16 +54,6 @@ public class SoundMenu extends BasicGameState{
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
 		this.gc = gc;
 		this.sbg = sbg;
-		
-		//loading the font
-		try{
-			InputStream is = ResourceLoader.getResourceAsStream("Squared Display.ttf");
-			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
-			awtFont = awtFont.deriveFont(fontSize);
-			font = new TrueTypeFont(awtFont, false);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 		
 		buttonWidth = 220;
 		buttonHeight = 30;
@@ -97,8 +85,10 @@ public class SoundMenu extends BasicGameState{
 	 */
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		mainMenu.backgroundAnimation.draw(g);
+
+		background = mainMenu.background;
 		
-		g.setFont(font);
+		g.setFont(mainMenu.font);
 		
 		g.setColor(textColor);
 		g.drawString("Master Volume: " + (int)(master.getValue() * 100) + "%", master.getX(), master.getY()-g.getFont().getLineHeight());

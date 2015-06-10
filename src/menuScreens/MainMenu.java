@@ -1,8 +1,9 @@
-package screens;
+package menuScreens;
 
 import java.awt.Font;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -11,6 +12,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.ResourceLoader;
 
 import driver.Driver;
@@ -33,7 +36,7 @@ public class MainMenu extends BasicGameState {
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 
 	TrueTypeFont font;
-	float fontSize = 24f;
+	float fontSize = 12f;
 
 	//a container for all the buttons on the screen
 	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
@@ -58,7 +61,7 @@ public class MainMenu extends BasicGameState {
 
 		//loading the font
 		try{
-			InputStream is = ResourceLoader.getResourceAsStream("Squared Display.ttf");
+			InputStream is = ResourceLoader.getResourceAsStream("HappyKiller.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
 			awtFont = awtFont.deriveFont(fontSize);
 			font = new TrueTypeFont(awtFont, false);
@@ -83,6 +86,14 @@ public class MainMenu extends BasicGameState {
 		buttons.add(loadGame);
 		buttons.add(options);
 		buttons.add(quit);
+		
+		//generate random background color
+		Random r = new Random();
+		String color = Integer.toHexString(r.nextInt(7)) + Integer.toHexString(r.nextInt(7)) + //red
+				       Integer.toHexString(r.nextInt(3)) + Integer.toHexString(r.nextInt(3)) + //green
+				       Integer.toHexString(r.nextInt(10)) + Integer.toHexString(r.nextInt(10));//blue
+		background = Color.decode("#"+color);
+		background.darker(5.0f);
 	}
 
 	/**
@@ -94,6 +105,8 @@ public class MainMenu extends BasicGameState {
 		backgroundAnimation.draw(g);
 
 		g.setFont(font);
+		
+		g.setBackground(background);
 
 		for(SimpleButton b : buttons){
 			b.draw(g, background, textColor);
@@ -142,6 +155,11 @@ public class MainMenu extends BasicGameState {
 					b2.reset();
 				}
 				sbg.enterState(Driver.OPTIONS_MENU);
+			}else if(newGame.hover(x, y)){
+				for(SimpleButton b2 : buttons){
+					b2.reset();
+				}
+				sbg.enterState(Driver.LEVEL_0, new FadeOutTransition(), new FadeInTransition());
 			}
 		}
 	}

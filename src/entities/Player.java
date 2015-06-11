@@ -11,13 +11,12 @@ import org.newdawn.slick.geom.Transform;
 import entities.Entity;
 
 public class Player extends Entity {
-	
-	float maxSpeed = 10;
+
+	float maxSpeed = 15;
 	float gravity = 2;
 
 	public Player(Rectangle boundingBox, Vector2f velocity) {
 		super(boundingBox, velocity);
-		System.out.println("Width: " + width + " Height: " + height);
 	}
 
 	public void update(GameContainer gc, int delta) {
@@ -28,19 +27,26 @@ public class Player extends Entity {
 			setVelocity(velocity.getX() + 1, velocity.getY());
 		}
 		
+		if(velocity.getX() > 0 && !gc.getInput().isKeyDown(Input.KEY_D)){
+			velocity.setX(velocity.getX() - 1);
+		}
+		if(velocity.getX() < 0 && !gc.getInput().isKeyDown(Input.KEY_A)){
+			velocity.setX(velocity.getX() + 1);
+		}
+
 		x += velocity.getX() * delta / gc.getFPS();
 		y += velocity.getY() * delta / gc.getFPS();
-		
+
 		boundingBox.setLocation(x, y);
 	}
 
-	public void move(int x, int y) {
+	public void move(float x, float y) {
 		this.x = x;
 		this.y = y;
-		
+
 		boundingBox.setLocation(x, y);
 	}
-	
+
 	public void rotate(float degrees){
 		boundingBox.transform(Transform.createRotateTransform(degrees));
 	}
@@ -51,15 +57,50 @@ public class Player extends Entity {
 		g.setColor(Color.red);
 		g.fill(boundingBox);
 	}
-	
+
 	public void jump(){
 		velocity.setY(-30.0f);
 	}
-	
+
 	public boolean collide(Entity e, GameContainer gc){
 		if(boundingBox.intersects(e.getBoundingBox())){
-			//TODO: figure out how to calculate which side of the entity the player collides with
-			return true;
+			float yOverlap = (boundingBox.getHeight()/2 + e.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - e.getBoundingBox().getCenterY()));
+			float xOverlap = (boundingBox.getWidth()/2 + e.getBoundingBox().getWidth()/2 - Math.abs((boundingBox.getCenterX() - e.getBoundingBox().getCenterX())));
+			
+			//PLATFORMS
+			if(e instanceof Platform){
+				
+				//whichever overlap is smaller indicates the axis on which the collision occurred
+				//collision occurred on the Y axis
+				if(yOverlap < xOverlap){
+					//player is above the Platform
+					if(boundingBox.getCenterY() < e.getBoundingBox().getCenterY()){
+						setVelocity(velocity.getX(), 0);
+						y = e.getY() - height;
+						return true;
+					//player is below the Platform
+					}if(boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
+						setVelocity(velocity.getX(), 0);
+						y = e.getBoundingBox().getMaxY();
+						return true;
+					}
+
+				//collision occurred on the X axis
+				}if(yOverlap >= xOverlap){
+					//player is to the left of the Platform
+					if(boundingBox.getCenterX() < e.getBoundingBox().getCenterX()){
+						setVelocity(0, velocity.getY());
+						x = e.getX() - boundingBox.getWidth();
+						return true;
+
+					//player is to the right of the Platform
+					}if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
+						setVelocity(0, velocity.getY());
+						x = e.getBoundingBox().getMaxX();
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}

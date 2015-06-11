@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Rectangle;
 public abstract class Entity {
 	
 	protected float x, y, width, height;
+	protected float maxPlayerSpeed = 15;
 	protected Rectangle boundingBox;
 	protected Vector2f velocity;
 	
@@ -23,18 +24,13 @@ public abstract class Entity {
 	
 	public abstract void update(GameContainer gc, int delta);
 	
-	public abstract void move(int x, int y);
+	public abstract void move(float x, float y);
 	
 	public abstract void rotate(float degrees);
 	
 	public abstract void draw(Graphics g);
 
-	public boolean collide(Entity e){
-	    if (boundingBox == null) {
-	        return false;
-	    }
-	    return boundingBox.intersects(e.getBoundingBox());
-	}
+	public abstract boolean collide(Entity e, GameContainer gc);
 	
 	public Rectangle getBoundingBox(){
 		return boundingBox;

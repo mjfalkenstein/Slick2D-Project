@@ -139,4 +139,20 @@ public class SimpleButton {
 	public float getWidth(){
 		return body.getWidth();
 	}
+	
+	public float getX(){
+		return body.getX();
+	}
+	
+	public float getY(){
+		return body.getY();
+	}
+	
+	public float getMaxX(){
+		return body.getMaxX();
+	}
+	
+	public float getMaxY(){
+		return body.getMaxY();
+	}
 }

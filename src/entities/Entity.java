@@ -10,10 +10,10 @@ import org.newdawn.slick.geom.Rectangle;
  */
 public abstract class Entity {
 	
-	protected float x, y, width, height;
+	protected float x, y, width, height, startingX, startingY;
 	protected float maxPlayerSpeed = 15;
 	protected Rectangle boundingBox;
-	protected Vector2f velocity;
+	protected Vector2f velocity, startingVelocity;
 	
 	/**
 	 * Constructor
@@ -25,10 +25,13 @@ public abstract class Entity {
 		super();
 		x = boundingBox.getMinX();
 		y = boundingBox.getMinY();
+		startingX = x;
+		startingY = y;
 		width = boundingBox.getWidth();
 		height = boundingBox.getHeight();
 		this.boundingBox = boundingBox;
 		this.velocity = velocity;
+		startingVelocity = velocity;
 	}
 	
 	/**
@@ -69,7 +72,12 @@ public abstract class Entity {
 	 * 
 	 * @return - true if the collision occurred, false otherwise
 	 */
-	public abstract boolean collide(Entity e, GameContainer gc);
+	public abstract void collide(Entity e, GameContainer gc);
+	
+	/**
+	 * Resets the Entity to its original position, velocity, and states
+	 */
+	public abstract void reset();
 	
 	public Rectangle getBoundingBox(){
 		return boundingBox;

@@ -80,8 +80,8 @@ public class ResolutionsMenu extends BasicGameState{
 		//generating list of supported resolutions and adding them to the list of buttons
 		try{
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
-			if(modes.length > 9){
-				DisplayMode[] temp = new DisplayMode[9];
+			if(modes.length > 6){
+				DisplayMode[] temp = new DisplayMode[6];
 				for(int i = 0; i < 9; i++){
 					temp[i] = modes[i];
 				}
@@ -95,11 +95,13 @@ public class ResolutionsMenu extends BasicGameState{
 		}catch(Exception e){}
 		
 		if(buttons.size() > 6){
-			buttons.subList(0, 5);
+			buttons.subList(buttons.size() - 5, buttons.size());
 		}
 		
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
+		
+		background = Color.black;
 		
 		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, "Change Resolution", "This will change your resolution are you sure you want to continue?");
 	}

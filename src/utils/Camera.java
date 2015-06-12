@@ -37,27 +37,35 @@ public class Camera {
 	public void translate(GameContainer gc, Graphics g, Entity e) {
 
 		//Checking that the player is within bounds of the camera horizontally
-		if(e.getCenterX()-gc.getWidth()/2 < 0){
+		if(e.getCenterX() - gc.getWidth() * 1/2 < 0){
 			dX = 0;
-		}else if(e.getCenterX()-gc.getWidth()/2 > levelWidth){
-			dX = -levelWidth+gc.getWidth();
+		}else if(e.getCenterX() - gc.getWidth() * 1/2 > levelWidth){
+			dX = -levelWidth + gc.getWidth();
 		}else{
-			dX = (int)-e.getCenterX()+gc.getWidth()/2;
+			dX = (int)-e.getCenterX() + gc.getWidth() * 1/2;
 		}
 
 		//checking that the player is within bounds of the camera vertically
-		if(e.getCenterY()-gc.getHeight()/2 < 0){
+		if(e.getCenterY() - gc.getHeight() * 1/2 < 0){
 			dY = 0;
-		}else if(e.getCenterY()+gc.getHeight()/2 > levelHeight){
-			dY = -levelHeight+gc.getHeight();
+		}else if(e.getCenterY() + gc.getHeight() * 1/2 > levelHeight){
+			dY = -levelHeight + gc.getHeight();
 		}else{
-			dY = (int)-e.getCenterY()+gc.getHeight()/2;
+			dY = (int)-e.getCenterY() + gc.getHeight() * 1/2;
 		}
 		
 		//Moving the camera appropriately
 		g.translate(dX, dY);
 		view.setX(-dX);
 		view.setY(-dY);
-
 	}
+	
+	public int getX(){
+		return (int) view.getX();
+	}
+	
+	public int getY(){
+		return (int) view.getY();
+	}
+	
 }

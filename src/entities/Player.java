@@ -18,6 +18,7 @@ public class Player extends Entity {
 	float maxSpeed = 20;
 	float gravity = 2;
 	boolean crouched = false;
+	boolean canJump = false;
 
 	/**
 	 * Constructor
@@ -96,14 +97,23 @@ public class Player extends Entity {
 		g.setColor(Color.red);
 		g.fill(boundingBox);
 	}
-
-	/**
-	 * Causes the player to jump vertically
-	 */
-	public void jump(){
-		velocity.setY(-30.0f);
-	}
 	
+	/**
+	 * Jump in a given direction
+	 * 
+	 * @param direction - either "UP", "LEFT", or "RIGHT"
+	 */
+	public void jump(String direction){
+		if(direction.equals("LEFT")){
+			setVelocity(maxSpeed, -30.0f);
+		}else if(direction.equals("RIGHT")){
+			setVelocity(-maxSpeed, -30.0f);
+		}else{
+			setVelocity(velocity.getX(), -30.0f);
+		}
+		canJump = false;
+	}
+
 	/**
 	 * Shrinks the hitbox of the player by half vertically
 	 */
@@ -125,21 +135,31 @@ public class Player extends Entity {
 	/**
 	 * returns true if this entity has collided with the given 
 	 * 
+	 * This method also handles when/how to jump
+	 * 
 	 * @param e - Entity we're checking the collision for
 	 * @param gc - GameContainer
 	 * 
 	 * @return - true if the collision occurred, false otherwise
 	 */
-	public boolean collide(Entity e, GameContainer gc){
-		if(boundingBox.intersects(e.getBoundingBox())){
-			
-			//calculating the overlap of the Player and the entity on each of the axes
-			//whichever overlap is smaller indicates the axis on which the collision occurred
-			float yOverlap = (boundingBox.getHeight()/2 + e.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - e.getBoundingBox().getCenterY()));
-			float xOverlap = (boundingBox.getWidth()/2 + e.getBoundingBox().getWidth()/2 - Math.abs((boundingBox.getCenterX() - e.getBoundingBox().getCenterX())));
-			
+	public void collide(Entity e, GameContainer gc){
+		
+		//TODO
+		//Fix issue with jumping when mid-air/jumping after falling without colliding
+		//jumping after walking off a platform causes the player to immediately jump upon hitting the ground
+		
+		//calculating the overlap of the Player and the entity on each of the axes
+		//whichever overlap is smaller indicates the axis on which the collision occurred
+		float yOverlap = (boundingBox.getHeight()/2 + e.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - e.getBoundingBox().getCenterY()));
+		float xOverlap = (boundingBox.getWidth()/2 + e.getBoundingBox().getWidth()/2 - Math.abs((boundingBox.getCenterX() - e.getBoundingBox().getCenterX())));
+		
+		//if both axes overlap, there is a collision
+		if(xOverlap > 0 && yOverlap > 0){
+
 			//PLATFORMS
 			if(e instanceof Platform){
+				
+				canJump = true;
 				
 				//collision occurred on the Y axis (vertically oriented)
 				if(yOverlap < xOverlap){
@@ -147,7 +167,12 @@ public class Player extends Entity {
 					if(boundingBox.getCenterY() < e.getBoundingBox().getCenterY()){
 						setVelocity(velocity.getX(), 0);
 						y = e.getY() - height;
-						return true;
+
+						//handle jumping
+						if(gc.getInput().isKeyPressed(Input.KEY_W) || gc.getInput().isKeyPressed(Input.KEY_SPACE)){
+							jump("UP");
+						}
+						
 					//player is below the Platform
 					}if(boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
 						setVelocity(velocity.getX(), 0);
@@ -161,7 +186,6 @@ public class Player extends Entity {
 								move(x - 5, y);
 							}
 						}
-						return true;
 					}
 
 				//collision occurred on the X axis (horizontally oriented)
@@ -170,17 +194,39 @@ public class Player extends Entity {
 					if(boundingBox.getCenterX() < e.getBoundingBox().getCenterX()){
 						setVelocity(0, velocity.getY());
 						x = e.getX() - boundingBox.getWidth();
-						return true;
+						
+						//handle jumping
+						if(gc.getInput().isKeyPressed(Input.KEY_W) || gc.getInput().isKeyPressed(Input.KEY_SPACE)){
+							jump("RIGHT");
+						}
 
 					//player is to the right of the Platform
 					}if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
 						setVelocity(0, velocity.getY());
 						x = e.getBoundingBox().getMaxX();
-						return true;
+						
+						//handle jumping
+						if(gc.getInput().isKeyPressed(Input.KEY_W) || gc.getInput().isKeyPressed(Input.KEY_SPACE)){
+							jump("LEFT");
+						}
 					}
 				}
 			}
 		}
-		return false;
+		if(!canJump){
+			gc.getInput().isKeyPressed(Input.KEY_W);
+			gc.getInput().isKeyPressed(Input.KEY_SPACE);
+		}
+	}
+	
+	/**
+	 * Resets the Entity to its original position, velocity, and states
+	 */
+	public void reset(){
+		move(startingX, startingY);
+		setVelocity(0, 0);
+		canJump = false;
+		crouched = false;
+		velocity = startingVelocity;
 	}
 }

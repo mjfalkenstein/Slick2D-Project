@@ -79,10 +79,15 @@ public class Platform extends Entity {
 	 * 
 	 * @return - true if the collision occurred, false otherwise
 	 */
-	public boolean collide(Entity e, GameContainer gc){
-		if(boundingBox.intersects(e.getBoundingBox())){
-			return true;
-		}
-		return false;
+	public void collide(Entity e, GameContainer gc){
+		//do nothing
+	}
+	
+	/**
+	 * Resets the Entity to its original position, velocity, and states
+	 */
+	public void reset(){
+		move(startingX, startingY);
+		velocity = startingVelocity;
 	}
 }

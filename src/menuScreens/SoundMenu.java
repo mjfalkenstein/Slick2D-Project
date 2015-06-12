@@ -94,6 +94,8 @@ public class SoundMenu extends BasicGameState{
 		g.drawString("Master Volume: " + (int)(master.getValue() * 100) + "%", master.getX(), master.getY()-g.getFont().getLineHeight());
 		g.drawString("SFX Volume: " + (int)(sfx.getValue() * 100) + "%", sfx.getX(), sfx.getY()-g.getFont().getLineHeight());
 		g.drawString("Music Volume: " + (int)(music.getValue() * 100) + "%", music.getX(), music.getY()-g.getFont().getLineHeight());
+
+		g.drawString("Sound Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Sound Options"), buttonYOffset);
 		
 		for(SlideBar b : bars){
 			b.draw(g);

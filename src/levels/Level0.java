@@ -18,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import driver.Driver;
 import utils.BackgroundBarsAnimation;
 import utils.Camera;
+import utils.PauseMenu;
 import entities.Entity;
 import entities.Platform;
 import entities.Player;
@@ -30,16 +31,20 @@ public class Level0 extends BasicGameState{
 	Player player;
 	Camera camera;
 	Platform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
-	
+
 	Circle background;
 
 	ArrayList<Entity> world = new ArrayList<Entity>();
 
 	Color sky = Color.decode("#99CCFF");
 	BackgroundBarsAnimation backgroundAnimation;
-	
+
 	int levelWidth = 2000;
 	int levelHeight = 1000;
+
+	boolean paused = false;
+	
+	PauseMenu pauseMenu;
 
 	/**
 	 * Called on program start-up
@@ -60,7 +65,7 @@ public class Level0 extends BasicGameState{
 		stair1 = new Platform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
 		stair2 = new Platform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
 		stair3 = new Platform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
-		
+
 		world.add(ground);
 		world.add(platform);
 		world.add(leftWall);
@@ -68,10 +73,12 @@ public class Level0 extends BasicGameState{
 		world.add(stair1);
 		world.add(stair2);
 		world.add(stair3);
-		
+
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
-		
+
 		camera = new Camera(gc, levelWidth, levelHeight);
+		
+		pauseMenu = new PauseMenu(gc, Color.black, Color.lightGray);
 	}
 
 	/**
@@ -81,7 +88,7 @@ public class Level0 extends BasicGameState{
 	 */
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		camera.translate(gc, g, player);
-		
+
 		g.setBackground(sky);
 		g.setColor(Color.decode("#99FF33"));
 		g.fill(background);
@@ -93,6 +100,8 @@ public class Level0 extends BasicGameState{
 		for(Entity e : world){
 			e.draw(g);
 		}
+		
+		pauseMenu.draw(g);
 	}
 
 	/**
@@ -101,35 +110,40 @@ public class Level0 extends BasicGameState{
 	 * Used to update all necessary data, ie mouse position
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		int mouseX = gc.getInput().getAbsoluteMouseX();
+		int mouseY = gc.getInput().getAbsoluteMouseY();
+		
+		if(!paused){
+			player.update(gc, delta);
 
-		player.update(gc, delta);
+			for(Entity e : world){
+				player.collide(e, gc);
+			}
 
-		for(Entity e : world){
-			player.collide(e, gc);
-			e.update(gc, delta);
+			//if the player leaves the screen, reset
+			if(player.getY() > levelHeight || player.getMaxX() < 0 || player.getX() > levelWidth){
+				player.reset();
+			}
+		}else{
+			gc.getInput().clearKeyPressedRecord();
 		}
-
-		//if the player leaves the screen, reset
-		if(player.getY() > levelHeight || player.getMaxX() < 0 || player.getX() > levelWidth){
-			player.move(120, 100);
-			player.setVelocity(0, 0);
-		}
+		
+		pauseMenu.hover(mouseX, mouseY);
+		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
 	}
 
 	public void keyPressed(int key, char c){
 		if(key == Input.KEY_ESCAPE){
-			sbg.enterState(Driver.MAIN_MENU, new FadeOutTransition(), new FadeInTransition());
-		}
-		if(key == Input.KEY_W || key == Input.KEY_SPACE){
-			boolean jump = false;
-			for(Entity e : world){
-				if(player.collide(e, gc)){
-					jump = true;
-				}
-			}
-			if(jump){
-				player.jump();
-				jump = false;
+			if(!paused){
+				gc.pause();
+				pauseMenu.show();
+				gc.setMouseGrabbed(false);
+				paused = true;
+			}else{
+				gc.resume();
+				pauseMenu.hide();
+				gc.setMouseGrabbed(true);
+				paused = false;
 			}
 		}
 	}
@@ -139,6 +153,14 @@ public class Level0 extends BasicGameState{
 	 */
 	public int getID() {
 		return 5;
+	}
+	
+	public void enter(GameContainer gc, StateBasedGame sbg){
+		gc.setMouseGrabbed(true);
+	}
+	
+	public void leave(GameContainer gc, StateBasedGame sbg){
+		gc.setMouseGrabbed(false);
 	}
 
 }

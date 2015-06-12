@@ -15,8 +15,9 @@ import entities.Entity;
  */
 public class Player extends Entity {
 
-	float maxSpeed = 15;
+	float maxSpeed = 20;
 	float gravity = 2;
+	boolean crouched = false;
 
 	/**
 	 * Constructor
@@ -42,6 +43,13 @@ public class Player extends Entity {
 			setVelocity(velocity.getX() + 1, velocity.getY());
 		}
 		
+		if(gc.getInput().isKeyDown(Input.KEY_S) && !crouched){
+			crouch();
+			y += boundingBox.getHeight();
+		}else if(!gc.getInput().isKeyDown(Input.KEY_S) && crouched){
+			uncrouch();
+		}
+		
 		if(velocity.getX() > 0 && !gc.getInput().isKeyDown(Input.KEY_D)){
 			velocity.setX(velocity.getX() - 1);
 		}
@@ -49,8 +57,8 @@ public class Player extends Entity {
 			velocity.setX(velocity.getX() + 1);
 		}
 
-		x += velocity.getX() * delta / gc.getFPS();
 		y += velocity.getY() * delta / gc.getFPS();
+		x += velocity.getX() * delta / gc.getFPS();
 
 		boundingBox.setLocation(x, y);
 	}
@@ -95,6 +103,24 @@ public class Player extends Entity {
 	public void jump(){
 		velocity.setY(-30.0f);
 	}
+	
+	/**
+	 * Shrinks the hitbox of the player by half vertically
+	 */
+	public void crouch(){
+		boundingBox = new Rectangle(x, y + height/2, width, height/2);
+		height = boundingBox.getHeight();
+		crouched = true;
+	}
+	
+	/**
+	 * Restores the hitbox of the player to its full height
+	 */
+	public void uncrouch(){
+		boundingBox = new Rectangle(x, y, width, height * 2);
+		height *= 2;
+		crouched = false;
+	}
 
 	/**
 	 * returns true if this entity has collided with the given 
@@ -126,6 +152,15 @@ public class Player extends Entity {
 					}if(boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
 						setVelocity(velocity.getX(), 0);
 						y = e.getBoundingBox().getMaxY();
+						
+						//if overlap is too great, assume player has uncrouched under a low ceiling and needs to be moved out
+						if(yOverlap > 15){
+							if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
+								move(x + 5, y);
+							}else{
+								move(x - 5, y);
+							}
+						}
 						return true;
 					}
 

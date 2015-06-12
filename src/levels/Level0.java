@@ -12,9 +12,12 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import driver.Driver;
 import utils.BackgroundBarsAnimation;
+import utils.Camera;
 import entities.Entity;
 import entities.Platform;
 import entities.Player;
@@ -25,7 +28,8 @@ public class Level0 extends BasicGameState{
 	StateBasedGame sbg;
 
 	Player player;
-	Platform ground, platform, leftWall, rightWall;
+	Camera camera;
+	Platform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
 	
 	Circle background;
 
@@ -33,6 +37,9 @@ public class Level0 extends BasicGameState{
 
 	Color sky = Color.decode("#99CCFF");
 	BackgroundBarsAnimation backgroundAnimation;
+	
+	int levelWidth = 2000;
+	int levelHeight = 1000;
 
 	/**
 	 * Called on program start-up
@@ -45,18 +52,26 @@ public class Level0 extends BasicGameState{
 
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 
-		player = new Player(new Rectangle(120, 100, 75, 150), new Vector2f(0, 0));
+		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
 		ground = new Platform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 50), new Vector2f(0, 0));
 		platform = new Platform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 50), new Vector2f(0, 0));
-		leftWall = new Platform(new Rectangle(50, ground.getY()-50, 50, 50), new Vector2f(0, 0));
+		leftWall = new Platform(new Rectangle(50, ground.getY()-200, 50, 200), new Vector2f(0, 0));
 		rightWall = new Platform(new Rectangle(ground.getX() + ground.getWidth() - 50, ground.getY() - 50, 50, 50), new Vector2f(0, 0));
-
+		stair1 = new Platform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
+		stair2 = new Platform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
+		stair3 = new Platform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
+		
 		world.add(ground);
 		world.add(platform);
 		world.add(leftWall);
 		world.add(rightWall);
+		world.add(stair1);
+		world.add(stair2);
+		world.add(stair3);
 		
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
+		
+		camera = new Camera(gc, levelWidth, levelHeight);
 	}
 
 	/**
@@ -65,6 +80,8 @@ public class Level0 extends BasicGameState{
 	 * Used to draw everything to the screen
 	 */
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		camera.translate(gc, g, player);
+		
 		g.setBackground(sky);
 		g.setColor(Color.decode("#99FF33"));
 		g.fill(background);
@@ -93,7 +110,7 @@ public class Level0 extends BasicGameState{
 		}
 
 		//if the player leaves the screen, reset
-		if(player.getY() > gc.getHeight() || player.getX() < -player.getWidth() || player.getX() > gc.getWidth()){
+		if(player.getY() > levelHeight || player.getMaxX() < 0 || player.getX() > levelWidth){
 			player.move(120, 100);
 			player.setVelocity(0, 0);
 		}
@@ -101,7 +118,7 @@ public class Level0 extends BasicGameState{
 
 	public void keyPressed(int key, char c){
 		if(key == Input.KEY_ESCAPE){
-			sbg.enterState(Driver.MAIN_MENU);;
+			sbg.enterState(Driver.MAIN_MENU, new FadeOutTransition(), new FadeInTransition());
 		}
 		if(key == Input.KEY_W || key == Input.KEY_SPACE){
 			boolean jump = false;

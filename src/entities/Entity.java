@@ -5,6 +5,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
+/**
+ * This class represents anything that can act as a solid object on the screen
+ */
 public abstract class Entity {
 	
 	protected float x, y, width, height;
@@ -12,6 +15,12 @@ public abstract class Entity {
 	protected Rectangle boundingBox;
 	protected Vector2f velocity;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param boundingBox - a Rectangle representing the borders of the Entity
+	 * @param velocity - the initial velocity
+	 */
 	public Entity(Rectangle boundingBox, Vector2f velocity) {
 		super();
 		x = boundingBox.getMinX();
@@ -22,20 +31,50 @@ public abstract class Entity {
 		this.velocity = velocity;
 	}
 	
+	/**
+	 * Called every frame, used to update position, state, etc
+	 * 
+	 * @param gc - GameContainer
+	 * @param delta - time difference since the last frame
+	 */
 	public abstract void update(GameContainer gc, int delta);
 	
+	/**
+	 * Instantly moves the entity to new coordinates (x, y)
+	 * 
+	 * @param x - new x coordinate
+	 * @param y - new y coordinate
+	 */
 	public abstract void move(float x, float y);
 	
+	/**
+	 * Rotates the entity by a given amount in degrees
+	 * 
+	 * @param degrees - rotation
+	 */
 	public abstract void rotate(float degrees);
 	
+	/**
+	 * Draws the entity to the given Graphics context
+	 * 
+	 * @param g - Graphics
+	 */
 	public abstract void draw(Graphics g);
 
+	/**
+	 * returns true if this entity has collided with the given 
+	 * 
+	 * @param e - Entity we're checking the collision for
+	 * @param gc - GameContainer
+	 * 
+	 * @return - true if the collision occurred, false otherwise
+	 */
 	public abstract boolean collide(Entity e, GameContainer gc);
 	
 	public Rectangle getBoundingBox(){
 		return boundingBox;
 	}
-
+	
 	public float getWidth() {
 		return width;
 	}
@@ -54,6 +93,22 @@ public abstract class Entity {
 
 	public float getX() {
 		return x;
+	}
+	
+	public float getCenterX(){
+		return boundingBox.getCenterX();
+	}
+	
+	public float getCenterY(){
+		return boundingBox.getCenterY();
+	}
+	
+	public float getMaxX(){
+		return boundingBox.getMaxX();
+	}
+	
+	public float getMaxY(){
+		return boundingBox.getMaxY();
 	}
 
 	public float getY() {

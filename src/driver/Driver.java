@@ -21,6 +21,7 @@ public class Driver extends StateBasedGame{
 	StateBasedGame game;
 	GameContainer gc;
 	
+	//Constant state values for each of the screens in the game
 	public static final int MAIN_MENU         	 	= 0;
 	public static final int OPTIONS_MENU 			= 1;
 	public static final int VIDEO_OPTIONS_MENU		= 2;
@@ -82,6 +83,7 @@ public class Driver extends StateBasedGame{
 		app.setVSync(true);
 		app.setAlwaysRender(true);
 		app.setTargetFrameRate(60);
+		app.setMultiSample(4);
 		app.setMinimumLogicUpdateInterval(30);
 		try{
 			app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);

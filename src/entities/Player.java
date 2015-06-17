@@ -18,7 +18,9 @@ public class Player extends Entity {
 	float maxSpeed = 20;
 	float gravity = 2;
 	boolean crouched = false;
-	boolean canJump = false;
+	boolean onGround = false;
+	boolean onLeftWall = false;
+	boolean onRightWall = false;
 
 	/**
 	 * Constructor
@@ -38,30 +40,17 @@ public class Player extends Entity {
 	 */
 	public void update(GameContainer gc, int delta) {
 		setVelocity(velocity.getX(), velocity.getY() + gravity);
-		if(gc.getInput().isKeyDown(Input.KEY_A) && velocity.getX() > -maxSpeed){
-			setVelocity(velocity.getX() - 1, velocity.getY());
-		}else if(gc.getInput().isKeyDown(Input.KEY_D) && velocity.getX() < maxSpeed){
-			setVelocity(velocity.getX() + 1, velocity.getY());
-		}
 		
-		if(gc.getInput().isKeyDown(Input.KEY_S) && !crouched){
-			crouch();
-			y += boundingBox.getHeight();
-		}else if(!gc.getInput().isKeyDown(Input.KEY_S) && crouched){
-			uncrouch();
-		}
-		
-		if(velocity.getX() > 0 && !gc.getInput().isKeyDown(Input.KEY_D)){
-			velocity.setX(velocity.getX() - 1);
-		}
-		if(velocity.getX() < 0 && !gc.getInput().isKeyDown(Input.KEY_A)){
-			velocity.setX(velocity.getX() + 1);
-		}
+		handleInputs(gc);
 
 		y += velocity.getY() * delta / gc.getFPS();
 		x += velocity.getX() * delta / gc.getFPS();
 
 		boundingBox.setLocation(x, y);
+		
+		onGround = false;
+		onRightWall = false;
+		onLeftWall = false;
 	}
 
 	/**
@@ -106,12 +95,15 @@ public class Player extends Entity {
 	public void jump(String direction){
 		if(direction.equals("LEFT")){
 			setVelocity(maxSpeed, -30.0f);
+			onRightWall = false;
 		}else if(direction.equals("RIGHT")){
 			setVelocity(-maxSpeed, -30.0f);
+			onLeftWall = false;
 		}else{
 			setVelocity(velocity.getX(), -30.0f);
+			onGround = false;
 		}
-		canJump = false;
+		onGround = false;
 	}
 
 	/**
@@ -144,10 +136,6 @@ public class Player extends Entity {
 	 */
 	public void collide(Entity e, GameContainer gc){
 		
-		//TODO
-		//Fix issue with jumping when mid-air/jumping after falling without colliding
-		//jumping after walking off a platform causes the player to immediately jump upon hitting the ground
-		
 		//calculating the overlap of the Player and the entity on each of the axes
 		//whichever overlap is smaller indicates the axis on which the collision occurred
 		float yOverlap = (boundingBox.getHeight()/2 + e.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - e.getBoundingBox().getCenterY()));
@@ -159,8 +147,6 @@ public class Player extends Entity {
 			//PLATFORMS
 			if(e instanceof Platform){
 				
-				canJump = true;
-				
 				//collision occurred on the Y axis (vertically oriented)
 				if(yOverlap < xOverlap){
 					//player is above the Platform
@@ -168,10 +154,7 @@ public class Player extends Entity {
 						setVelocity(velocity.getX(), 0);
 						y = e.getY() - height;
 
-						//handle jumping
-						if(gc.getInput().isKeyPressed(Input.KEY_W) || gc.getInput().isKeyPressed(Input.KEY_SPACE)){
-							jump("UP");
-						}
+						onGround = true;
 						
 					//player is below the Platform
 					}if(boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
@@ -195,27 +178,17 @@ public class Player extends Entity {
 						setVelocity(0, velocity.getY());
 						x = e.getX() - boundingBox.getWidth();
 						
-						//handle jumping
-						if(gc.getInput().isKeyPressed(Input.KEY_W) || gc.getInput().isKeyPressed(Input.KEY_SPACE)){
-							jump("RIGHT");
-						}
+						onLeftWall = true;
 
 					//player is to the right of the Platform
 					}if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
 						setVelocity(0, velocity.getY());
 						x = e.getBoundingBox().getMaxX();
 						
-						//handle jumping
-						if(gc.getInput().isKeyPressed(Input.KEY_W) || gc.getInput().isKeyPressed(Input.KEY_SPACE)){
-							jump("LEFT");
-						}
+						onRightWall = true;
 					}
 				}
 			}
-		}
-		if(!canJump){
-			gc.getInput().isKeyPressed(Input.KEY_W);
-			gc.getInput().isKeyPressed(Input.KEY_SPACE);
 		}
 	}
 	
@@ -225,8 +198,64 @@ public class Player extends Entity {
 	public void reset(){
 		move(startingX, startingY);
 		setVelocity(0, 0);
-		canJump = false;
+		onGround = false;
 		crouched = false;
+		onLeftWall = false;
+		onRightWall = false;
 		velocity = startingVelocity;
+	}
+	
+	/**
+	 * Called from update(), used to handle all inputs
+	 * 
+	 * @param gc - GameConatiner
+	 */
+	public void handleInputs(GameContainer gc){
+		Input input = gc.getInput();
+		
+		//handling horizontal movement
+		if(velocity.getX() > 0){
+			if(!input.isKeyDown(Input.KEY_D)){
+				velocity.setX(velocity.getX() - 1);
+			}
+		}
+		if(velocity.getX() < 0){
+			if(!input.isKeyDown(Input.KEY_A)){
+				velocity.setX(velocity.getX() + 1);
+			}
+		}
+		if(input.isKeyDown(Input.KEY_A)){
+			if(velocity.getX() > -maxSpeed){
+				setVelocity(velocity.getX() - 1, velocity.getY());
+			}
+		}
+		if(input.isKeyDown(Input.KEY_D)){
+			if(velocity.getX() < maxSpeed){
+				setVelocity(velocity.getX() + 1, velocity.getY());
+			}
+		}
+		
+		//handling crouching
+		if(input.isKeyDown(Input.KEY_S)){
+			if(!crouched){
+				crouch();
+				y += boundingBox.getHeight();
+			}
+		}else if(!input.isKeyDown(Input.KEY_S)){
+			if(crouched){
+			uncrouch();
+			}
+		}
+		
+		//handling jumping
+		if(input.isKeyPressed(input.KEY_W) || input.isKeyPressed(input.KEY_SPACE)){
+			if(onGround){
+				jump("UP");
+			}else if(onLeftWall){
+				jump("RIGHT");
+			}else if(onRightWall){
+				jump("LEFT");
+			}
+		}
 	}
 }

@@ -60,7 +60,7 @@ public class Level0 extends BasicGameState{
 		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
 		ground = new Platform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 50), new Vector2f(0, 0));
 		platform = new Platform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 50), new Vector2f(0, 0));
-		leftWall = new Platform(new Rectangle(50, ground.getY()-200, 50, 200), new Vector2f(0, 0));
+		leftWall = new Platform(new Rectangle(50, ground.getY()-400, 50, 400), new Vector2f(0, 0));
 		rightWall = new Platform(new Rectangle(ground.getX() + ground.getWidth() - 50, ground.getY() - 50, 50, 50), new Vector2f(0, 0));
 		stair1 = new Platform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
 		stair2 = new Platform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));

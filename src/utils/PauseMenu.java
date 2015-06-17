@@ -66,7 +66,7 @@ public class PauseMenu {
 	public void move(int x, int y){
 		body.setLocation(100, 100);
 		
-		int counter = 0;
+		int counter = 0; 
 		mainMenu.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
 		newGame.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));

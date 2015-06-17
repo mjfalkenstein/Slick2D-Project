@@ -78,7 +78,7 @@ public class Level0 extends BasicGameState{
 
 		camera = new Camera(gc, levelWidth, levelHeight);
 		
-		pauseMenu = new PauseMenu(gc, Color.black, Color.lightGray);
+		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
 	}
 
 	/**
@@ -110,8 +110,8 @@ public class Level0 extends BasicGameState{
 	 * Used to update all necessary data, ie mouse position
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		int mouseX = gc.getInput().getAbsoluteMouseX();
-		int mouseY = gc.getInput().getAbsoluteMouseY();
+		int mouseX = gc.getInput().getMouseX() + camera.getX();
+		int mouseY = gc.getInput().getMouseY() + camera.getY();
 		
 		if(!paused){
 			player.update(gc, delta);
@@ -124,14 +124,15 @@ public class Level0 extends BasicGameState{
 			if(player.getY() > levelHeight || player.getMaxX() < 0 || player.getX() > levelWidth){
 				player.reset();
 			}
-		}else{
-			gc.getInput().clearKeyPressedRecord();
 		}
 		
 		pauseMenu.hover(mouseX, mouseY);
 		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
 	}
 
+	/**
+	 * Called every frame to handle keyboard inputs
+	 */
 	public void keyPressed(int key, char c){
 		if(key == Input.KEY_ESCAPE){
 			if(!paused){

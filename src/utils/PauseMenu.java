@@ -16,11 +16,14 @@ public class PauseMenu {
 
 	Color bg, textColor;
 	
+	Graphics g;
+	
 	boolean showing = false;
 
-	public PauseMenu(GameContainer gc, Color bg, Color textColor){
+	public PauseMenu(GameContainer gc, Graphics g, Color bg, Color textColor){
 		this.bg = bg;
 		this.textColor = textColor;
+		this.g = g;
 
 		buttonWidth = 220;
 		buttonHeight = 30;
@@ -39,7 +42,7 @@ public class PauseMenu {
 		counter++;
 		quit = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Quit");
 		
-		body = new Rectangle(100, 100, 100, 100);
+		body = new Rectangle(mainMenu.getX() - 10, mainMenu.getY() - g.getFont().getHeight("Paused") -  20, mainMenu.getWidth() + 20, quit.getMaxY() - mainMenu.getY() + g.getFont().getHeight("Paused") + 30);
 		x = (int) body.getX();
 		y = (int) body.getY();
 		width = (int) body.getWidth();
@@ -54,6 +57,9 @@ public class PauseMenu {
 			bg.a = 0.95f;
 			g.setColor(bg);
 			g.fill(body);
+			
+			g.setColor(textColor);
+			g.drawString("Paused", mainMenu.getX() + mainMenu.getWidth()/2 - g.getFont().getWidth("Paused")/2, mainMenu.getY() - g.getFont().getHeight("Paused") - 10);
 
 			mainMenu.draw(g, bg, textColor);
 			newGame.draw(g, bg, textColor);
@@ -64,18 +70,18 @@ public class PauseMenu {
 	}
 	
 	public void move(int x, int y){
-		body.setLocation(100, 100);
-		
 		int counter = 0; 
-		mainMenu.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));
+		mainMenu.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
-		newGame.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));
+		newGame.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
-		saveGame.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));
+		saveGame.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
-		loadGame.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));
+		loadGame.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
-		quit.move(buttonXOffset, y + buttonYOffset + (counter * buttonYGap));
+		quit.move(x, y + buttonYOffset + (counter * buttonYGap));
+		
+		body.setLocation(mainMenu.getX() - 10, mainMenu.getY() - g.getFont().getHeight("Paused") - 20);
 	}
 	
 	public String hover(int x, int y){
@@ -97,10 +103,20 @@ public class PauseMenu {
 	}
 	
 	public void show(){
+		mainMenu.reset();
+		newGame.reset();
+		saveGame.reset();
+		loadGame.reset();
+		quit.reset();
 		showing = true;
 	}
 	
 	public void hide(){
+		mainMenu.reset();
+		newGame.reset();
+		saveGame.reset();
+		loadGame.reset();
+		quit.reset();
 		showing = false;
 	}
 	

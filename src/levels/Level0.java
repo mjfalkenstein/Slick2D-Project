@@ -20,6 +20,7 @@ import utils.BackgroundBarsAnimation;
 import utils.Camera;
 import utils.PauseMenu;
 import entities.Entity;
+import entities.Friendly;
 import entities.Platform;
 import entities.Player;
 
@@ -29,6 +30,7 @@ public class Level0 extends BasicGameState{
 	StateBasedGame sbg;
 
 	Player player;
+	Friendly friendly;
 	Camera camera;
 	Platform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
 
@@ -43,7 +45,7 @@ public class Level0 extends BasicGameState{
 	int levelHeight = 1000;
 
 	boolean paused = false;
-	
+
 	PauseMenu pauseMenu;
 
 	/**
@@ -57,7 +59,6 @@ public class Level0 extends BasicGameState{
 
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 
-		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
 		ground = new Platform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 50), new Vector2f(0, 0));
 		platform = new Platform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 50), new Vector2f(0, 0));
 		leftWall = new Platform(new Rectangle(50, ground.getY()-400, 50, 400), new Vector2f(0, 0));
@@ -65,7 +66,12 @@ public class Level0 extends BasicGameState{
 		stair1 = new Platform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
 		stair2 = new Platform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
 		stair3 = new Platform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
+		
+		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
+		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
+		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 50, 75), new Vector2f(0, 0), s, true);
 
+		world.add(player);
 		world.add(ground);
 		world.add(platform);
 		world.add(leftWall);
@@ -73,11 +79,12 @@ public class Level0 extends BasicGameState{
 		world.add(stair1);
 		world.add(stair2);
 		world.add(stair3);
+		world.add(friendly);
 
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
 
 		camera = new Camera(gc, levelWidth, levelHeight);
-		
+
 		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
 	}
 
@@ -95,12 +102,10 @@ public class Level0 extends BasicGameState{
 
 		backgroundAnimation.draw(g);
 
-		player.draw(g);
-
 		for(Entity e : world){
 			e.draw(g);
 		}
-		
+
 		pauseMenu.draw(g);
 	}
 
@@ -110,14 +115,18 @@ public class Level0 extends BasicGameState{
 	 * Used to update all necessary data, ie mouse position
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		//make sure to add cameraX/cameraY to account for moving camera
 		int mouseX = gc.getInput().getMouseX() + camera.getX();
 		int mouseY = gc.getInput().getMouseY() + camera.getY();
-		
+
 		if(!paused){
 			player.update(gc, delta);
+			
+			friendly.update(gc, delta);
 
 			for(Entity e : world){
 				player.collide(e, gc);
+				friendly.collide(e, gc);
 			}
 
 			//if the player leaves the screen, reset
@@ -125,9 +134,34 @@ public class Level0 extends BasicGameState{
 				player.reset();
 			}
 		}
-		
+
 		pauseMenu.hover(mouseX, mouseY);
 		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
+	}
+
+	/**
+	 * Called upon mouse button release (as opposed to mouse button press)
+	 * 
+	 * Used as an event handler
+	 */
+	public void mouseReleased(int button, int x, int y){
+		//make sure to add cameraX/cameraY to account for moving camera
+		x += camera.getX();
+		y += camera.getY();
+		
+		String pauseMenuSelection = pauseMenu.hover(x, y);
+		
+		if(button == 0){
+			if(paused){
+				if(pauseMenuSelection == "mainMenu"){
+					pauseMenu.reset();
+					gc.resume();
+					sbg.enterState(Driver.MAIN_MENU, new FadeOutTransition(), new FadeInTransition());
+				}else if(pauseMenuSelection == "quit"){
+					gc.exit();
+				}
+			}
+		}
 	}
 
 	/**
@@ -155,11 +189,15 @@ public class Level0 extends BasicGameState{
 	public int getID() {
 		return 5;
 	}
-	
+
 	public void enter(GameContainer gc, StateBasedGame sbg){
+		gc.resume();
+		pauseMenu.hide();
 		gc.setMouseGrabbed(true);
+		paused = false;
+		player.reset();
 	}
-	
+
 	public void leave(GameContainer gc, StateBasedGame sbg){
 		gc.setMouseGrabbed(false);
 	}

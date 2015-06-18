@@ -91,5 +91,6 @@ public class Driver extends StateBasedGame{
 			app.setDisplayMode(1280, 800, true);
 		}
 		app.start();
+		app.getGraphics().setAntiAlias(true);
 	}
 }

@@ -17,6 +17,7 @@ public class Player extends Entity {
 
 	float maxSpeed = 20;
 	float gravity = 2;
+	float originalHeight;
 	boolean crouched = false;
 	boolean onGround = false;
 	boolean onLeftWall = false;
@@ -30,6 +31,7 @@ public class Player extends Entity {
 	 */
 	public Player(Rectangle boundingBox, Vector2f velocity) {
 		super(boundingBox, velocity);
+		originalHeight = boundingBox.getHeight();
 	}
 
 	/**
@@ -81,8 +83,6 @@ public class Player extends Entity {
 	 * @param g - Graphics
 	 */
 	public void draw(Graphics g) {
-		g.setColor(Color.red.darker());
-		g.draw(boundingBox);
 		g.setColor(Color.red);
 		g.fill(boundingBox);
 	}
@@ -94,13 +94,13 @@ public class Player extends Entity {
 	 */
 	public void jump(String direction){
 		if(direction.equals("LEFT")){
-			setVelocity(maxSpeed, -30.0f);
+			setVelocity(maxSpeed, -35.0f);
 			onRightWall = false;
 		}else if(direction.equals("RIGHT")){
-			setVelocity(-maxSpeed, -30.0f);
+			setVelocity(-maxSpeed, -35.0f);
 			onLeftWall = false;
 		}else{
-			setVelocity(velocity.getX(), -30.0f);
+			setVelocity(velocity.getX(), -35.0f);
 			onGround = false;
 		}
 		onGround = false;
@@ -110,8 +110,9 @@ public class Player extends Entity {
 	 * Shrinks the hitbox of the player by half vertically
 	 */
 	public void crouch(){
-		boundingBox = new Rectangle(x, y + height/2, width, height/2);
+		boundingBox = new Rectangle(x, y + height/2, width, originalHeight/2);
 		height = boundingBox.getHeight();
+		y += boundingBox.getHeight();
 		crouched = true;
 	}
 	
@@ -119,8 +120,8 @@ public class Player extends Entity {
 	 * Restores the hitbox of the player to its full height
 	 */
 	public void uncrouch(){
-		boundingBox = new Rectangle(x, y, width, height * 2);
-		height *= 2;
+		boundingBox = new Rectangle(x, y, width, originalHeight);
+		height = originalHeight;
 		crouched = false;
 	}
 
@@ -203,6 +204,7 @@ public class Player extends Entity {
 		onLeftWall = false;
 		onRightWall = false;
 		velocity = startingVelocity;
+		uncrouch();
 	}
 	
 	/**
@@ -239,11 +241,10 @@ public class Player extends Entity {
 		if(input.isKeyDown(Input.KEY_S)){
 			if(!crouched){
 				crouch();
-				y += boundingBox.getHeight();
 			}
 		}else if(!input.isKeyDown(Input.KEY_S)){
 			if(crouched){
-			uncrouch();
+				uncrouch();
 			}
 		}
 		

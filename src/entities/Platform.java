@@ -66,8 +66,10 @@ public class Platform extends Entity {
 	 * 
 	 * @param g - Graphics
 	 */
-	public void draw(Graphics g) {
-		g.setColor(Color.black);
+	public void draw(Graphics g){
+		Color c = Color.black;
+		c.a = 1.0f;
+		g.setColor(c);
 		g.fill(boundingBox);
 	}
 

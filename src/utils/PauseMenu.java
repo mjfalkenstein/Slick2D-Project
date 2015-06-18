@@ -86,7 +86,9 @@ public class PauseMenu {
 	
 	public String hover(int x, int y){
 		String s = "";
-		if(mainMenu.hover(x, y)){
+		if(body.contains(x, y)){
+			s = "body";
+		}if(mainMenu.hover(x, y)){
 			s =  "mainMenu";
 		}if(newGame.hover(x, y)){
 			s = "newGame";
@@ -96,8 +98,6 @@ public class PauseMenu {
 			s =  "loadGame";
 		}if(quit.hover(x, y)){
 			s =  "quit";
-		}if(body.contains(x, y)){
-			s =  "body";
 		}
 		return s;
 	}
@@ -118,6 +118,14 @@ public class PauseMenu {
 		loadGame.reset();
 		quit.reset();
 		showing = false;
+	}
+	
+	public void reset(){
+		mainMenu.reset();
+		newGame.reset();
+		saveGame.reset();
+		loadGame.reset();
+		quit.reset();
 	}
 	
 	public int getWidth(){

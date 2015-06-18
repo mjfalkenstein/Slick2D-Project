@@ -121,8 +121,8 @@ public class MainMenu extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		int counter = 1;
 
-		mouseX = gc.getInput().getMouseX();
-		mouseY = gc.getInput().getMouseY();
+		mouseX = gc.getInput().getAbsoluteMouseX();
+		mouseY = gc.getInput().getAbsoluteMouseY();
 		
 		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
 		buttonYOffset = (int)(gc.getHeight() * 0.5f);
@@ -137,8 +137,6 @@ public class MainMenu extends BasicGameState {
 			counter++;
 			b.hover(mouseX, mouseY);
 		}
-		
-		//System.out.printf("Mouse pos: (%d, %d)\n", mouseX, mouseY);
 	}
 
 	/**
@@ -169,6 +167,10 @@ public class MainMenu extends BasicGameState {
 	 */
 	public int getID() {
 		return Driver.MAIN_MENU;
+	}
+	
+	public void enter(GameContainer gc, StateBasedGame sbg){
+		gc.setMouseGrabbed(false);
 	}
 
 }

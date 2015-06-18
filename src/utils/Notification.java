@@ -66,7 +66,7 @@ public class Notification {
 	public void draw(Graphics g){
 		if(showing){
 			
-			//splitting the body text into deparate lines depending on the width of the indow
+			//splitting the body text into separate lines depending on the width of the indow
 			text = "";
 			int textWidth = 0;
 			textComplete.clear();
@@ -107,7 +107,6 @@ public class Notification {
 			for(String s : textComplete){	
 				g.drawString(s, body.getX() + 10, (body.getY() + 10) + g.getFont().getLineHeight() * counter);
 				counter++;
-				System.out.println(s);
 			}
 			
 			if(b1 != null){

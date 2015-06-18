@@ -6,6 +6,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.RoundedRectangle;
 
+/**
+ * This class represents a single speech bubble in a dialogue from an NPC
+ */
 public class SpeechBubble {
 
 	float x, y;
@@ -20,6 +23,15 @@ public class SpeechBubble {
 	
 	static int maxLength = 150;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x - x coordinate of the speech bubble
+	 * @param y - y coordinate of the speech bubble
+	 * @param text - text in the speech bubble
+	 * @param bg - background color
+	 * @param textColor - text color
+	 */
 	public SpeechBubble(float x, float y, String text, Color bg, Color textColor){
 		this.x = x;
 		this.y = y;
@@ -32,6 +44,11 @@ public class SpeechBubble {
 		lines = new ArrayList<String>();
 	}
 
+	/**
+	 * Draws the entity to the given Graphics context
+	 * 
+	 * @param g - Graphics
+	 */
 	public void draw(Graphics g){
 		if(showing){
 			
@@ -73,15 +90,27 @@ public class SpeechBubble {
 		}
 	}
 
+	/**
+	 * Instantly moves the entity to new coordinates (x, y)
+	 * 
+	 * @param x - new x coordinate
+	 * @param y - new y coordinate
+	 */
 	public void move(float x, float y){
 		body.setLocation(x, y);
 		hint.setLocation(body.getX() + body.getWidth() * 3/5, body.getMaxY());
 	}
 
+	/**
+	 * shows the bubble to the screen
+	 */
 	public void show(){
 		showing = true;
 	}
 
+	/**
+	 * removes the bubble from the screen
+	 */
 	public void hide(){
 		showing = false;
 	}

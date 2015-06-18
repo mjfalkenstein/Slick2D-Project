@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
+/**
+ * This class is a wrapper class to handle several speech bubbles at once
+ */
 public class Dialogue {
 
 	float x, y;
@@ -18,6 +21,15 @@ public class Dialogue {
 	String[] textWords;
 	ArrayList<String> lines;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param x - x coordinate of the speech bubbles 
+	 * @param y - y coordinate of the speech bubbles
+	 * @param text - text in the speech bubbles
+	 * @param bg - background color
+	 * @param textColor - text color
+	 */
 	public Dialogue(float x, float y, String text, Color bg, Color textColor){
 		this.x = x;
 		this.y = y;
@@ -56,6 +68,9 @@ public class Dialogue {
 		height = speechBubbles.get(0).getHeight();
 	}
 
+	/**
+	 * Move on to the next speech bubble
+	 */
 	public void advance(){
 		if(index + 1 == speechBubbles.size()){
 			reset();
@@ -65,6 +80,9 @@ public class Dialogue {
 		}
 	}
 
+	/**
+	 * Reset to the original state of the dialogue
+	 */
 	public void reset(){
 		for(SpeechBubble s : speechBubbles){
 			s.hide();
@@ -73,21 +91,38 @@ public class Dialogue {
 		showing = false;
 	}
 
+	/**
+	 * Instantly moves the entity to new coordinates (x, y)
+	 * 
+	 * @param x - new x coordinate
+	 * @param y - new y coordinate
+	 */
 	public void move(float x, float y){
 		for(SpeechBubble s : speechBubbles){
 			s.move(x, y);
 		}
 	}
-
+	
+	/**
+	 * Draws the entity to the given Graphics context
+	 * 
+	 * @param g - Graphics
+	 */
 	public void draw(Graphics g){
 		speechBubbles.get(index).draw(g);
 	}
 
+	/**
+	 * Draws the dialogue to the screen
+	 */
 	public void show(){
 		speechBubbles.get(index).show();
 		showing = true;
 	}
 
+	/**
+	 * Remove the dialogue from the screen
+	 */
 	public void hide(){
 		reset();
 		showing = false;

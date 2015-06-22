@@ -123,11 +123,6 @@ public class SimpleButton {
 		return text;
 	}
 
-	/**
-	 * Mutator
-	 * 
-	 * @param text - new text to be placed in the button
-	 */
 	public void setText(String text) {
 		this.text = text;
 	}

@@ -57,7 +57,7 @@ public class SpeechBubble {
 			int textWidth = 0;
 			lines.clear();
 			for(String s : textWords){
-				if(textWidth + g.getFont().getWidth(s) < body.getWidth()){
+				if(textWidth + g.getFont().getWidth(s) + 10< body.getWidth()){
 					text += s + " ";
 					textWidth += g.getFont().getWidth(text);
 				}else{

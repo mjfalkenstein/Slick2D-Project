@@ -11,7 +11,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
 
 import utils.Dialogue;
-import utils.SpeechBubble;
 import entities.Entity;
 
 /**
@@ -114,20 +113,20 @@ public class Friendly extends Entity {
 				time = 0;
 			}
 		}
-		
+
 		if(speaking){
 			setVelocity(0, 0);
 		}
-		
+
 		dialogue.move(x - dialogue.getWidth()/2 + boundingBox.getWidth()/2, y - dialogue.getHeight() - 10);
-		
+
 		if(!canSpeak){
 			dialogue.hide();
 			speaking = false;
 		}
 
 		handleInputs(gc);
- 
+
 		y += velocity.getY() * delta / gc.getFPS();
 		x += velocity.getX() * delta / gc.getFPS();
 
@@ -165,13 +164,8 @@ public class Friendly extends Entity {
 	 * @param g - Graphics
 	 */
 	public void draw(Graphics g) {
-		if(canSpeak){
-			g.setColor(Color.blue);
-		}else{
-			g.setColor(Color.yellow);
-		}
+		g.setColor(Color.blue);
 		g.fill(boundingBox);
-
 		if(dialogue != null){
 			dialogue.draw(g);
 		}
@@ -185,7 +179,6 @@ public class Friendly extends Entity {
 	 * @param e - Entity we're checking the collision for
 	 * @param gc - GameContainer
 	 * 
-	 * @return - true if the collision occurred, false otherwise
 	 */
 	public void collide(Entity e, GameContainer gc){
 
@@ -259,7 +252,7 @@ public class Friendly extends Entity {
 	public void handleInputs(GameContainer gc){
 		Input input = gc.getInput();
 
-		if(input.isKeyPressed(input.KEY_LSHIFT)){
+		if(input.isKeyPressed(Input.KEY_LSHIFT)){
 			if(canSpeak && !dialogue.showing()){
 				dialogue.show();
 				speaking = true;

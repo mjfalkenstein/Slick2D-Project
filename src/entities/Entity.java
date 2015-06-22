@@ -3,7 +3,7 @@ package entities;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 /**
  * This class represents anything that can act as a solid object on the screen
@@ -12,7 +12,7 @@ public abstract class Entity {
 	
 	protected float x, y, width, height, startingX, startingY;
 	protected float maxPlayerSpeed = 15;
-	protected Rectangle boundingBox;
+	protected Shape boundingBox;
 	protected Vector2f velocity, startingVelocity;
 	
 	/**
@@ -21,7 +21,7 @@ public abstract class Entity {
 	 * @param boundingBox - a Rectangle representing the borders of the Entity
 	 * @param velocity - the initial velocity
 	 */
-	public Entity(Rectangle boundingBox, Vector2f velocity) {
+	public Entity(Shape boundingBox, Vector2f velocity) {
 		super();
 		x = boundingBox.getMinX();
 		y = boundingBox.getMinY();
@@ -70,7 +70,6 @@ public abstract class Entity {
 	 * @param e - Entity we're checking the collision for
 	 * @param gc - GameContainer
 	 * 
-	 * @return - true if the collision occurred, false otherwise
 	 */
 	public abstract void collide(Entity e, GameContainer gc);
 	
@@ -79,7 +78,7 @@ public abstract class Entity {
 	 */
 	public abstract void reset();
 	
-	public Rectangle getBoundingBox(){
+	public Shape getBoundingBox(){
 		return boundingBox;
 	}
 	

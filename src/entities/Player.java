@@ -22,6 +22,7 @@ public class Player extends Entity {
 	boolean onGround = false;
 	boolean onLeftWall = false;
 	boolean onRightWall = false;
+	boolean dead = false;
 
 	/**
 	 * Constructor
@@ -133,7 +134,6 @@ public class Player extends Entity {
 	 * @param e - Entity we're checking the collision for
 	 * @param gc - GameContainer
 	 * 
-	 * @return - true if the collision occurred, false otherwise
 	 */
 	public void collide(Entity e, GameContainer gc){
 		
@@ -203,6 +203,7 @@ public class Player extends Entity {
 		crouched = false;
 		onLeftWall = false;
 		onRightWall = false;
+		dead = false;
 		velocity = startingVelocity;
 		uncrouch();
 	}
@@ -249,7 +250,7 @@ public class Player extends Entity {
 		}
 		
 		//handling jumping
-		if(input.isKeyPressed(input.KEY_W) || input.isKeyPressed(input.KEY_SPACE)){
+		if(input.isKeyPressed(Input.KEY_W) || input.isKeyPressed(Input.KEY_SPACE)){
 			if(onGround){
 				jump("UP");
 			}else if(onLeftWall){
@@ -258,5 +259,16 @@ public class Player extends Entity {
 				jump("LEFT");
 			}
 		}
+	}
+	
+	/**
+	 * Used to signify that the player has been killed
+	 */
+	public void kill(){
+		dead = true;
+	}
+	
+	public boolean isDead(){
+		return dead;
 	}
 }

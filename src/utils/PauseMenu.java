@@ -5,6 +5,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
+/**
+ * A simple pause menu that contains the necessary buttons for minimal functionality
+ */
 public class PauseMenu {
 
 	int x, y, width, height;
@@ -20,6 +23,14 @@ public class PauseMenu {
 	
 	boolean showing = false;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param gc - the GameContainer
+	 * @param g - the graphics context in which this will be drawn
+	 * @param bg - background color
+	 * @param textColor - text color
+	 */
 	public PauseMenu(GameContainer gc, Graphics g, Color bg, Color textColor){
 		this.bg = bg;
 		this.textColor = textColor;
@@ -49,6 +60,11 @@ public class PauseMenu {
 		height = (int) body.getHeight();
 	}
 
+	/**
+	 * draws the pause menu to the screen
+	 * 
+	 * @param g - the Graphics context
+	 */
 	public void draw(Graphics g){
 		if(showing){
 			g.setColor(bg);
@@ -69,6 +85,12 @@ public class PauseMenu {
 		}
 	}
 	
+	/**
+	 * moves the pause menu to the given x and y
+	 * 
+	 * @param x - x coordinate of the pause menu
+	 * @param y - y coordinate of the pause menu
+	 */
 	public void move(int x, int y){
 		int counter = 0; 
 		mainMenu.move(x, y + buttonYOffset + (counter * buttonYGap));
@@ -84,6 +106,14 @@ public class PauseMenu {
 		body.setLocation(mainMenu.getX() - 10, mainMenu.getY() - g.getFont().getHeight("Paused") - 20);
 	}
 	
+	/**
+	 * detects which part, if any, the mouse is hovering over
+	 * 
+	 * @param x - x coordinate of the mouse
+	 * @param y - y coordinate of the mouse
+	 * 
+	 * @return - string indicative of where the moues is located
+	 */
 	public String hover(int x, int y){
 		String s = "";
 		if(body.contains(x, y)){
@@ -102,6 +132,9 @@ public class PauseMenu {
 		return s;
 	}
 	
+	/**
+	 * Instructs the menu to be drawn
+	 */
 	public void show(){
 		mainMenu.reset();
 		newGame.reset();
@@ -111,6 +144,9 @@ public class PauseMenu {
 		showing = true;
 	}
 	
+	/**
+	 * Instructs the menu to be hidden
+	 */
 	public void hide(){
 		mainMenu.reset();
 		newGame.reset();
@@ -120,6 +156,9 @@ public class PauseMenu {
 		showing = false;
 	}
 	
+	/**
+	 * Resets the menu and all contained buttons
+	 */
 	public void reset(){
 		mainMenu.reset();
 		newGame.reset();

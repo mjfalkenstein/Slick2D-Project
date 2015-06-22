@@ -20,6 +20,7 @@ import utils.BackgroundBarsAnimation;
 import utils.Camera;
 import utils.PauseMenu;
 import entities.Entity;
+import entities.FollowerEnemy;
 import entities.Friendly;
 import entities.Platform;
 import entities.Player;
@@ -31,6 +32,7 @@ public class Level0 extends BasicGameState{
 
 	Player player;
 	Friendly friendly;
+	FollowerEnemy follower;
 	Camera camera;
 	Platform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
 
@@ -70,6 +72,7 @@ public class Level0 extends BasicGameState{
 		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
 		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 50, 75), new Vector2f(0, 0), s, true);
+		follower = new FollowerEnemy(new Circle(1000, 300, 25), new Vector2f(0, 0), player);
 
 		world.add(player);
 		world.add(ground);
@@ -80,6 +83,7 @@ public class Level0 extends BasicGameState{
 		world.add(stair2);
 		world.add(stair3);
 		world.add(friendly);
+		world.add(follower);
 
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
 
@@ -105,7 +109,7 @@ public class Level0 extends BasicGameState{
 		for(Entity e : world){
 			e.draw(g);
 		}
-
+		
 		pauseMenu.draw(g);
 	}
 
@@ -120,19 +124,27 @@ public class Level0 extends BasicGameState{
 		int mouseY = gc.getInput().getMouseY() + camera.getY();
 
 		if(!paused){
-			player.update(gc, delta);
-			
-			friendly.update(gc, delta);
 
 			for(Entity e : world){
+				e.update(gc, delta);
+				
 				player.collide(e, gc);
 				friendly.collide(e, gc);
+				follower.collide(e, gc);
 			}
 
-			//if the player leaves the screen, reset
-			if(player.getY() > levelHeight || player.getMaxX() < 0 || player.getX() > levelWidth){
-				player.reset();
+			//if the player leaves the screen, it dies
+			if(player.getY() > levelHeight){
+				player.kill();
 			}
+		}
+		
+		//if the player is dead, pause and reset
+		if(player.isDead()){
+			for(Entity e : world){
+				e.reset();
+			}
+			pause();
 		}
 
 		pauseMenu.hover(mouseX, mouseY);
@@ -170,15 +182,9 @@ public class Level0 extends BasicGameState{
 	public void keyPressed(int key, char c){
 		if(key == Input.KEY_ESCAPE){
 			if(!paused){
-				gc.pause();
-				pauseMenu.show();
-				gc.setMouseGrabbed(false);
-				paused = true;
+				pause();
 			}else{
-				gc.resume();
-				pauseMenu.hide();
-				gc.setMouseGrabbed(true);
-				paused = false;
+				unpause();
 			}
 		}
 	}
@@ -200,6 +206,20 @@ public class Level0 extends BasicGameState{
 
 	public void leave(GameContainer gc, StateBasedGame sbg){
 		gc.setMouseGrabbed(false);
+	}
+	
+	public void pause(){
+		gc.pause();
+		pauseMenu.show();
+		gc.setMouseGrabbed(false);
+		paused = true;
+	}
+	
+	public void unpause(){
+		gc.resume();
+		pauseMenu.hide();
+		gc.setMouseGrabbed(true);
+		paused = false;
 	}
 
 }

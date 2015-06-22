@@ -14,16 +14,24 @@ import entities.Entity;
  * 
  * serves as ground, ceiling, and walls
  */
-public class Platform extends Entity {
+public class HorizontalOscillatingPlatform extends Entity {
+	
+	int counter = 0;
+	float distance, minX, maxX, startingX;
+	float oldX;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param boundingBox - a Rectangle representing the borders of the Platform
 	 * @param velocity - the initial velocity
+	 * @param maxX - the maximum X value that the platform will reach before turning around
 	 */
-	public Platform(Rectangle boundingBox, Vector2f velocity) {
+	public HorizontalOscillatingPlatform(Rectangle boundingBox, Vector2f velocity, float maxX) {
 		super(boundingBox, velocity);
+		minX = boundingBox.getX();
+		this.maxX = maxX;
+		distance = maxX - minX;
 	}
 
 	/**
@@ -33,10 +41,17 @@ public class Platform extends Entity {
 	 * @param delta - time difference since the last frame
 	 */
 	public void update(GameContainer gc, int delta) {
-		x += velocity.getX() * delta / gc.getFPS();
-		y += velocity.getY() * delta / gc.getFPS();
-
-		boundingBox.setLocation(x, y);
+		counter = counter%360;
+		
+		oldX = boundingBox.getX();
+		
+		move((float) (minX + distance * -Math.sin(counter * Math.PI / 180)), boundingBox.getY());
+		
+		setVelocity(x - oldX, 0);
+		
+		counter++;
+		
+		System.out.println(velocity.getX());
 	}
 
 	/**
@@ -67,7 +82,7 @@ public class Platform extends Entity {
 	 * @param g - Graphics
 	 */
 	public void draw(Graphics g){
-		Color c = Color.black;
+		Color c = Color.magenta;
 		c.a = 1.0f;
 		g.setColor(c);
 		g.fill(boundingBox);
@@ -82,7 +97,7 @@ public class Platform extends Entity {
 	 * @return - true if the collision occurred, false otherwise
 	 */
 	public void collide(Entity e, GameContainer gc){
-		//do nothing
+		//do nothing, collision is handles by other entities
 	}
 	
 	/**

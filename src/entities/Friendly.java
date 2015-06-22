@@ -199,7 +199,7 @@ public class Friendly extends Entity {
 		if(xOverlap > 0 && yOverlap > 0){
 
 			//PLATFORMS
-			if(e instanceof Platform){
+			if(e instanceof StationaryPlatform){
 
 				//collision occurred on the Y axis (vertically oriented)
 				if(yOverlap < xOverlap){
@@ -210,10 +210,10 @@ public class Friendly extends Entity {
 
 						//keep the friendly from wandering off an edge
 						if(boundingBox.getX() <= e.getBoundingBox().getX()){
-							setVelocity(0, 0);
+							setVelocity(velocity.getX(), 0);
 						}
 						if(boundingBox.getMaxX() >= e.getBoundingBox().getMaxX()){
-							setVelocity(0, 0);
+							setVelocity(-velocity.getX(), 0);
 						}
 					}
 				}
@@ -222,12 +222,12 @@ public class Friendly extends Entity {
 				if(yOverlap >= xOverlap){
 					//player is to the left of the Platform
 					if(boundingBox.getCenterX() < e.getBoundingBox().getCenterX()){
-						setVelocity(0, velocity.getY());
+						setVelocity(-velocity.getX(), velocity.getY());
 						x = e.getX() - boundingBox.getWidth();
 
 						//player is to the right of the Platform
 					}if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
-						setVelocity(0, velocity.getY());
+						setVelocity(-velocity.getX(), velocity.getY());
 						x = e.getBoundingBox().getMaxX();
 					}
 				}

@@ -45,6 +45,12 @@ public class Player extends Entity {
 		setVelocity(velocity.getX(), velocity.getY() + gravity);
 		
 		handleInputs(gc);
+		
+//		if(velocity.getX() > maxSpeed){
+//			setVelocity(maxSpeed, velocity.getY());
+//		}else if(velocity.getX() < -maxSpeed){
+//			setVelocity(-maxSpeed, velocity.getY());
+//		}
 
 		y += velocity.getY() * delta / gc.getFPS();
 		x += velocity.getX() * delta / gc.getFPS();
@@ -146,13 +152,13 @@ public class Player extends Entity {
 		if(xOverlap > 0 && yOverlap > 0){
 
 			//PLATFORMS
-			if(e instanceof Platform){
+			if(e instanceof StationaryPlatform || e instanceof HorizontalOscillatingPlatform){
 				
 				//collision occurred on the Y axis (vertically oriented)
 				if(yOverlap < xOverlap){
 					//player is above the Platform
 					if(boundingBox.getCenterY() < e.getBoundingBox().getCenterY()){
-						setVelocity(velocity.getX(), 0);
+						setVelocity(velocity.getX() + e.getVelocity().getX(), 0);
 						y = e.getY() - height;
 
 						onGround = true;

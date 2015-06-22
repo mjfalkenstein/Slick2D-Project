@@ -22,7 +22,8 @@ import utils.PauseMenu;
 import entities.Entity;
 import entities.FollowerEnemy;
 import entities.Friendly;
-import entities.Platform;
+import entities.HorizontalOscillatingPlatform;
+import entities.StationaryPlatform;
 import entities.Player;
 
 public class Level0 extends BasicGameState{
@@ -34,7 +35,8 @@ public class Level0 extends BasicGameState{
 	Friendly friendly;
 	FollowerEnemy follower;
 	Camera camera;
-	Platform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
+	StationaryPlatform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
+	HorizontalOscillatingPlatform HOP1;
 
 	Circle background;
 
@@ -61,13 +63,14 @@ public class Level0 extends BasicGameState{
 
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 
-		ground = new Platform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 50), new Vector2f(0, 0));
-		platform = new Platform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 50), new Vector2f(0, 0));
-		leftWall = new Platform(new Rectangle(50, ground.getY()-400, 50, 400), new Vector2f(0, 0));
-		rightWall = new Platform(new Rectangle(ground.getX() + ground.getWidth() - 50, ground.getY() - 50, 50, 50), new Vector2f(0, 0));
-		stair1 = new Platform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
-		stair2 = new Platform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
-		stair3 = new Platform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
+		ground = new StationaryPlatform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 50), new Vector2f(0, 0));
+		platform = new StationaryPlatform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 50), new Vector2f(0, 0));
+		leftWall = new StationaryPlatform(new Rectangle(50, ground.getY()-400, 50, 400), new Vector2f(0, 0));
+		rightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 50, ground.getY() - 50, 50, 50), new Vector2f(0, 0));
+		stair1 = new StationaryPlatform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
+		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
+		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
+		HOP1 = new HorizontalOscillatingPlatform(new Rectangle(400, 400, 200, 50), new Vector2f(0, 0), 800);
 		
 		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
@@ -82,6 +85,7 @@ public class Level0 extends BasicGameState{
 		world.add(stair1);
 		world.add(stair2);
 		world.add(stair3);
+		world.add(HOP1);
 		world.add(friendly);
 		world.add(follower);
 
@@ -130,7 +134,7 @@ public class Level0 extends BasicGameState{
 				
 				player.collide(e, gc);
 				friendly.collide(e, gc);
-				follower.collide(e, gc);
+				//follower.collide(e, gc);
 			}
 
 			//if the player leaves the screen, it dies

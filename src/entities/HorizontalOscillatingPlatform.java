@@ -50,8 +50,6 @@ public class HorizontalOscillatingPlatform extends Entity {
 		setVelocity(x - oldX, 0);
 		
 		counter++;
-		
-		System.out.println(velocity.getX());
 	}
 
 	/**

@@ -158,7 +158,7 @@ public class Player extends Entity {
 				if(yOverlap < xOverlap){
 					//player is above the Platform
 					if(boundingBox.getCenterY() < e.getBoundingBox().getCenterY()){
-						setVelocity(velocity.getX() + e.getVelocity().getX(), 0);
+						setVelocity(velocity.getX(), 0);
 						y = e.getY() - height;
 
 						onGround = true;

@@ -33,6 +33,9 @@ public class HorizontalOscillatingPlatform extends Entity {
 		this.maxX = maxX;
 		distance = (maxX - minX)/2;
 		center = (maxX + minX)/2;
+		startingX = center;
+		startingY = boundingBox.getY();
+		boundingBox.setLocation(center, boundingBox.getY());
 	}
 
 	/**
@@ -48,7 +51,7 @@ public class HorizontalOscillatingPlatform extends Entity {
 		
 		move((float) (center + distance * -Math.sin(counter * Math.PI / 180)), boundingBox.getY());
 		
-		setVelocity(x - oldX, 0);
+		setVelocity((x - oldX)/delta * gc.getFPS(), 0);
 		
 		counter++;
 	}

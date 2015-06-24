@@ -23,6 +23,7 @@ public class Player extends Entity {
 	boolean onLeftWall = false;
 	boolean onRightWall = false;
 	boolean dead = false;
+	Vector2f environmentVelocity;
 
 	/**
 	 * Constructor
@@ -32,6 +33,7 @@ public class Player extends Entity {
 	 */
 	public Player(Rectangle boundingBox, Vector2f velocity) {
 		super(boundingBox, velocity);
+		environmentVelocity = new Vector2f(0, 0);
 		originalHeight = boundingBox.getHeight();
 	}
 
@@ -45,17 +47,13 @@ public class Player extends Entity {
 		setVelocity(velocity.getX(), velocity.getY() + gravity);
 		
 		handleInputs(gc);
-		
-//		if(velocity.getX() > maxSpeed){
-//			setVelocity(maxSpeed, velocity.getY());
-//		}else if(velocity.getX() < -maxSpeed){
-//			setVelocity(-maxSpeed, velocity.getY());
-//		}
 
-		y += velocity.getY() * delta / gc.getFPS();
-		x += velocity.getX() * delta / gc.getFPS();
+		y += (velocity.getY() + environmentVelocity.getY()) * delta / gc.getFPS();
+		x += (velocity.getX() + environmentVelocity.getX()) * delta / gc.getFPS();
 
 		boundingBox.setLocation(x, y);
+		
+		environmentVelocity.set(0, 0);
 		
 		onGround = false;
 		onRightWall = false;
@@ -158,7 +156,10 @@ public class Player extends Entity {
 				if(yOverlap < xOverlap){
 					//player is above the Platform
 					if(boundingBox.getCenterY() < e.getBoundingBox().getCenterY()){
-						setVelocity(velocity.getX(), 0);
+						if(velocity.getX() <= maxSpeed){
+							setVelocity(velocity.getX(), 0);
+							environmentVelocity.set(e.getVelocity().getX(), e.getVelocity().getY());
+						}
 						y = e.getY() - height;
 
 						onGround = true;
@@ -169,7 +170,7 @@ public class Player extends Entity {
 						y = e.getBoundingBox().getMaxY();
 						
 						//if overlap is too great, assume player has uncrouched under a low ceiling and needs to be moved out
-						if(yOverlap > 15){
+						if(yOverlap > 15 && boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
 							if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
 								move(x + 5, y);
 							}else{
@@ -183,6 +184,7 @@ public class Player extends Entity {
 					//player is to the left of the Platform
 					if(boundingBox.getCenterX() < e.getBoundingBox().getCenterX()){
 						setVelocity(0, velocity.getY());
+						environmentVelocity.set(e.getVelocity().getX(), e.getVelocity().getY());
 						x = e.getX() - boundingBox.getWidth();
 						
 						onLeftWall = true;
@@ -190,6 +192,7 @@ public class Player extends Entity {
 					//player is to the right of the Platform
 					}if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
 						setVelocity(0, velocity.getY());
+						environmentVelocity.set(e.getVelocity().getX(), e.getVelocity().getY());
 						x = e.getBoundingBox().getMaxX();
 						
 						onRightWall = true;
@@ -211,6 +214,7 @@ public class Player extends Entity {
 		onRightWall = false;
 		dead = false;
 		velocity = startingVelocity;
+		environmentVelocity = new Vector2f(0, 0);
 		uncrouch();
 	}
 	

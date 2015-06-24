@@ -14,11 +14,11 @@ import entities.Entity;
  * 
  * serves as ground, ceiling, and walls
  */
-public class HorizontalOscillatingPlatform extends Entity {
+public class VerticalOscillatingPlatform extends Entity {
 	
 	int counter = 0;
-	float distance, center, minX, maxX;
-	float oldX;
+	float distance, center, minY, maxY;
+	float oldY;
 
 	/**
 	 * Constructor
@@ -27,14 +27,14 @@ public class HorizontalOscillatingPlatform extends Entity {
 	 * @param velocity - the initial velocity
 	 * @param maxX - the maximum X value that the platform will reach before turning around
 	 */
-	public HorizontalOscillatingPlatform(Rectangle boundingBox, Vector2f velocity, float maxX) {
+	public VerticalOscillatingPlatform(Rectangle boundingBox, Vector2f velocity, float maxY) {
 		super(boundingBox, velocity);
-		minX = boundingBox.getX();
-		this.maxX = maxX;
-		distance = (maxX - minX)/2;
-		center = (maxX + minX)/2;
+		minY = boundingBox.getY();
+		this.maxY = maxY;
+		distance = (maxY - minY)/2;
+		center = (maxY + minY)/2;
 		startingX = center;
-		boundingBox.setLocation(center, boundingBox.getY());
+		boundingBox.setLocation(boundingBox.getX(), center);
 	}
 
 	/**
@@ -46,11 +46,11 @@ public class HorizontalOscillatingPlatform extends Entity {
 	public void update(GameContainer gc, int delta) {
 		counter = counter%360;
 		
-		oldX = boundingBox.getX();
+		oldY = boundingBox.getY();
 		
-		move((float) (center + distance * -Math.sin(counter * Math.PI / 180)), boundingBox.getY());
+		move(boundingBox.getX(), (float) (center + distance * -Math.sin(counter * Math.PI / 180)));
 		
-		setVelocity((x - oldX)/delta * gc.getFPS(), 0);
+		setVelocity(0, (y - oldY)/delta * gc.getFPS());
 		
 		counter++;
 	}

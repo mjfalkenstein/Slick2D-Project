@@ -150,7 +150,9 @@ public class Player extends Entity {
 		if(xOverlap > 0 && yOverlap > 0){
 
 			//PLATFORMS
-			if(e instanceof StationaryPlatform || e instanceof HorizontalOscillatingPlatform){
+			if(	e instanceof StationaryPlatform || 
+				e instanceof HorizontalOscillatingPlatform || 
+				e instanceof VerticalOscillatingPlatform){
 				
 				//collision occurred on the Y axis (vertically oriented)
 				if(yOverlap < xOverlap){

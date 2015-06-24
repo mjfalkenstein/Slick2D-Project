@@ -17,7 +17,7 @@ import entities.Entity;
 public class HorizontalOscillatingPlatform extends Entity {
 	
 	int counter = 0;
-	float distance, minX, maxX, startingX;
+	float distance, center, minX, maxX, startingX;
 	float oldX;
 
 	/**
@@ -31,7 +31,8 @@ public class HorizontalOscillatingPlatform extends Entity {
 		super(boundingBox, velocity);
 		minX = boundingBox.getX();
 		this.maxX = maxX;
-		distance = maxX - minX;
+		distance = (maxX - minX)/2;
+		center = (maxX + minX)/2;
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class HorizontalOscillatingPlatform extends Entity {
 		
 		oldX = boundingBox.getX();
 		
-		move((float) (minX + distance * -Math.sin(counter * Math.PI / 180)), boundingBox.getY());
+		move((float) (center + distance * -Math.sin(counter * Math.PI / 180)), boundingBox.getY());
 		
 		setVelocity(x - oldX, 0);
 		

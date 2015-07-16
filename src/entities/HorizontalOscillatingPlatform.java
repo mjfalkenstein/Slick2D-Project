@@ -37,12 +37,7 @@ public class HorizontalOscillatingPlatform extends Entity {
 		boundingBox.setLocation(center, boundingBox.getY());
 	}
 
-	/**
-	 * Called every frame, used to update position, state, etc
-	 * 
-	 * @param gc - GameContainer
-	 * @param delta - time difference since the last frame
-	 */
+	@Override
 	public void update(GameContainer gc, int delta) {
 		counter = counter%360;
 		
@@ -55,12 +50,7 @@ public class HorizontalOscillatingPlatform extends Entity {
 		counter++;
 	}
 
-	/**
-	 * Instantly moves the entity to new coordinates (x, y)
-	 * 
-	 * @param x - new x coordinate
-	 * @param y - new y coordinate
-	 */
+	@Override
 	public void move(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -68,42 +58,28 @@ public class HorizontalOscillatingPlatform extends Entity {
 		boundingBox.setLocation(x, y);
 	}
 
-	/**
-	 * Rotates the entity by a given amount in degrees
-	 * 
-	 * @param degrees - rotation
-	 */
+	@Override
 	public void rotate(float degrees){
 		boundingBox.transform(Transform.createRotateTransform(degrees));
 	}
 
-	/**
-	 * Draws the entity to the given Graphics context
-	 * 
-	 * @param g - Graphics
-	 */
+	@Override
 	public void draw(Graphics g){
 		Color c = Color.magenta;
 		c.a = 1.0f;
 		g.setColor(c);
 		g.fill(boundingBox);
+		g.setColor(Color.magenta.darker());
+		g.setLineWidth(3);
+		g.draw(boundingBox);
 	}
 
-	/**
-	 * returns true if this entity has collided with the given 
-	 * 
-	 * @param e - Entity we're checking the collision for
-	 * @param gc - GameContainer
-	 * 
-	 * @return - true if the collision occurred, false otherwise
-	 */
+	@Override
 	public void collide(Entity e, GameContainer gc){
 		//do nothing, collision is handles by other entities
 	}
 	
-	/**
-	 * Resets the Entity to its original position, velocity, and states
-	 */
+	@Override
 	public void reset(){
 		move(startingX, startingY);
 		velocity = startingVelocity;

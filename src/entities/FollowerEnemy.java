@@ -34,12 +34,7 @@ public class FollowerEnemy extends Entity{
 		this.target = target;
 	}
 
-	/**
-	 * Called every frame, used to update position, state, etc
-	 * 
-	 * @param gc - GameContainer
-	 * @param delta - time difference since the last frame
-	 */
+	@Override
 	public void update(GameContainer gc, int delta) {
 		if(Math.abs(boundingBox.getCenterX() - target.getCenterX()) < followRange && Math.abs(boundingBox.getCenterY() - target.getCenterY()) < followRange){
 			following = true;
@@ -66,12 +61,7 @@ public class FollowerEnemy extends Entity{
 		boundingBox.setLocation(x, y);
 	}
 
-	/**
-	 * Instantly moves the entity to new coordinates (x, y)
-	 * 
-	 * @param x - new x coordinate
-	 * @param y - new y coordinate
-	 */
+	@Override
 	public void move(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -79,38 +69,21 @@ public class FollowerEnemy extends Entity{
 		boundingBox.setLocation(x, y);
 	}
 
-	/**
-	 * Rotates the entity by a given amount in degrees
-	 * 
-	 * @param degrees - rotation
-	 */
+	@Override
 	public void rotate(float degrees){
 		boundingBox.transform(Transform.createRotateTransform(degrees));
 	}
 
-	/**
-	 * Draws the entity to the given Graphics context
-	 * 
-	 * @param g - Graphics
-	 */	/**
-	 * Draws the entity to the given Graphics context
-	 * 
-	 * @param g - Graphics
-	 */
+	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.yellow);
 		g.fill(boundingBox);
+		g.setColor(Color.yellow.darker());
+		g.setLineWidth(3);
+		g.draw(boundingBox);
 	}
 
-	/**
-	 * returns true if this entity has collided with the given 
-	 * 
-	 * This method also handles when/how to jump
-	 * 
-	 * @param e - Entity we're checking the collision for
-	 * @param gc - GameContainer
-	 * 
-	 */
+	@Override
 	public void collide(Entity e, GameContainer gc) {
 
 		//calculating the overlap of the Player and the entity on each of the axes
@@ -128,9 +101,7 @@ public class FollowerEnemy extends Entity{
 		}
 	}
 
-	/**
-	 * Resets the Entity to its original position, velocity, and states
-	 */
+	@Override
 	public void reset() {
 		move(startingX, startingY);
 		following = false;

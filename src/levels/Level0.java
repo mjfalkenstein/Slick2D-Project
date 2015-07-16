@@ -23,8 +23,10 @@ import entities.Entity;
 import entities.FollowerEnemy;
 import entities.Friendly;
 import entities.HorizontalOscillatingPlatform;
+import entities.Key;
 import entities.StationaryPlatform;
 import entities.Player;
+import entities.TurretEnemy;
 import entities.VerticalOscillatingPlatform;
 
 public class Level0 extends BasicGameState{
@@ -35,10 +37,12 @@ public class Level0 extends BasicGameState{
 	Player player;
 	Friendly friendly;
 	FollowerEnemy follower;
+	TurretEnemy turret;
 	Camera camera;
 	StationaryPlatform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
 	HorizontalOscillatingPlatform HOP1;
 	VerticalOscillatingPlatform VOP1;
+	Key key1, key2;
 
 	Circle background;
 
@@ -73,12 +77,15 @@ public class Level0 extends BasicGameState{
 		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
 		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
 		HOP1 = new HorizontalOscillatingPlatform(new Rectangle(400, 400, 200, 50), new Vector2f(0, 0), 800);
-		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 50), new Vector2f(0, 0), 0);
+		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 50), new Vector2f(0, 0), 200);
+		key1 = new Key(new Circle(500, 600, 25), new Vector2f(0, 0));
+		key2 = new Key(new Circle(1000, 600, 25), new Vector2f(0, 0));
 		
 		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
 		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 50, 75), new Vector2f(0, 0), s, true);
 		follower = new FollowerEnemy(new Circle(1000, 300, 25), new Vector2f(0, 0), player);
+		turret = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
 
 		world.add(player);
 		world.add(ground);
@@ -90,8 +97,11 @@ public class Level0 extends BasicGameState{
 		world.add(stair3);
 		world.add(HOP1);
 		world.add(VOP1);
+		world.add(key1);
+		world.add(key2);
 		world.add(friendly);
 		world.add(follower);
+		world.add(turret);
 
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
 
@@ -119,6 +129,10 @@ public class Level0 extends BasicGameState{
 		}
 		
 		pauseMenu.draw(g);
+		
+		if(player.getInventory() != null){
+			player.getInventory().draw(g);
+		}
 	}
 
 	/**
@@ -140,11 +154,25 @@ public class Level0 extends BasicGameState{
 				friendly.collide(e, gc);
 				//follower.collide(e, gc);
 			}
+			
+			key1.collide(player, gc);
+			key2.collide(player, gc);
 
+			key1.collide(player, gc);
 			//if the player leaves the screen, it dies
 			if(player.getY() > levelHeight){
 				player.kill();
 			}
+			
+			player.getInventory().move(camera.getX(), camera.getY());
+		}
+		
+		player.getInventory().update(gc, delta);
+		
+		if(player.getInventory().isVisible()){
+			pause();
+		}else{
+			unpause();
 		}
 		
 		//if the player is dead, pause and reset
@@ -152,7 +180,7 @@ public class Level0 extends BasicGameState{
 			for(Entity e : world){
 				e.reset();
 			}
-			pause();
+			// pause();
 		}
 
 		pauseMenu.hover(mouseX, mouseY);
@@ -191,8 +219,10 @@ public class Level0 extends BasicGameState{
 		if(key == Input.KEY_ESCAPE){
 			if(!paused){
 				pause();
+				pauseMenu.show();
 			}else{
 				unpause();
+				pauseMenu.hide();
 			}
 		}
 	}
@@ -218,16 +248,13 @@ public class Level0 extends BasicGameState{
 	
 	public void pause(){
 		gc.pause();
-		pauseMenu.show();
 		gc.setMouseGrabbed(false);
 		paused = true;
 	}
 	
 	public void unpause(){
 		gc.resume();
-		pauseMenu.hide();
 		gc.setMouseGrabbed(true);
 		paused = false;
 	}
-
 }

@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.ArrayList;
+
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -8,6 +10,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
 
+import utils.Inventory;
+import utils.Item;
 import entities.Entity;
 
 /**
@@ -24,6 +28,7 @@ public class Player extends Entity {
 	boolean onRightWall = false;
 	boolean dead = false;
 	Vector2f environmentVelocity;
+	Inventory inventory;
 
 	/**
 	 * Constructor
@@ -36,14 +41,26 @@ public class Player extends Entity {
 		environmentVelocity = new Vector2f(0, 0);
 		originalHeight = boundingBox.getHeight();
 	}
-
+	
 	/**
-	 * Called every frame, used to update position, state, etc
+	 * Constructor
 	 * 
-	 * @param gc - GameContainer
-	 * @param delta - time difference since the last frame
+	 * @param boundingBox - a Rectangle representing the borders of the Platform
+	 * @param velocity - the initial velocity
 	 */
+	public Player(Rectangle boundingBox, Vector2f velocity, Inventory inventory) {
+		super(boundingBox, velocity);
+		environmentVelocity = new Vector2f(0, 0);
+		originalHeight = boundingBox.getHeight();
+		this.inventory = inventory;
+	}
+
+	@Override
 	public void update(GameContainer gc, int delta) {
+		if(inventory == null){
+			inventory = new Inventory(gc, new ArrayList<Item>());
+		}
+		
 		setVelocity(velocity.getX(), velocity.getY() + gravity);
 		
 		handleInputs(gc);
@@ -60,12 +77,7 @@ public class Player extends Entity {
 		onLeftWall = false;
 	}
 
-	/**
-	 * Instantly moves the entity to new coordinates (x, y)
-	 * 
-	 * @param x - new x coordinate
-	 * @param y - new y coordinate
-	 */
+	@Override
 	public void move(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -73,20 +85,12 @@ public class Player extends Entity {
 		boundingBox.setLocation(x, y);
 	}
 
-	/**
-	 * Rotates the entity by a given amount in degrees
-	 * 
-	 * @param degrees - rotation
-	 */
+	@Override
 	public void rotate(float degrees){
 		boundingBox.transform(Transform.createRotateTransform(degrees));
 	}
 
-	/**
-	 * Draws the entity to the given Graphics context
-	 * 
-	 * @param g - Graphics
-	 */
+	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.red);
 		g.fill(boundingBox);
@@ -130,15 +134,7 @@ public class Player extends Entity {
 		crouched = false;
 	}
 
-	/**
-	 * returns true if this entity has collided with the given 
-	 * 
-	 * This method also handles when/how to jump
-	 * 
-	 * @param e - Entity we're checking the collision for
-	 * @param gc - GameContainer
-	 * 
-	 */
+	@Override
 	public void collide(Entity e, GameContainer gc){
 		
 		//calculating the overlap of the Player and the entity on each of the axes
@@ -204,9 +200,7 @@ public class Player extends Entity {
 		}
 	}
 	
-	/**
-	 * Resets the Entity to its original position, velocity, and states
-	 */
+	@Override
 	public void reset(){
 		move(startingX, startingY);
 		setVelocity(0, 0);
@@ -282,5 +276,17 @@ public class Player extends Entity {
 	
 	public boolean isDead(){
 		return dead;
+	}
+
+	public void addItem(Item item) {
+		inventory.addItem(item);
+	}
+	
+	public Inventory getInventory(){
+		return inventory;
+	}
+	
+	public boolean has(Item item){
+		return inventory.contains(item);
 	}
 }

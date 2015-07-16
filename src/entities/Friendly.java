@@ -85,12 +85,7 @@ public class Friendly extends Entity {
 		speakingBox = new Rectangle(boundingBox.getX() - boundingBox.getWidth(), boundingBox.getY(), boundingBox.getWidth() * 3, boundingBox.getHeight());
 	}
 
-	/**
-	 * Called every frame, used to update position, state, etc
-	 * 
-	 * @param gc - GameContainer
-	 * @param delta - time difference since the last frame
-	 */
+	@Override
 	public void update(GameContainer gc, int delta) {
 		setVelocity(velocity.getX(), velocity.getY() + gravity);
 
@@ -134,12 +129,7 @@ public class Friendly extends Entity {
 		boundingBox.setLocation(x, y);
 	}
 
-	/**
-	 * Instantly moves the entity to new coordinates (x, y)
-	 * 
-	 * @param x - new x coordinate
-	 * @param y - new y coordinate
-	 */
+	@Override
 	public void move(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -148,21 +138,13 @@ public class Friendly extends Entity {
 		boundingBox.setLocation(x, y);
 	}
 
-	/**
-	 * Rotates the entity by a given amount in degrees
-	 * 
-	 * @param degrees - rotation
-	 */
+	@Override
 	public void rotate(float degrees){
 		boundingBox.transform(Transform.createRotateTransform(degrees));
 		speakingBox.transform(Transform.createRotateTransform(degrees));
 	}
 
-	/**
-	 * Draws the entity to the given Graphics context
-	 * 
-	 * @param g - Graphics
-	 */
+	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.blue);
 		g.fill(boundingBox);
@@ -171,15 +153,7 @@ public class Friendly extends Entity {
 		}
 	}
 
-	/**
-	 * returns true if this entity has collided with the given 
-	 * 
-	 * This method also handles when/how to jump
-	 * 
-	 * @param e - Entity we're checking the collision for
-	 * @param gc - GameContainer
-	 * 
-	 */
+	@Override
 	public void collide(Entity e, GameContainer gc){
 
 		//calculating the overlap of the Player and the entity on each of the axes
@@ -235,9 +209,7 @@ public class Friendly extends Entity {
 		}
 	}
 
-	/**
-	 * Resets the Entity to its original position, velocity, and states
-	 */
+	@Override
 	public void reset(){
 		move(startingX, startingY);
 		velocity = startingVelocity;

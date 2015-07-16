@@ -37,7 +37,7 @@ public class Level0 extends BasicGameState{
 	Player player;
 	Friendly friendly;
 	FollowerEnemy follower;
-	TurretEnemy turret;
+	TurretEnemy turret1, turret2;
 	Camera camera;
 	StationaryPlatform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
 	HorizontalOscillatingPlatform HOP1;
@@ -85,7 +85,8 @@ public class Level0 extends BasicGameState{
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
 		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 50, 75), new Vector2f(0, 0), s, true);
 		follower = new FollowerEnemy(new Circle(1000, 300, 25), new Vector2f(0, 0), player);
-		turret = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
+		turret1 = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
+		turret2 = new TurretEnemy(new Circle(1000, 200, 25), new Vector2f(0, 0), player);
 
 		world.add(player);
 		world.add(ground);
@@ -101,7 +102,8 @@ public class Level0 extends BasicGameState{
 		world.add(key2);
 		world.add(friendly);
 		world.add(follower);
-		world.add(turret);
+		world.add(turret1);
+		world.add(turret2);
 
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
 
@@ -153,6 +155,8 @@ public class Level0 extends BasicGameState{
 				player.collide(e, gc);
 				friendly.collide(e, gc);
 				//follower.collide(e, gc);
+				//turret1.collide(e, gc);
+				//turret2.collide(e, gc);
 			}
 			
 			key1.collide(player, gc);

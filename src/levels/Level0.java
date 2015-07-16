@@ -69,22 +69,22 @@ public class Level0 extends BasicGameState{
 
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 
-		ground = new StationaryPlatform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 50), new Vector2f(0, 0));
-		platform = new StationaryPlatform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 50), new Vector2f(0, 0));
-		leftWall = new StationaryPlatform(new Rectangle(50, ground.getY()-400, 50, 400), new Vector2f(0, 0));
-		rightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 50, ground.getY() - 50, 50, 50), new Vector2f(0, 0));
-		stair1 = new StationaryPlatform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 50), new Vector2f(0, 0));
-		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 50), new Vector2f(0, 0));
-		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 50), new Vector2f(0, 0));
-		HOP1 = new HorizontalOscillatingPlatform(new Rectangle(400, 400, 200, 50), new Vector2f(0, 0), 800);
-		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 50), new Vector2f(0, 0), 200);
-		key1 = new Key(new Circle(500, 600, 25), new Vector2f(0, 0));
-		key2 = new Key(new Circle(1000, 600, 25), new Vector2f(0, 0));
+		ground = new StationaryPlatform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 40), new Vector2f(0, 0));
+		platform = new StationaryPlatform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 40), new Vector2f(0, 0));
+		leftWall = new StationaryPlatform(new Rectangle(50, ground.getY()-400, 40, 400), new Vector2f(0, 0));
+		rightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 50, ground.getY() - 50, 40, 50), new Vector2f(0, 0));
+		stair1 = new StationaryPlatform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 40), new Vector2f(0, 0));
+		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 40), new Vector2f(0, 0));
+		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 40), new Vector2f(0, 0));
+		HOP1 = new HorizontalOscillatingPlatform(new Rectangle(400, 400, 200, 40), new Vector2f(0, 0), 800);
+		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 40), new Vector2f(0, 0), 200);
+		key1 = new Key(new Circle(500, 600, 15), new Vector2f(0, 0));
+		key2 = new Key(new Circle(1000, 600, 15), new Vector2f(0, 0));
 		
-		player = new Player(new Rectangle(120, 100, 50, 75), new Vector2f(0, 0));
+		player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
-		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 50, 75), new Vector2f(0, 0), s, true);
-		follower = new FollowerEnemy(new Circle(1000, 300, 25), new Vector2f(0, 0), player);
+		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 40, 60), new Vector2f(0, 0), s, true);
+		follower = new FollowerEnemy(new Circle(1000, 300, 15), new Vector2f(0, 0), player);
 		turret1 = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
 		turret2 = new TurretEnemy(new Circle(1000, 200, 25), new Vector2f(0, 0), player);
 

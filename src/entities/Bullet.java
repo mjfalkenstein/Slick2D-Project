@@ -8,7 +8,7 @@ import org.newdawn.slick.geom.Shape;
 
 public class Bullet extends Entity{
 
-	static public float maxSpeed = 12;
+	static public float maxSpeed = 15;
 	float lifeTime = 5000;
 	boolean visible = true;
 	Vector2f direction;

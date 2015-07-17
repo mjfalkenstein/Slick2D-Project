@@ -36,6 +36,7 @@ public class TurretEnemy extends Entity{
 
 	@Override
 	public void update(GameContainer gc, int delta) {
+		//handle the bullet updating
 		Line line = new Line(target.getCenterX() - boundingBox.getCenterX(), target.getCenterY() - boundingBox.getCenterY());
 		cooldown -= delta;
 		Bullet b;
@@ -48,7 +49,12 @@ public class TurretEnemy extends Entity{
 				}
 			}
 		}
+		
+		if(bullets.size() > 10){
+			bullets = bullets.subList(bullets.size()/2, bullets.size());
+		}
 
+		//handle the barrel rotation
 		if(line.length() < targetDistance){
 			angle = (float) Math.atan2(target.getCenterY() - boundingBox.getCenterY(), target.getCenterX() - boundingBox.getCenterX());
 			angle += Math.PI/2;
@@ -67,19 +73,11 @@ public class TurretEnemy extends Entity{
 
 	@Override
 	public void rotate(float degrees) {
-		boundingBox.transform(Transform.createRotateTransform(degrees));
-		barrel.transform(Transform.createRotateTransform(degrees + 90));
+		//do nothing, the update method handles rotation
 	}
 
 	@Override 
 	public void draw(Graphics g) {
-		g.setColor(Color.gray);
-		g.fill(barrel);
-		g.fill(boundingBox);
-		g.setColor(Color.gray.darker());
-		g.setLineWidth(3);
-		g.draw(barrel);
-		g.draw(boundingBox);
 		Bullet b;
 		synchronized(bullets){
 			Iterator<Bullet> i = bullets.iterator();
@@ -90,6 +88,13 @@ public class TurretEnemy extends Entity{
 				}
 			}
 		}
+		g.setColor(Color.gray);
+		g.fill(barrel);
+		g.fill(boundingBox);
+		g.setColor(Color.gray.darker());
+		g.setLineWidth(3);
+		g.draw(barrel);
+		g.draw(boundingBox);
 	}
 
 	@Override

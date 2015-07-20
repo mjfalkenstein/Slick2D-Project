@@ -26,7 +26,7 @@ public class Key extends Item {
 
 	@Override
 	public void update(GameContainer gc, int delta) {
-
+		//Do nothing
 	}
 
 	@Override
@@ -74,5 +74,6 @@ public class Key extends Item {
 	@Override
 	public void reset() {
 		move(startingX, startingY);
+		isShowing = true;
 	}
 }

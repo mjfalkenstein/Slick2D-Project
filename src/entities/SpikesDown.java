@@ -11,9 +11,9 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 /**
- * This class represents a series of upward-facing spikes of a fixed width and height that kill the player if it touches them
+ * This class represents a series of downward-facing spikes of a fixed width and height that kill the player if it touches them
  */
-public class SpikesUp extends Entity{
+public class SpikesDown extends Entity{
 	
 	ArrayList<Polygon> spikes;
 	int spikeWidth = 50;
@@ -25,7 +25,7 @@ public class SpikesUp extends Entity{
 	 * @param boundingBox - a Rectangle representing the borders of the Entity
 	 * @param velocity - the initial velocity
 	 */
-	public SpikesUp(Shape boundingBox, Vector2f velocity) {
+	public SpikesDown(Shape boundingBox, Vector2f velocity) {
 		super(boundingBox, velocity);
 		if(boundingBox.getWidth() % spikeWidth != 0){
 			boundingBox = new Rectangle(boundingBox.getX(), boundingBox.getY(), (boundingBox.getWidth() * spikeWidth) / spikeWidth, spikeWidth);
@@ -40,11 +40,11 @@ public class SpikesUp extends Entity{
 		float counter = 0;
 		for(int i = 0; i < numSpikes * 6 - 5; i += 6){
 			points[i+0] = boundingBox.getX() + counter * spikeWidth;
-			points[i+1] = boundingBox.getMaxY();
+			points[i+1] = boundingBox.getY();
 			points[i+2] = boundingBox.getX() + (counter+1) * spikeWidth;
-			points[i+3] = boundingBox.getMaxY();
+			points[i+3] = boundingBox.getY();
 			points[i+4] = boundingBox.getX() + counter * spikeWidth + 0.5f * spikeWidth;
-			points[i+5] = boundingBox.getY();
+			points[i+5] = boundingBox.getMaxY();
 			counter++;
 		}
 		

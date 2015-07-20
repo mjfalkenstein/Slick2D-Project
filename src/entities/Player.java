@@ -212,6 +212,9 @@ public class Player extends Entity {
 		velocity = startingVelocity;
 		environmentVelocity = new Vector2f(0, 0);
 		uncrouch();
+		if(inventory != null){
+			inventory.reset();
+		}
 	}
 	
 	/**

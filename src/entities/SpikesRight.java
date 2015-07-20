@@ -11,12 +11,12 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 /**
- * This class represents a series of upward-facing spikes of a fixed width and height that kill the player if it touches them
+ * This class represents a series of left-facing spikes of a fixed width and height that kill the player if it touches them
  */
-public class SpikesUp extends Entity{
+public class SpikesRight extends Entity{
 	
 	ArrayList<Polygon> spikes;
-	int spikeWidth = 50;
+	int spikeHeight = 50;
 	int numSpikes;
 	
 	/**
@@ -25,26 +25,26 @@ public class SpikesUp extends Entity{
 	 * @param boundingBox - a Rectangle representing the borders of the Entity
 	 * @param velocity - the initial velocity
 	 */
-	public SpikesUp(Shape boundingBox, Vector2f velocity) {
+	public SpikesRight(Shape boundingBox, Vector2f velocity) {
 		super(boundingBox, velocity);
-		if(boundingBox.getWidth() % spikeWidth != 0){
-			boundingBox = new Rectangle(boundingBox.getX(), boundingBox.getY(), (boundingBox.getWidth() * spikeWidth) / spikeWidth, spikeWidth);
+		if(boundingBox.getHeight() % spikeHeight != 0){
+			boundingBox = new Rectangle(boundingBox.getX(), boundingBox.getY(), spikeHeight, (boundingBox.getHeight() * spikeHeight) / spikeHeight);
 		}
 		setVelocity(0, 0);
 		
 		spikes = new ArrayList<Polygon>();
 		
-		numSpikes = (int) (boundingBox.getWidth() / spikeWidth);
+		numSpikes = (int) (boundingBox.getHeight() / spikeHeight);
 		
 		float[] points = new float[numSpikes * 6];
 		float counter = 0;
 		for(int i = 0; i < numSpikes * 6 - 5; i += 6){
-			points[i+0] = boundingBox.getX() + counter * spikeWidth;
-			points[i+1] = boundingBox.getMaxY();
-			points[i+2] = boundingBox.getX() + (counter+1) * spikeWidth;
-			points[i+3] = boundingBox.getMaxY();
-			points[i+4] = boundingBox.getX() + counter * spikeWidth + 0.5f * spikeWidth;
-			points[i+5] = boundingBox.getY();
+			points[i+0] = boundingBox.getX();
+			points[i+1] = boundingBox.getY() + counter * spikeHeight;
+			points[i+2] = boundingBox.getX();
+			points[i+3] = boundingBox.getY() + (counter + 1) * spikeHeight;
+			points[i+4] = boundingBox.getMaxX();
+			points[i+5] = boundingBox.getY() + counter * spikeHeight + 0.5f * spikeHeight;
 			counter++;
 		}
 		

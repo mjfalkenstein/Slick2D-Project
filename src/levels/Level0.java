@@ -24,6 +24,9 @@ import entities.FollowerEnemy;
 import entities.Friendly;
 import entities.HorizontalOscillatingPlatform;
 import entities.Key;
+import entities.SpikesDown;
+import entities.SpikesLeft;
+import entities.SpikesRight;
 import entities.SpikesUp;
 import entities.StationaryPlatform;
 import entities.Player;
@@ -40,11 +43,14 @@ public class Level0 extends BasicGameState{
 	FollowerEnemy follower;
 	TurretEnemy turret1, turret2;
 	Camera camera;
-	StationaryPlatform ground, platform, leftWall, rightWall, stair1, stair2, stair3;
+	StationaryPlatform ground, platform, leftWall, smallRightWall, bigRightWall, stair1, stair2, stair3;
 	HorizontalOscillatingPlatform HOP1;
 	VerticalOscillatingPlatform VOP1;
 	Key key1, key2;
 	SpikesUp spikesUp;
+	SpikesDown spikesDown;
+	SpikesLeft spikesLeft;
+	SpikesRight spikesRight;
 
 	Circle background;
 
@@ -74,7 +80,8 @@ public class Level0 extends BasicGameState{
 		ground = new StationaryPlatform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 40), new Vector2f(0, 0));
 		platform = new StationaryPlatform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 40), new Vector2f(0, 0));
 		leftWall = new StationaryPlatform(new Rectangle(50, ground.getY()-400, 40, 400), new Vector2f(0, 0));
-		rightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 40, ground.getY() - 50, 40, 50), new Vector2f(0, 0));
+		smallRightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 40, ground.getY() - 50, 40, 50), new Vector2f(0, 0));
+		bigRightWall = new StationaryPlatform(new Rectangle(platform.getMaxX(), 0, 50, 275), new Vector2f(0, 0));
 		stair1 = new StationaryPlatform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 40), new Vector2f(0, 0));
 		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 40), new Vector2f(0, 0));
 		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 40), new Vector2f(0, 0));
@@ -82,7 +89,10 @@ public class Level0 extends BasicGameState{
 		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 40), new Vector2f(0, 0), 200);
 		key1 = new Key(new Circle(500, 600, 15), new Vector2f(0, 0));
 		key2 = new Key(new Circle(1000, 600, 15), new Vector2f(0, 0));
-		spikesUp = new SpikesUp(new Rectangle(ground.getMaxX() - 200 - rightWall.getWidth(), ground.getY() - 50, 200, 50), new Vector2f(0, 0));
+		spikesUp = new SpikesUp(new Rectangle(ground.getMaxX() - 200 - smallRightWall.getWidth(), ground.getY() - 50, 200, 50), new Vector2f(0, 0));
+		spikesDown = new SpikesDown(new Rectangle(platform.getCenterX() - 100, platform.getMaxY(), 200, 50), new Vector2f(0, 0));
+		spikesLeft = new SpikesLeft(new Rectangle(bigRightWall.getX() - 50, bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
+		spikesRight = new SpikesRight(new Rectangle(bigRightWall.getMaxX(), bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		
 		player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
@@ -95,7 +105,8 @@ public class Level0 extends BasicGameState{
 		world.add(ground);
 		world.add(platform);
 		world.add(leftWall);
-		world.add(rightWall);
+		world.add(smallRightWall);
+		world.add(bigRightWall);
 		world.add(stair1);
 		world.add(stair2);
 		world.add(stair3);
@@ -104,6 +115,10 @@ public class Level0 extends BasicGameState{
 		world.add(key1);
 		world.add(key2);
 		world.add(spikesUp);
+		world.add(spikesDown);
+		world.add(spikesLeft);
+		world.add(spikesRight);
+		
 		world.add(friendly);
 		world.add(follower);
 		world.add(turret1);
@@ -161,13 +176,15 @@ public class Level0 extends BasicGameState{
 				//follower.collide(e, gc);
 				//turret1.collide(e, gc);
 				//turret2.collide(e, gc);
-				spikesUp.collide(e, gc);
+				//spikesUp.collide(e, gc);
+				//spikesDown.collide(e, gc);
+				//spikesLeft.collide(e, gc);
+				spikesRight.collide(e, gc);
 			}
 			
 			key1.collide(player, gc);
 			key2.collide(player, gc);
 
-			key1.collide(player, gc);
 			//if the player leaves the screen, it dies
 			if(player.getY() > levelHeight){
 				player.kill();

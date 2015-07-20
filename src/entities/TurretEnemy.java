@@ -15,6 +15,9 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 
+/**
+ * This is a simple stationary turret that targets and fires at a given Entity if the Entity is within range
+ */
 public class TurretEnemy extends Entity{
 
 	Shape barrel, originalBarrel;
@@ -112,11 +115,17 @@ public class TurretEnemy extends Entity{
 				((Player) e).kill();
 			}
 		}
+		for(Bullet b : bullets){
+			b.collide(e, gc);
+		}
 	}
 
 	@Override
 	public void reset() {
 		barrel = new Rectangle(boundingBox.getCenterX() - barrelWidth/2, boundingBox.getCenterY(), barrelWidth, barrelLength);
+		for(Bullet b : bullets){
+			b.remove();
+		}
 	}
 
 	/**

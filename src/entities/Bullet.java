@@ -6,6 +6,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
+/**
+ * This class serves as the projectile for the TurretEnemy class
+ */
 public class Bullet extends Entity{
 
 	static public float maxSpeed = 15;
@@ -65,6 +68,7 @@ public class Bullet extends Entity{
 			//Player
 			if(e instanceof Player){
 				((Player) e).kill();
+				remove();
 			}
 		}
 	}
@@ -77,9 +81,8 @@ public class Bullet extends Entity{
 
 	/**
 	 * Remove the bullet from the screen
-	 * 
 	 */
-	private void remove(){
+	public void remove(){
 		move(-100, -100);
 		setVelocity(0, 0);
 		visible = false;

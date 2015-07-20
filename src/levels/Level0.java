@@ -24,6 +24,7 @@ import entities.FollowerEnemy;
 import entities.Friendly;
 import entities.HorizontalOscillatingPlatform;
 import entities.Key;
+import entities.SpikesUp;
 import entities.StationaryPlatform;
 import entities.Player;
 import entities.TurretEnemy;
@@ -43,6 +44,7 @@ public class Level0 extends BasicGameState{
 	HorizontalOscillatingPlatform HOP1;
 	VerticalOscillatingPlatform VOP1;
 	Key key1, key2;
+	SpikesUp spikesUp;
 
 	Circle background;
 
@@ -80,6 +82,7 @@ public class Level0 extends BasicGameState{
 		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 40), new Vector2f(0, 0), 200);
 		key1 = new Key(new Circle(500, 600, 15), new Vector2f(0, 0));
 		key2 = new Key(new Circle(1000, 600, 15), new Vector2f(0, 0));
+		spikesUp = new SpikesUp(new Rectangle(ground.getMaxX() - 200 - rightWall.getWidth(), ground.getY() - 50, 200, 50), new Vector2f(0, 0));
 		
 		player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
@@ -100,6 +103,7 @@ public class Level0 extends BasicGameState{
 		world.add(VOP1);
 		world.add(key1);
 		world.add(key2);
+		world.add(spikesUp);
 		world.add(friendly);
 		world.add(follower);
 		world.add(turret1);
@@ -157,6 +161,7 @@ public class Level0 extends BasicGameState{
 				//follower.collide(e, gc);
 				//turret1.collide(e, gc);
 				//turret2.collide(e, gc);
+				spikesUp.collide(e, gc);
 			}
 			
 			key1.collide(player, gc);

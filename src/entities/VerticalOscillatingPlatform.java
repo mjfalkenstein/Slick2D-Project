@@ -82,6 +82,7 @@ public class VerticalOscillatingPlatform extends Entity {
 	@Override
 	public void reset(){
 		move(startingX, startingY);
+		counter = 0;
 		velocity = startingVelocity;
 	}
 }

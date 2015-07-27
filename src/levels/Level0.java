@@ -179,7 +179,7 @@ public class Level0 extends BasicGameState{
 				//spikesUp.collide(e, gc);
 				//spikesDown.collide(e, gc);
 				//spikesLeft.collide(e, gc);
-				spikesRight.collide(e, gc);
+				//spikesRight.collide(e, gc);
 			}
 			
 			key1.collide(player, gc);
@@ -230,6 +230,9 @@ public class Level0 extends BasicGameState{
 				if(pauseMenuSelection == "mainMenu"){
 					pauseMenu.reset();
 					gc.resume();
+					for(Entity e : world){
+						e.reset();
+					}
 					sbg.enterState(Driver.MAIN_MENU, new FadeOutTransition(), new FadeInTransition());
 				}else if(pauseMenuSelection == "quit"){
 					gc.exit();

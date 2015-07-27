@@ -3,6 +3,7 @@ package entities;
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Shape;
 
 /**
@@ -14,6 +15,8 @@ public abstract class Entity {
 	protected float maxPlayerSpeed = 15;
 	protected Shape boundingBox;
 	protected Vector2f velocity, startingVelocity;
+	protected String spritePath;
+	protected SpriteSheet sprites;
 	
 	/**
 	 * Constructor

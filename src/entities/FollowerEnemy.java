@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Random;
+
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -19,6 +21,7 @@ public class FollowerEnemy extends Entity{
 	Entity target;
 	boolean dead = false;
 	boolean following = false;
+	private int threshold = 1000;
 
 	/**
 	 * Constructor
@@ -36,6 +39,7 @@ public class FollowerEnemy extends Entity{
 
 	@Override
 	public void update(GameContainer gc, int delta) {
+		threshold -= delta;
 		if(Math.abs(boundingBox.getCenterX() - target.getCenterX()) < followRange && Math.abs(boundingBox.getCenterY() - target.getCenterY()) < followRange){
 			following = true;
 		}else{
@@ -53,10 +57,28 @@ public class FollowerEnemy extends Entity{
 			setVelocity(velocity.getX(), -maxSpeed);
 		}
 
-		follow();
-
+		if(following){
+			follow();
+		}else{
+			if(threshold <= 0){
+				Random r = new Random();
+				if(r.nextInt(10) > 5){
+					setVelocity(r.nextInt(10) - 5, r.nextInt(10) - 5);
+				}else{
+					setVelocity(0, 0);
+				}
+				threshold = 1000;
+			}
+		}
 		y += velocity.getY() * delta / gc.getFPS();
 		x += velocity.getX() * delta / gc.getFPS();
+		
+		if(x < 0){
+			setVelocity(0, velocity.getY());
+		}
+		if(y < 0){
+			setVelocity(velocity.getX(), 0);
+		}
 
 		boundingBox.setLocation(x, y);
 	}

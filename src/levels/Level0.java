@@ -173,7 +173,6 @@ public class Level0 extends BasicGameState{
 		if(!paused){
 
 			for(Entity e : world){
-				e.update(gc, delta);
 				
 				player.collide(e, gc);
 				friendly.collide(e, gc);
@@ -185,6 +184,8 @@ public class Level0 extends BasicGameState{
 				//spikesLeft.collide(e, gc);
 				//spikesRight.collide(e, gc);
 				door.collide(e, gc);
+				
+				e.update(gc, delta);
 			}
 			
 			key1.collide(player, gc);

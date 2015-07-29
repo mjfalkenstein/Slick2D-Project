@@ -19,8 +19,10 @@ import entities.Entity;
  */
 public class Player extends Entity {
 
-	float maxSpeed = 20;
-	float gravity = 2;
+	float maxSpeed = 0.33333333f;
+	float gravity = 0.02222222f;
+	float acceleration = 0.00555555f;
+	float jumpSpeed = 0.9f;
 	float originalHeight;
 	boolean crouched = false;
 	boolean onGround = false;
@@ -60,13 +62,15 @@ public class Player extends Entity {
 		if(inventory == null){
 			inventory = new Inventory(gc, new ArrayList<Item>());
 		}
-		
-		setVelocity(velocity.getX(), velocity.getY() + gravity);
-		
-		handleInputs(gc);
 
-		y += (velocity.getY() + environmentVelocity.getY()) * delta / gc.getFPS();
-		x += (velocity.getX() + environmentVelocity.getX()) * delta / gc.getFPS();
+		handleInputs(gc);
+		
+		if(!onGround){
+			setVelocity(velocity.getX(), velocity.getY() + gravity);
+		}
+
+		y += (velocity.getY() + environmentVelocity.getY()) * delta;
+		x += (velocity.getX() + environmentVelocity.getX()) * delta;
 
 		boundingBox.setLocation(x, y);
 		
@@ -103,13 +107,13 @@ public class Player extends Entity {
 	 */
 	public void jump(String direction){
 		if(direction.equals("LEFT")){
-			setVelocity(maxSpeed, -35.0f);
+			setVelocity(maxSpeed, -jumpSpeed);
 			onRightWall = false;
 		}else if(direction.equals("RIGHT")){
-			setVelocity(-maxSpeed, -35.0f);
+			setVelocity(-maxSpeed, -jumpSpeed);
 			onLeftWall = false;
 		}else{
-			setVelocity(velocity.getX(), -35.0f);
+			setVelocity(velocity.getX(), -jumpSpeed);
 			onGround = false;
 		}
 		onGround = false;
@@ -168,11 +172,11 @@ public class Player extends Entity {
 						y = e.getBoundingBox().getMaxY();
 						
 						//if overlap is too great, assume player has uncrouched under a low ceiling and needs to be moved out
-						if(yOverlap > 15 && boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
+						if(yOverlap > height/4 && boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
 							if(boundingBox.getCenterX() > e.getBoundingBox().getCenterX()){
-								move(x + 5, y);
+								move(x + acceleration, y);
 							}else{
-								move(x - 5, y);
+								move(x - acceleration, y);
 							}
 						}
 					}
@@ -228,22 +232,22 @@ public class Player extends Entity {
 		//handling horizontal movement
 		if(velocity.getX() > 0){
 			if(!input.isKeyDown(Input.KEY_D)){
-				velocity.setX(velocity.getX() - 1);
+				velocity.setX(velocity.getX() - acceleration);
 			}
 		}
 		if(velocity.getX() < 0){
 			if(!input.isKeyDown(Input.KEY_A)){
-				velocity.setX(velocity.getX() + 1);
+				velocity.setX(velocity.getX() + acceleration);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_A)){
 			if(velocity.getX() > -maxSpeed){
-				setVelocity(velocity.getX() - 1, velocity.getY());
+				setVelocity(velocity.getX() - acceleration, velocity.getY());
 			}
 		}
 		if(input.isKeyDown(Input.KEY_D)){
 			if(velocity.getX() < maxSpeed){
-				setVelocity(velocity.getX() + 1, velocity.getY());
+				setVelocity(velocity.getX() + acceleration, velocity.getY());
 			}
 		}
 		

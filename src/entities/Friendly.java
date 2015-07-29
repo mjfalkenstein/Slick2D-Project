@@ -18,8 +18,8 @@ import entities.Entity;
  */
 public class Friendly extends Entity {
 
-	float maxSpeed = 6;
-	float gravity = 2;
+	float maxSpeed = 0.1f;
+	float gravity = 0.03333333f;
 	int time = 0;
 	Dialogue dialogue;
 	String text;
@@ -27,6 +27,7 @@ public class Friendly extends Entity {
 	boolean wander = false;
 	boolean canSpeak = false;
 	boolean speaking = false;
+	boolean onGround = false;
 	Rectangle speakingBox;
 	Color bg = Color.black;
 	Color textColor = Color.lightGray;
@@ -87,7 +88,9 @@ public class Friendly extends Entity {
 
 	@Override
 	public void update(GameContainer gc, int delta) {
-		setVelocity(velocity.getX(), velocity.getY() + gravity);
+		if(!onGround){
+			setVelocity(velocity.getX(), velocity.getY() + gravity);
+		}
 
 		//handle random wandering
 		if(wander && !speaking){
@@ -122,8 +125,8 @@ public class Friendly extends Entity {
 
 		handleInputs(gc);
 
-		y += velocity.getY() * delta / gc.getFPS();
-		x += velocity.getX() * delta / gc.getFPS();
+		y += velocity.getY() * delta;
+		x += velocity.getX() * delta;
 
 		speakingBox.setLocation(x - boundingBox.getWidth(), y);
 		boundingBox.setLocation(x, y);
@@ -181,6 +184,7 @@ public class Friendly extends Entity {
 					if(boundingBox.getCenterY() < e.getBoundingBox().getCenterY()){
 						setVelocity(velocity.getX(), 0);
 						y = e.getY() - height;
+						onGround = true;
 
 						//keep the friendly from wandering off an edge
 						if(boundingBox.getX() <= e.getBoundingBox().getX()){

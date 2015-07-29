@@ -16,9 +16,11 @@ import entities.Entity;
  */
 public class HorizontalOscillatingPlatform extends Entity {
 	
-	int counter = 0;
-	float distance, center, minX, maxX;
-	float oldX;
+	float maxSpeed = 0.222222222f;
+	float acceleration = 0.0111111f;
+	float minX, maxX;
+	boolean movingLeft = false;
+	boolean movingRight = true;
 
 	/**
 	 * Constructor
@@ -31,23 +33,35 @@ public class HorizontalOscillatingPlatform extends Entity {
 		super(boundingBox, velocity);
 		minX = boundingBox.getX();
 		this.maxX = maxX;
-		distance = (maxX - minX)/2;
-		center = (maxX + minX)/2;
-		startingX = center;
-		boundingBox.setLocation(center, boundingBox.getY());
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) {
-		counter = counter%360;
+		if(movingRight){
+			if(boundingBox.getMaxX() < maxX){
+				if(velocity.getX() < maxSpeed){
+					setVelocity(velocity.getX() + acceleration, 0);
+				}
+			}else{
+				movingRight = false;
+				movingLeft = true;
+			}
+		}
+		if(movingLeft){
+			if(boundingBox.getX() > minX){
+				if(velocity.getX() > -maxSpeed){
+					setVelocity(velocity.getX() - acceleration, 0);
+				}
+			}else{
+				movingRight = true;
+				movingLeft = false;
+			}
+		}
 		
-		oldX = boundingBox.getX();
-		
-		move((float) (center + distance * -Math.sin(counter * Math.PI / 180)), boundingBox.getY());
-		
-		setVelocity((x - oldX)/delta * gc.getFPS(), 0);
-		
-		counter++;
+		y += velocity.getY() * delta;
+		x += velocity.getX() * delta;
+
+		boundingBox.setLocation(x, y);
 	}
 
 	@Override
@@ -76,13 +90,12 @@ public class HorizontalOscillatingPlatform extends Entity {
 
 	@Override
 	public void collide(Entity e, GameContainer gc){
-		//do nothing, collision is handles by other entities
+		//do nothing, collision is handled by other entities
 	}
 	
 	@Override
 	public void reset(){
 		move(startingX, startingY);
-		counter = 0;
 		velocity = startingVelocity;
 	}
 }

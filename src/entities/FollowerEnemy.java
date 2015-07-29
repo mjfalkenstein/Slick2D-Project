@@ -15,8 +15,9 @@ import org.newdawn.slick.geom.Transform;
 public class FollowerEnemy extends Entity{
 
 	float startingX, startingY;
-	float maxSpeed = 10;
-	float acceleration = 1;
+	float maxSpeed = 0.133333333f;
+	float minSpeed = -maxSpeed;
+	float acceleration = maxSpeed/10;
 	float followRange = 300;
 	Entity target;
 	boolean dead = false;
@@ -63,15 +64,17 @@ public class FollowerEnemy extends Entity{
 			if(threshold <= 0){
 				Random r = new Random();
 				if(r.nextInt(10) > 5){
-					setVelocity(r.nextInt(10) - 5, r.nextInt(10) - 5);
+					float xSpeed = r.nextFloat() * (maxSpeed - minSpeed) + minSpeed;
+					float ySpeed = r.nextFloat() * (maxSpeed - minSpeed) + minSpeed;
+					setVelocity(xSpeed, ySpeed);
 				}else{
 					setVelocity(0, 0);
 				}
 				threshold = 1000;
 			}
 		}
-		y += velocity.getY() * delta / gc.getFPS();
-		x += velocity.getX() * delta / gc.getFPS();
+		y += velocity.getY() * delta;
+		x += velocity.getX() * delta;
 		
 		if(x < 0){
 			setVelocity(0, velocity.getY());

@@ -11,7 +11,7 @@ import org.newdawn.slick.geom.Shape;
  */
 public class Bullet extends Entity{
 
-	static public float maxSpeed = 15;
+	static public float maxSpeed = 0.25f;
 	float lifeTime = 5000;
 	boolean visible = true;
 	Vector2f direction;
@@ -28,8 +28,8 @@ public class Bullet extends Entity{
 		if(lifeTime < 0){
 			remove();
 		}
-		y += direction.getY() * maxSpeed * delta / gc.getFPS();
-		x += direction.getX() * maxSpeed * delta / gc.getFPS();
+		y += direction.getY() * maxSpeed * delta;
+		x += direction.getX() * maxSpeed * delta;
 
 		boundingBox.setLocation(x, y);
 	}
@@ -67,8 +67,10 @@ public class Bullet extends Entity{
 
 			//Player
 			if(e instanceof Player){
-				((Player) e).kill();
-				remove();
+				if(visible){
+					((Player) e).kill();
+					remove();
+				}
 			}
 		}
 	}

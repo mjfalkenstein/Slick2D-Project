@@ -12,7 +12,6 @@ import org.newdawn.slick.geom.Shape;
 public abstract class Entity {
 	
 	protected float x, y, width, height, startingX, startingY;
-	protected float maxPlayerSpeed = 15;
 	protected Shape boundingBox;
 	protected Vector2f velocity, startingVelocity;
 	protected String spritePath;

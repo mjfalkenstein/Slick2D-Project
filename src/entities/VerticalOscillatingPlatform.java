@@ -16,9 +16,11 @@ import entities.Entity;
  */
 public class VerticalOscillatingPlatform extends Entity {
 	
-	int counter = 0;
-	float distance, center, minY, maxY;
-	float oldY;
+	float maxSpeed = 0.222222222f;
+	float acceleration = 0.0111111f;
+	float minY, maxY;
+	boolean movingUp = true;
+	boolean movingDown = false;
 
 	/**
 	 * Constructor
@@ -31,23 +33,36 @@ public class VerticalOscillatingPlatform extends Entity {
 		super(boundingBox, velocity);
 		minY = boundingBox.getY();
 		this.maxY = maxY;
-		distance = (maxY - minY)/2;
-		center = (maxY + minY)/2;
-		startingX = center;
-		boundingBox.setLocation(boundingBox.getX(), center);
+		boundingBox.setLocation(boundingBox.getX(), minY);
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) {
-		counter = counter%360;
+		if(movingUp){
+			if(boundingBox.getMaxY() > minY){
+				if(velocity.getY() > -maxSpeed){
+					setVelocity(0, velocity.getY() - acceleration);
+				}
+			}else{
+				movingUp = false;
+				movingDown = true;
+			}
+		}
+		if(movingDown){
+			if(boundingBox.getY() < maxY){
+				if(velocity.getY() < maxSpeed){
+					setVelocity(0, velocity.getY() + acceleration);
+				}
+			}else{
+				movingUp = true;
+				movingDown = false;
+			}
+		}
 		
-		oldY = boundingBox.getY();
-		
-		move(boundingBox.getX(), (float) (center + distance * -Math.sin(counter * Math.PI / 180)));
-		
-		setVelocity(0, (y - oldY)/delta * gc.getFPS());
-		
-		counter++;
+		y += velocity.getY() * delta;
+		x += velocity.getX() * delta;
+
+		boundingBox.setLocation(x, y);
 	}
 
 	@Override
@@ -82,7 +97,6 @@ public class VerticalOscillatingPlatform extends Entity {
 	@Override
 	public void reset(){
 		move(startingX, startingY);
-		counter = 0;
 		velocity = startingVelocity;
 	}
 }

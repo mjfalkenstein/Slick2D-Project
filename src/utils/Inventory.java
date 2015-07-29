@@ -79,6 +79,15 @@ public class Inventory {
 			items.add(item);
 		}
 	}
+	
+	/**
+	 * Removes the given item from the inventory
+	 * 
+	 * @param item - Item to remove
+	 */
+	public void removeItem(Item item){
+		items.remove(item);
+	}
 
 	/**
 	 * Instantly moves the visual representation of the inventory to the new coordinates

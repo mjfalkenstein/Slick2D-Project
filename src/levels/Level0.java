@@ -19,6 +19,7 @@ import driver.Driver;
 import utils.BackgroundBarsAnimation;
 import utils.Camera;
 import utils.PauseMenu;
+import entities.Door;
 import entities.Entity;
 import entities.FollowerEnemy;
 import entities.Friendly;
@@ -51,6 +52,7 @@ public class Level0 extends BasicGameState{
 	SpikesDown spikesDown;
 	SpikesLeft spikesLeft;
 	SpikesRight spikesRight;
+	Door door;
 
 	Circle background;
 
@@ -93,6 +95,7 @@ public class Level0 extends BasicGameState{
 		spikesDown = new SpikesDown(new Rectangle(platform.getCenterX() - 100, platform.getMaxY(), 200, 50), new Vector2f(0, 0));
 		spikesLeft = new SpikesLeft(new Rectangle(bigRightWall.getX() - 50, bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		spikesRight = new SpikesRight(new Rectangle(bigRightWall.getMaxX(), bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
+		door = new Door(new Rectangle(stair3.getMaxX() - 50, stair3.getY() - 100, 50, 100), new Vector2f(0, 0), key1);
 		
 		player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
@@ -118,6 +121,7 @@ public class Level0 extends BasicGameState{
 		world.add(spikesDown);
 		world.add(spikesLeft);
 		world.add(spikesRight);
+		world.add(door);
 		
 		world.add(friendly);
 		world.add(follower);
@@ -180,6 +184,7 @@ public class Level0 extends BasicGameState{
 				//spikesDown.collide(e, gc);
 				//spikesLeft.collide(e, gc);
 				//spikesRight.collide(e, gc);
+				door.collide(e, gc);
 			}
 			
 			key1.collide(player, gc);

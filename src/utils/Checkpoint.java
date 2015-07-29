@@ -5,7 +5,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
-import entities.Entity;
 import entities.Player;
 
 /**
@@ -16,6 +15,7 @@ public class Checkpoint {
 	Shape boundingBox;
 	Player player;
 	boolean saved = false;
+	int levelID;
 
 	/**
 	 * Constructor
@@ -23,9 +23,10 @@ public class Checkpoint {
 	 * @param boundingBox - the area that the player must enter for the game to be saved
 	 * @param target - the player
 	 */
-	public Checkpoint(Shape boundingBox, Player player){
+	public Checkpoint(Shape boundingBox, Player player, int levelID){
 		this.boundingBox = boundingBox;
 		this.player = player;
+		this.levelID = levelID;
 	}
 
 	/**
@@ -59,8 +60,16 @@ public class Checkpoint {
 		//if both axes overlap, there is a collision
 		if(xOverlap > 0 && yOverlap > 0){
 			if(!saved){
-				saved = SaverLoader.saveGame(player, this);
+				saved = SaverLoader.saveGame(player, this, levelID);
 			}
 		}
+	}
+
+	public float getCenterX() {
+		return boundingBox.getCenterX();
+	}
+	
+	public float getCenterY(){
+		return boundingBox.getCenterY();
 	}
 }

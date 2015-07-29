@@ -48,4 +48,6 @@ public abstract class Item extends Entity{
 	public void show(){
 		isShowing = true;
 	}
+	
+	public abstract String toString();
 }

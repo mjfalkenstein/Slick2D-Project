@@ -89,8 +89,8 @@ public class Level0 extends BasicGameState{
 		stair1 = new StationaryPlatform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 40), new Vector2f(0, 0));
 		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 40), new Vector2f(0, 0));
 		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 40), new Vector2f(0, 0));
-		HOP1 = new HorizontalOscillatingPlatform(new Rectangle(300, 400, 200, 40), new Vector2f(0, 0), 600);
-		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 40), new Vector2f(0, 0), 200);
+		HOP1 = new HorizontalOscillatingPlatform(new Rectangle(200, 400, 200, 40), new Vector2f(0, 0), 600);
+		VOP1 = new VerticalOscillatingPlatform(new Rectangle (1000, 400, 200, 40), new Vector2f(0, 0), 100);
 		key1 = new Key(new Circle(500, 600, 15), new Vector2f(0, 0));
 		key2 = new Key(new Circle(1000, 600, 15), new Vector2f(0, 0));
 		spikesUp = new SpikesUp(new Rectangle(ground.getMaxX() - 200 - smallRightWall.getWidth(), ground.getY() - 50, 200, 50), new Vector2f(0, 0));
@@ -106,7 +106,7 @@ public class Level0 extends BasicGameState{
 		turret1 = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
 		turret2 = new TurretEnemy(new Circle(1000, 200, 25), new Vector2f(0, 0), player);
 
-		checkpoint = new Checkpoint(new Rectangle(1450, 0, 50, levelHeight), player);
+		checkpoint = new Checkpoint(new Rectangle(stair2.getX(), stair2.getY() - 100, stair2.getWidth(), 100), player, getID());
 
 		world.add(player);
 		world.add(ground);

@@ -76,4 +76,8 @@ public class Key extends Item {
 		move(startingX, startingY);
 		isShowing = true;
 	}
+	
+	public String toString(){
+		return "Key - " + startingX + ", " + startingY + "\n";
+	}
 }

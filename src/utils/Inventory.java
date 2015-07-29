@@ -123,4 +123,12 @@ public class Inventory {
 	public boolean isVisible(){
 		return visible;
 	}
+	
+	public String toString(){
+		String s = "";
+		for(Item i : items){
+			s += i.toString();
+		}
+		return s;
+	}
 }

@@ -16,8 +16,8 @@ import entities.Entity;
  */
 public class HorizontalOscillatingPlatform extends Entity {
 	
-	float maxSpeed = 0.01444444f;
-	float acceleration = 0.0111111f;
+	float maxSpeed = 0.05444444f;
+	float acceleration = 0.0011111f;
 	float minX, maxX;
 	boolean movingLeft = false;
 	boolean movingRight = true;

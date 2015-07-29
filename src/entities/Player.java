@@ -62,8 +62,6 @@ public class Player extends Entity {
 		if(inventory == null){
 			inventory = new Inventory(gc, new ArrayList<Item>());
 		}
-		
-		System.out.println(onGround);
 
 		handleInputs(gc);
 		

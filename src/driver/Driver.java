@@ -87,7 +87,8 @@ public class Driver extends StateBasedGame{
 		app.setMinimumLogicUpdateInterval(0);
 		app.setMaximumLogicUpdateInterval(16);
 		try{
-			app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
+			//app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
+			app.setDisplayMode(640, 480, false);
 		}catch(SlickException e){
 			app.setDisplayMode(1280, 800, true);
 		}

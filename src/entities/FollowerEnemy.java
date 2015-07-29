@@ -136,25 +136,15 @@ public class FollowerEnemy extends Entity{
 	 * Used to follow the designated target at max speed
 	 */
 	private void follow(){
-		if(following){
-			if(boundingBox.getCenterX() - target.getCenterX() < 0){
-				setVelocity(velocity.getX() + acceleration, velocity.getY());
-			}else if(boundingBox.getCenterX() - target.getCenterX() > 0){
-				setVelocity(velocity.getX() - acceleration, velocity.getY());
-			}
-			if(boundingBox.getCenterY() - target.getCenterY() < 0){
-				setVelocity(velocity.getX(), velocity.getY() + acceleration);
-			}else if(boundingBox.getCenterY() - target.getCenterY() > 0){
-				setVelocity(velocity.getX(), velocity.getY() - acceleration);
-			}
-		}else{
-			setVelocity(velocity.getX()/2, velocity.getY()/2);
-			if(Math.abs(velocity.getX()) < 1){
-				setVelocity(0, velocity.getY());
-			}
-			if(Math.abs(velocity.getY()) < 1){
-				setVelocity(velocity.getX(), 0);
-			}
+		if(boundingBox.getCenterX() - target.getCenterX() < 0){
+			setVelocity(velocity.getX() + acceleration, velocity.getY());
+		}else if(boundingBox.getCenterX() - target.getCenterX() > 0){
+			setVelocity(velocity.getX() - acceleration, velocity.getY());
+		}
+		if(boundingBox.getCenterY() - target.getCenterY() < 0){
+			setVelocity(velocity.getX(), velocity.getY() + acceleration);
+		}else if(boundingBox.getCenterY() - target.getCenterY() > 0){
+			setVelocity(velocity.getX(), velocity.getY() - acceleration);
 		}
 	}
 

@@ -218,6 +218,7 @@ public class Friendly extends Entity {
 		move(startingX, startingY);
 		velocity = startingVelocity;
 		dialogue.reset();
+		onGround = false;
 	}
 
 	/**

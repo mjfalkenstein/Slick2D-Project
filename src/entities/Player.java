@@ -19,10 +19,10 @@ import entities.Entity;
  */
 public class Player extends Entity {
 
-	float maxSpeed = 0.33333333f;
-	float gravity = 0.02222222f;
+	float maxSpeed = 0.42222222f;
+	float gravity = 0.01444444f;
 	float acceleration = 0.00555555f;
-	float jumpSpeed = 0.9f;
+	float jumpSpeed = 0.75f;
 	float originalHeight;
 	boolean crouched = false;
 	boolean onGround = false;
@@ -62,6 +62,8 @@ public class Player extends Entity {
 		if(inventory == null){
 			inventory = new Inventory(gc, new ArrayList<Item>());
 		}
+		
+		System.out.println(onGround);
 
 		handleInputs(gc);
 		
@@ -113,10 +115,10 @@ public class Player extends Entity {
 			setVelocity(-maxSpeed, -jumpSpeed);
 			onLeftWall = false;
 		}else{
+			move(x, y - 5);
 			setVelocity(velocity.getX(), -jumpSpeed);
 			onGround = false;
 		}
-		onGround = false;
 	}
 
 	/**
@@ -162,13 +164,13 @@ public class Player extends Entity {
 							setVelocity(velocity.getX(), 0);
 							environmentVelocity.set(e.getVelocity().getX(), e.getVelocity().getY());
 						}
-						y = e.getY() - height;
+						y = e.getY() - height + 1;
 
 						onGround = true;
 						
 					//player is below the Platform
 					}if(boundingBox.getCenterY() > e.getBoundingBox().getCenterY()){
-						setVelocity(velocity.getX(), 0);
+						setVelocity(velocity.getX(), gravity + e.getVelocity().getY());
 						y = e.getBoundingBox().getMaxY();
 						
 						//if overlap is too great, assume player has uncrouched under a low ceiling and needs to be moved out
@@ -229,6 +231,12 @@ public class Player extends Entity {
 	public void handleInputs(GameContainer gc){
 		Input input = gc.getInput();
 		
+		if(!input.isKeyDown(Input.KEY_D) && !input.isKeyDown(Input.KEY_A)){
+			if(Math.abs(velocity.getX()) < 0.01){
+				setVelocity(0, velocity.getY());
+			}
+		}
+		
 		//handling horizontal movement
 		if(velocity.getX() > 0){
 			if(!input.isKeyDown(Input.KEY_D)){
@@ -287,6 +295,10 @@ public class Player extends Entity {
 
 	public void addItem(Item item) {
 		inventory.addItem(item);
+	}
+	
+	public void removeItem(Item item){
+		inventory.removeItem(item);
 	}
 	
 	public Inventory getInventory(){

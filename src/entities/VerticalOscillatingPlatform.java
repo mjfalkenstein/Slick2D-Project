@@ -16,7 +16,7 @@ import entities.Entity;
  */
 public class VerticalOscillatingPlatform extends Entity {
 	
-	float maxSpeed = 0.222222222f;
+	float maxSpeed = 0.01444444f;
 	float acceleration = 0.0111111f;
 	float minY, maxY;
 	boolean movingUp = true;

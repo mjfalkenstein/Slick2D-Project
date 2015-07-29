@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
 import entities.Entity;
+import entities.Player;
 
 /**
  * This class represents a checkpoint that the player must cross in order for the game to save
@@ -13,7 +14,7 @@ import entities.Entity;
 public class Checkpoint {
 
 	Shape boundingBox;
-	Entity target;
+	Player player;
 	boolean saved = false;
 
 	/**
@@ -22,9 +23,9 @@ public class Checkpoint {
 	 * @param boundingBox - the area that the player must enter for the game to be saved
 	 * @param target - the player
 	 */
-	public Checkpoint(Shape boundingBox, Entity target){
+	public Checkpoint(Shape boundingBox, Player player){
 		this.boundingBox = boundingBox;
-		this.target = target;
+		this.player = player;
 	}
 
 	/**
@@ -52,12 +53,14 @@ public class Checkpoint {
 	public void collide(GameContainer gc){
 		//calculating the overlap of the Player and the entity on each of the axes
 		//whichever overlap is smaller indicates the axis on which the collision occurred
-		float yOverlap = (boundingBox.getHeight()/2 + target.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - target.getBoundingBox().getCenterY()));
-		float xOverlap = (boundingBox.getWidth()/2 + target.getBoundingBox().getWidth()/2 - Math.abs((boundingBox.getCenterX() - target.getBoundingBox().getCenterX())));
+		float yOverlap = (boundingBox.getHeight()/2 + player.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - player.getBoundingBox().getCenterY()));
+		float xOverlap = (boundingBox.getWidth()/2 + player.getBoundingBox().getWidth()/2 - Math.abs((boundingBox.getCenterX() - player.getBoundingBox().getCenterX())));
 
 		//if both axes overlap, there is a collision
 		if(xOverlap > 0 && yOverlap > 0){
-			saved = SaverLoader.saveGame();
+			if(!saved){
+				saved = SaverLoader.saveGame(player, this);
+			}
 		}
 	}
 }

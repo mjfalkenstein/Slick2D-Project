@@ -78,15 +78,15 @@ public class SimpleButton {
 	 */
 	public boolean hover(int x, int y){
 		if(body.contains(x,y)){
-			if(highlight.getWidth() < body.getWidth() - 3){
+			if(highlight.getWidth() < body.getWidth() - 2){
 				highlight.setLocation(body.getX(), highlight.getY());
 				highlight.setWidth(body.getWidth());
 			}
 			return true;
 		}
 		if(highlight.getWidth() > 0){
-			highlight.setLocation(highlight.getX() + 3, highlight.getY());
-			highlight.setWidth(highlight.getWidth() - 6);
+			highlight.setLocation(highlight.getX() + 2, highlight.getY());
+			highlight.setWidth(highlight.getWidth() - 4);
 		}
 		return false;
 	}

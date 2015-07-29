@@ -18,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import driver.Driver;
 import utils.BackgroundBarsAnimation;
 import utils.Camera;
+import utils.Checkpoint;
 import utils.PauseMenu;
 import entities.Door;
 import entities.Entity;
@@ -53,6 +54,7 @@ public class Level0 extends BasicGameState{
 	SpikesLeft spikesLeft;
 	SpikesRight spikesRight;
 	Door door;
+	Checkpoint checkpoint;
 
 	Circle background;
 
@@ -103,6 +105,8 @@ public class Level0 extends BasicGameState{
 		follower = new FollowerEnemy(new Circle(1000, 300, 15), new Vector2f(0, 0), player);
 		turret1 = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
 		turret2 = new TurretEnemy(new Circle(1000, 200, 25), new Vector2f(0, 0), player);
+
+		checkpoint = new Checkpoint(new Rectangle(1450, 0, 50, levelHeight), player);
 
 		world.add(player);
 		world.add(ground);
@@ -155,6 +159,8 @@ public class Level0 extends BasicGameState{
 		
 		pauseMenu.draw(g);
 		
+		checkpoint.draw(g);
+		
 		if(player.getInventory() != null){
 			player.getInventory().draw(g);
 		}
@@ -188,6 +194,8 @@ public class Level0 extends BasicGameState{
 				
 				e.update(gc, delta);
 			}
+			
+			checkpoint.collide(gc);
 			
 			key1.collide(player, gc);
 			key2.collide(player, gc);

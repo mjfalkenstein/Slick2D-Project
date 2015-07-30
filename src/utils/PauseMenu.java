@@ -11,7 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 public class PauseMenu {
 
 	int x, y, width, height;
-	SimpleButton mainMenu, newGame, saveGame, loadGame, quit;
+	SimpleButton mainMenu, newGame, loadGame, quit;
 
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 
@@ -45,9 +45,7 @@ public class PauseMenu {
 		int counter = 0;
 		mainMenu = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Main Menu");
 		counter++;
-		newGame = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "New Game");
-		counter++;
-		saveGame = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Save Game");
+		newGame = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "New Game");;
 		counter++;
 		loadGame = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Load Game");
 		counter++;
@@ -79,7 +77,6 @@ public class PauseMenu {
 
 			mainMenu.draw(g, bg, textColor);
 			newGame.draw(g, bg, textColor);
-			saveGame.draw(g, bg, textColor);
 			loadGame.draw(g, bg, textColor);
 			quit.draw(g, bg, textColor);
 		}
@@ -96,8 +93,6 @@ public class PauseMenu {
 		mainMenu.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
 		newGame.move(x, y + buttonYOffset + (counter * buttonYGap));
-		counter++;
-		saveGame.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
 		loadGame.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
@@ -122,8 +117,6 @@ public class PauseMenu {
 			s =  "mainMenu";
 		}if(newGame.hover(x, y)){
 			s = "newGame";
-		}if(saveGame.hover(x, y)){
-			s =  "saveGame";
 		}if(loadGame.hover(x, y)){
 			s =  "loadGame";
 		}if(quit.hover(x, y)){
@@ -138,7 +131,6 @@ public class PauseMenu {
 	public void show(){
 		mainMenu.reset();
 		newGame.reset();
-		saveGame.reset();
 		loadGame.reset();
 		quit.reset();
 		showing = true;
@@ -150,7 +142,6 @@ public class PauseMenu {
 	public void hide(){
 		mainMenu.reset();
 		newGame.reset();
-		saveGame.reset();
 		loadGame.reset();
 		quit.reset();
 		showing = false;
@@ -162,7 +153,6 @@ public class PauseMenu {
 	public void reset(){
 		mainMenu.reset();
 		newGame.reset();
-		saveGame.reset();
 		loadGame.reset();
 		quit.reset();
 	}

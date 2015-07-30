@@ -1,17 +1,22 @@
 package driver;
 
 import levels.Level0;
+import menuScreens.LoadMenu;
 import menuScreens.MainMenu;
 import menuScreens.OptionsMenu;
 import menuScreens.ResolutionsMenu;
 import menuScreens.SoundMenu;
 import menuScreens.VideoOptionsMenu;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.state.StateBasedGame;
+
+import entities.Player;
 
 /**
  * The main driver class, initializes all the game states and handles the initial display mode
@@ -27,7 +32,8 @@ public class Driver extends StateBasedGame{
 	public static final int VIDEO_OPTIONS_MENU		= 2;
 	public static final int RESOLUTIONS_MENU 		= 3;
 	public static final int SOUND_MENU 				= 4;
-	public static final int LEVEL_0					= 5;
+	public static final int LOAD_GAME				= 5;
+	public static final int LEVEL_0					= 6;
 
 	/**
 	 * Constructor
@@ -59,13 +65,15 @@ public class Driver extends StateBasedGame{
 	public void initStatesList(GameContainer gc) throws SlickException {
 		MainMenu mainMenu = new MainMenu();
 		addState(mainMenu);
+		addState(new LoadMenu(mainMenu));
 		addState(new OptionsMenu(mainMenu));
 		addState(new VideoOptionsMenu(mainMenu));
 		addState(new ResolutionsMenu(mainMenu));
 		addState(new SoundMenu(mainMenu));
-		addState(new Level0());
+		Player p = new Player(new Rectangle(500, 100, 40, 60), new Vector2f(0, 0));
+		addState(new Level0(p, 2000, 1000));
 		
-		enterState(MAIN_MENU);
+		enterState(MAIN_MENU); 
 	}
 	
 	/**

@@ -82,7 +82,7 @@ public class ResolutionsMenu extends BasicGameState{
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 			if(modes.length > 6){
 				DisplayMode[] temp = new DisplayMode[6];
-				for(int i = 0; i < 9; i++){
+				for(int i = 0; i < 6; i++){
 					temp[i] = modes[i];
 				}
 				modes = temp;
@@ -92,7 +92,9 @@ public class ResolutionsMenu extends BasicGameState{
 				String s = current.getWidth() + " x " + current.getHeight();
 				buttons.add(new SimpleButton(0, 0, buttonWidth, buttonHeight, s));
 			}
-		}catch(Exception e){}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		if(buttons.size() > 6){
 			buttons.subList(buttons.size() - 5, buttons.size());

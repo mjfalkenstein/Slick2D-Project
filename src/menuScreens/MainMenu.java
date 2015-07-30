@@ -158,6 +158,11 @@ public class MainMenu extends BasicGameState {
 					b2.reset();
 				}
 				sbg.enterState(Driver.LEVEL_0, new FadeOutTransition(), new FadeInTransition());
+			}else if(loadGame.hover(x, y)){
+				for(SimpleButton b2 : buttons){
+					b2.reset();
+				}
+				sbg.enterState(Driver.LOAD_GAME);
 			}
 		}
 	}

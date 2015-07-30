@@ -16,6 +16,7 @@ public class Checkpoint {
 	Player player;
 	boolean saved = false;
 	int levelID;
+	Level level;
 
 	/**
 	 * Constructor
@@ -23,7 +24,8 @@ public class Checkpoint {
 	 * @param boundingBox - the area that the player must enter for the game to be saved
 	 * @param target - the player
 	 */
-	public Checkpoint(Shape boundingBox, Player player, int levelID){
+	public Checkpoint(Level level, Shape boundingBox, Player player, int levelID){
+		this.level = level;
 		this.boundingBox = boundingBox;
 		this.player = player;
 		this.levelID = levelID;
@@ -60,7 +62,7 @@ public class Checkpoint {
 		//if both axes overlap, there is a collision
 		if(xOverlap > 0 && yOverlap > 0){
 			if(!saved){
-				saved = SaverLoader.saveGame(player, this, levelID);
+				saved = SaverLoader.saveGame(level, player, this, levelID);
 			}
 		}
 	}

@@ -19,6 +19,7 @@ import driver.Driver;
 import utils.BackgroundBarsAnimation;
 import utils.Camera;
 import utils.Checkpoint;
+import utils.Level;
 import utils.PauseMenu;
 import entities.Door;
 import entities.Entity;
@@ -35,12 +36,12 @@ import entities.Player;
 import entities.TurretEnemy;
 import entities.VerticalOscillatingPlatform;
 
-public class Level0 extends BasicGameState{
+public class Level0 extends Level{
 
 	GameContainer gc;
 	StateBasedGame sbg;
 
-	Player player;
+	//Player player;
 	Friendly friendly;
 	FollowerEnemy follower;
 	TurretEnemy turret1, turret2;
@@ -63,12 +64,16 @@ public class Level0 extends BasicGameState{
 	Color sky = Color.decode("#99CCFF");
 	BackgroundBarsAnimation backgroundAnimation;
 
-	int levelWidth = 2000;
-	int levelHeight = 1000;
+	int levelWidth;
+	int levelHeight;
 
 	boolean paused = false;
 
 	PauseMenu pauseMenu;
+	
+	public Level0(Player p, int levelWidth, int levelHeight) {
+		super(p, levelWidth, levelHeight);
+	}
 
 	/**
 	 * Called on program start-up
@@ -99,14 +104,14 @@ public class Level0 extends BasicGameState{
 		spikesRight = new SpikesRight(new Rectangle(bigRightWall.getMaxX(), bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		door = new Door(new Rectangle(stair3.getMaxX() - 50, stair3.getY() - 100, 50, 100), new Vector2f(0, 0), key1);
 		
-		player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
+		//player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
 		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 40, 60), new Vector2f(0, 0), s, true);
 		follower = new FollowerEnemy(new Circle(1000, 300, 15), new Vector2f(0, 0), player);
 		turret1 = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
 		turret2 = new TurretEnemy(new Circle(1000, 200, 25), new Vector2f(0, 0), player);
 
-		checkpoint = new Checkpoint(new Rectangle(stair2.getX(), stair2.getY() - 100, stair2.getWidth(), 100), player, getID());
+		checkpoint = new Checkpoint(this, new Rectangle(stair2.getX(), stair2.getY() - 100, stair2.getWidth(), 100), player, getID());
 
 		world.add(player);
 		world.add(ground);
@@ -275,7 +280,7 @@ public class Level0 extends BasicGameState{
 	 * The unique ID for this screen, must be different for all over BasicGameStates
 	 */
 	public int getID() {
-		return 5;
+		return 6;
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg){
@@ -291,6 +296,7 @@ public class Level0 extends BasicGameState{
 	}
 	
 	public void pause(){
+		System.out.println("paused");
 		gc.pause();
 		gc.setMouseGrabbed(false);
 		paused = true;

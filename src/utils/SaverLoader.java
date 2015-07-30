@@ -11,8 +11,6 @@ import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import levels.Level0;
-
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;

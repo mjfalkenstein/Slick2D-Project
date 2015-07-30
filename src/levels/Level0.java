@@ -56,9 +56,6 @@ public class Level0 extends Level{
 	
 	public Level0(Player p, int levelWidth, int levelHeight) {
 		super(p, levelWidth, levelHeight);
-		player = p;
-		this.levelWidth = levelWidth;
-		this.levelHeight = levelHeight;
 	}
 
 	@Override
@@ -264,7 +261,6 @@ public class Level0 extends Level{
 	}
 	
 	public void pause(){
-		System.out.println("paused");
 		gc.pause();
 		gc.setMouseGrabbed(false);
 		paused = true;

@@ -148,10 +148,14 @@ public class Notification {
 
 	public void show(){
 		showing = true;
+		b1.reset();
+		b2.reset();
 	}
 
 	public void hide(){
 		showing = false;
+		b1.reset();
+		b2.reset();
 	}
 
 	public int getWidth(){

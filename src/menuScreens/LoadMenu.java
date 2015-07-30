@@ -3,6 +3,7 @@ package menuScreens;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -12,9 +13,14 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import driver.Driver;
+import utils.BackgroundBarsAnimation;
+import utils.Notification;
 import utils.SaverLoader;
 import utils.SimpleButton;
 
+/**
+ * This class serves as a simple ui for the player to load a saved game
+ */
 public class LoadMenu extends BasicGameState {
 
 	MainMenu mainMenu;
@@ -34,6 +40,11 @@ public class LoadMenu extends BasicGameState {
 	float fontSize = 24f;
 
 	SimpleButton back;
+
+	Notification warning;
+	SimpleButton b1, b2;
+	
+	String path;
 
 	public LoadMenu(MainMenu mainMenu){
 		this.mainMenu = mainMenu;
@@ -69,6 +80,13 @@ public class LoadMenu extends BasicGameState {
 				buttons.add(new SimpleButton(0, 0, buttonWidth, buttonHeight, listOfFiles[i].getName()));
 			} 
 		}
+		
+		background = mainMenu.background;
+		
+		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
+		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
+
+		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, "Change Resolution", "This will change your resolution are you sure you want to continue?");
 	}
 
 	@Override
@@ -85,7 +103,9 @@ public class LoadMenu extends BasicGameState {
 
 		back.draw(g, background, textColor);
 
-		g.drawString("Load Game", buttonXOffset + buttonWidth - g.getFont().getWidth("Select Resolution"), buttonYOffset);
+		g.drawString("Load Game", buttonXOffset + buttonWidth - g.getFont().getWidth("Load Game"), buttonYOffset);
+
+		warning.draw(g);
 	}
 
 	@Override
@@ -113,14 +133,30 @@ public class LoadMenu extends BasicGameState {
 		}
 		back.move(buttonXOffset, buttonYOffset + (yCounter * buttonYGap));
 		back.hover(mouseX, mouseY);
+
+		warning.move(gc.getWidth()/2 - warning.getWidth()/2, gc.getHeight()/2 - warning.getHeight()/2);
+		b1.hover(mouseX, mouseY);
+		b2.hover(mouseX, mouseY);
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y){
-		if(button == 0){
+		if(button == 0){			
+			if(b2.hover(x, y) && warning.isShowing()){
+				warning.hide();
+			}
+			if(b1.hover(x, y) && warning.isShowing()){
+				for(SimpleButton b : buttons){
+					b.reset();
+					b1.reset();
+					b2.reset();
+				}
+				SaverLoader.loadGame("savedGames/" + path, sbg);
+			}
 			for(SimpleButton b : buttons){
-				if(b.hover(x, y)){
-					SaverLoader.loadGame("savedGames/" + b.getText(), sbg);
+				if(b.hover(x, y) && !warning.isShowing()){
+					warning.show();
+					path = b.getText();
 				}
 			}
 			if(back.hover(x, y)){

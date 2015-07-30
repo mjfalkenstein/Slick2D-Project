@@ -43,19 +43,6 @@ public class Player extends Entity {
 		environmentVelocity = new Vector2f(0, 0);
 		originalHeight = boundingBox.getHeight();
 	}
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param boundingBox - a Rectangle representing the borders of the Platform
-	 * @param velocity - the initial velocity
-	 */
-	public Player(Rectangle boundingBox, Vector2f velocity, Inventory inventory) {
-		super(boundingBox, velocity);
-		environmentVelocity = new Vector2f(0, 0);
-		originalHeight = boundingBox.getHeight();
-		this.inventory = inventory;
-	}
 
 	@Override
 	public void update(GameContainer gc, int delta) {

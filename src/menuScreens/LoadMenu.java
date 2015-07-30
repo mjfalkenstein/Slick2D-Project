@@ -21,7 +21,7 @@ public class LoadMenu extends BasicGameState {
 
 	ArrayList<SimpleButton> buttons = new ArrayList<SimpleButton>();
 
-	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
+	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonXGap, buttonYGap;
 
 	Color textColor = Color.lightGray;
 	Color background;
@@ -48,18 +48,18 @@ public class LoadMenu extends BasicGameState {
 		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
 		buttonYOffset = (int)(gc.getHeight() * 0.5f);
 		buttonYGap = (int)(gc.getHeight() * 0.075f);
+		buttonXGap = (int)(gc.getWidth() * 0.2);
 
 		File folder = new File("savedGames/");
 		File[] listOfFiles = folder.listFiles();
 
 		back = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 
-		if(listOfFiles.length > 3){
-			File[] temp = new File[3];
-			int counter = 5;
-			for(int i = listOfFiles.length; i > listOfFiles.length - 3; i--){
-				temp[counter] = listOfFiles[i];
-				counter--;
+		if(listOfFiles.length >= 6){
+			File[] temp = new File[6];
+			int counter = 0;
+			for(int i = listOfFiles.length; i > listOfFiles.length - 6; i--, counter++){
+				temp[counter] = listOfFiles[i-1];
 			}
 			listOfFiles = temp;
 		}
@@ -90,19 +90,28 @@ public class LoadMenu extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		int xCounter = 0;
+		int yCounter = 1;
+		int buttonCounter = 0;
+
+		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
+		buttonYOffset = (int)(gc.getHeight() * 0.5f);
+		buttonYGap = (int)(gc.getHeight() * 0.075f);
+		buttonXGap = (int)(gc.getWidth() * 0.2);
 
 		mouseX = gc.getInput().getMouseX();
 		mouseY = gc.getInput().getMouseY();
 
-		int counter = 0;
-
-		for(int i = 0; i < buttons.size(); i++, counter++){
-			SimpleButton b = buttons.get(i);
-			b.move(buttonXOffset, buttonYOffset + (counter + 1) * buttonYGap);
-			b.hover(mouseX, mouseY);
+		for(xCounter = 0; xCounter <= 1; xCounter++){
+			for(yCounter = 1; yCounter <= 3; yCounter++){
+				if(buttonCounter < buttons.size()){
+					buttons.get(buttonCounter).move(buttonXOffset - (xCounter * (buttonXGap + 100)), buttonYOffset + (yCounter * buttonYGap));
+					buttons.get(buttonCounter).hover(mouseX, mouseY);
+				}
+				buttonCounter++;
+			}
 		}
-
-		back.move(buttonXOffset, buttonYOffset + (4 * buttonYGap));
+		back.move(buttonXOffset, buttonYOffset + (yCounter * buttonYGap));
 		back.hover(mouseX, mouseY);
 	}
 

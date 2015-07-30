@@ -1,22 +1,28 @@
 package utils;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import entities.Entity;
 import entities.Player;
 
 public abstract class Level extends BasicGameState{
 	
-	GameContainer gc;
-	StateBasedGame sbg;
-	boolean paused = false;
-	PauseMenu pauseMenu;
+	protected GameContainer gc;
+	protected StateBasedGame sbg;
+	protected boolean paused = false;
+	protected PauseMenu pauseMenu;
 	protected Player player;
-	Camera camera;
-	int mouseX, mouseY;
-	int levelWidth, levelHeight;
+	protected Camera camera;
+	protected int mouseX, mouseY;
+	protected int levelWidth, levelHeight;
+	
+	protected ArrayList<Entity> world = new ArrayList<Entity>();
 	
 	public Level(Player p, int levelWidth, int levelHeight){
 		player = p;
@@ -25,10 +31,7 @@ public abstract class Level extends BasicGameState{
 	}
 
 	@Override
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.gc = gc;
-		this.sbg = sbg;
-	}
+	public abstract void init(GameContainer gc, StateBasedGame sbg) throws SlickException;
 
 	@Override
 	public abstract void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException;

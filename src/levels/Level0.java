@@ -1,7 +1,5 @@
 package levels;
 
-import java.util.ArrayList;
-
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -10,7 +8,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -37,15 +34,10 @@ import entities.TurretEnemy;
 import entities.VerticalOscillatingPlatform;
 
 public class Level0 extends Level{
-
-	GameContainer gc;
-	StateBasedGame sbg;
-
-	//Player player;
+	
 	Friendly friendly;
 	FollowerEnemy follower;
 	TurretEnemy turret1, turret2;
-	Camera camera;
 	StationaryPlatform ground, platform, leftWall, smallRightWall, bigRightWall, stair1, stair2, stair3;
 	HorizontalOscillatingPlatform HOP1;
 	VerticalOscillatingPlatform VOP1;
@@ -59,31 +51,21 @@ public class Level0 extends Level{
 
 	Circle background;
 
-	ArrayList<Entity> world = new ArrayList<Entity>();
-
 	Color sky = Color.decode("#99CCFF");
 	BackgroundBarsAnimation backgroundAnimation;
-
-	int levelWidth;
-	int levelHeight;
-
-	boolean paused = false;
-
-	PauseMenu pauseMenu;
 	
 	public Level0(Player p, int levelWidth, int levelHeight) {
 		super(p, levelWidth, levelHeight);
+		player = p;
+		this.levelWidth = levelWidth;
+		this.levelHeight = levelHeight;
 	}
 
-	/**
-	 * Called on program start-up
-	 * 
-	 * Used to initialize all necessary data for the screen to run
-	 */
+	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		this.gc = gc;
 		this.sbg = sbg;
-
+		
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 
 		ground = new StationaryPlatform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 40), new Vector2f(0, 0));
@@ -144,11 +126,7 @@ public class Level0 extends Level{
 		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to draw everything to the screen
-	 */
+	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		camera.translate(gc, g, player);
 
@@ -171,11 +149,7 @@ public class Level0 extends Level{
 		}
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to update all necessary data, ie mouse position
-	 */
+	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		//make sure to add cameraX/cameraY to account for moving camera
 		int mouseX = gc.getInput().getMouseX() + camera.getX();
@@ -233,11 +207,7 @@ public class Level0 extends Level{
 		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
 	}
 
-	/**
-	 * Called upon mouse button release (as opposed to mouse button press)
-	 * 
-	 * Used as an event handler
-	 */
+	@Override
 	public void mouseReleased(int button, int x, int y){
 		//make sure to add cameraX/cameraY to account for moving camera
 		x += camera.getX();
@@ -261,9 +231,7 @@ public class Level0 extends Level{
 		}
 	}
 
-	/**
-	 * Called every frame to handle keyboard inputs
-	 */
+	@Override
 	public void keyPressed(int key, char c){
 		if(key == Input.KEY_ESCAPE){
 			if(!paused){
@@ -276,13 +244,12 @@ public class Level0 extends Level{
 		}
 	}
 
-	/**
-	 * The unique ID for this screen, must be different for all over BasicGameStates
-	 */
+	@Override
 	public int getID() {
 		return 6;
 	}
 
+	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg){
 		gc.resume();
 		pauseMenu.hide();
@@ -291,6 +258,7 @@ public class Level0 extends Level{
 		player.reset();
 	}
 
+	@Override
 	public void leave(GameContainer gc, StateBasedGame sbg){
 		gc.setMouseGrabbed(false);
 	}

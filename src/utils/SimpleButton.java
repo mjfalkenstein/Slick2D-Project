@@ -49,6 +49,7 @@ public class SimpleButton {
 		if(highlight.getX() < body.getX()){
 			highlight.setX(body.getX());
 		}
+		highlight.setY(body.getY());
 		if(highlight.getWidth() >= body.getWidth()-1){
 			highlight.setWidth(body.getWidth());
 		}else if(highlight.getWidth() < 0){

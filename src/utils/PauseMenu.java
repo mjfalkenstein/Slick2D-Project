@@ -11,7 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 public class PauseMenu {
 
 	int x, y, width, height;
-	SimpleButton mainMenu, newGame, loadGame, quit;
+	SimpleButton mainMenu, newGame, loadGame, options, quit;
 
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 
@@ -49,6 +49,8 @@ public class PauseMenu {
 		counter++;
 		loadGame = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Load Game");
 		counter++;
+		options = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Options");
+		counter++;
 		quit = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Quit");
 		
 		body = new Rectangle(mainMenu.getX() - 10, mainMenu.getY() - g.getFont().getHeight("Paused") -  20, mainMenu.getWidth() + 20, quit.getMaxY() - mainMenu.getY() + g.getFont().getHeight("Paused") + 30);
@@ -78,6 +80,7 @@ public class PauseMenu {
 			mainMenu.draw(g, bg, textColor);
 			newGame.draw(g, bg, textColor);
 			loadGame.draw(g, bg, textColor);
+			options.draw(g, bg, textColor);
 			quit.draw(g, bg, textColor);
 		}
 	}
@@ -95,6 +98,8 @@ public class PauseMenu {
 		newGame.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
 		loadGame.move(x, y + buttonYOffset + (counter * buttonYGap));
+		counter++;
+		options.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
 		quit.move(x, y + buttonYOffset + (counter * buttonYGap));
 		
@@ -119,6 +124,8 @@ public class PauseMenu {
 			s = "newGame";
 		}if(loadGame.hover(x, y)){
 			s =  "loadGame";
+		}if(options.hover(x, y)){
+			s =  "options";
 		}if(quit.hover(x, y)){
 			s =  "quit";
 		}
@@ -132,6 +139,7 @@ public class PauseMenu {
 		mainMenu.reset();
 		newGame.reset();
 		loadGame.reset();
+		options.reset();
 		quit.reset();
 		showing = true;
 	}
@@ -143,6 +151,7 @@ public class PauseMenu {
 		mainMenu.reset();
 		newGame.reset();
 		loadGame.reset();
+		options.reset();
 		quit.reset();
 		showing = false;
 	}
@@ -154,6 +163,7 @@ public class PauseMenu {
 		mainMenu.reset();
 		newGame.reset();
 		loadGame.reset();
+		options.reset();
 		quit.reset();
 	}
 	

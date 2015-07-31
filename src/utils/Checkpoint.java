@@ -71,6 +71,10 @@ public class Checkpoint {
 		saved = true;
 	}
 	
+	public void reset(){
+		saved = false;
+	}
+	
 	public float getX(){
 		return boundingBox.getX();
 	}

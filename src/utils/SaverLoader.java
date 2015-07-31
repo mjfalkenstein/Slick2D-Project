@@ -68,10 +68,10 @@ public class SaverLoader {
 				data += "FollowerEnemy " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + "\n";
 			}
 			if(e instanceof HorizontalOscillatingPlatform){
-				data += "HOZ " + e.getX() + " " + e.getY() + "\n";
+				data += "HOP " + e.getX() + " " + e.getY() + "\n";
 			}
 			if(e instanceof VerticalOscillatingPlatform){
-				data += "VOZ " + e.getX() + " " + e.getY() + "\n";
+				data += "VOP " + e.getX() + " " + e.getY() + "\n";
 			}
 		}
 
@@ -181,7 +181,7 @@ public class SaverLoader {
 						}
 					}
 				}
-				else if(words[0].equals("HOZ")){
+				else if(words[0].equals("HOP")){
 					for(Entity e : level.getEntities()){
 						if(e instanceof HorizontalOscillatingPlatform){
 							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
@@ -190,7 +190,7 @@ public class SaverLoader {
 						}
 					}
 				}
-				else if(words[0].equals("VOZ")){
+				else if(words[0].equals("VOP")){
 					for(Entity e : level.getEntities()){
 						if(e instanceof VerticalOscillatingPlatform){
 							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){

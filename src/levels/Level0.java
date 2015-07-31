@@ -9,10 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import driver.Driver;
 import utils.BackgroundBarsAnimation;
 import utils.Camera;
 import utils.Checkpoint;
@@ -54,8 +51,8 @@ public class Level0 extends Level{
 	Color sky = Color.decode("#99CCFF");
 	BackgroundBarsAnimation backgroundAnimation;
 	
-	public Level0(Player p, int levelWidth, int levelHeight) {
-		super(p, levelWidth, levelHeight);
+	public Level0(GameContainer gc, Player p, int levelWidth, int levelHeight) {
+		super(gc, p, levelWidth, levelHeight);
 	}
 
 	@Override
@@ -148,6 +145,11 @@ public class Level0 extends Level{
 		if(player.getInventory() != null){
 			player.getInventory().draw(g);
 		}
+		
+		warning.draw(g);
+		warning.move(gc.getWidth()/2 - warning.getWidth()/2, gc.getHeight()/2 - warning.getHeight()/2);
+		b1.hover(mouseX, mouseY);
+		b2.hover(mouseX, mouseY);
 	}
 
 	@Override
@@ -192,21 +194,24 @@ public class Level0 extends Level{
 		
 		player.getInventory().update(gc, delta);
 		
-		if(player.getInventory().isVisible()){
-			pause();
-		}else{
-			unpause();
-		}
-		
 		//if the player is dead, pause and reset
 		if(player.isDead()){
 			for(Entity e : world){
 				e.reset();
 			}
+			for(Checkpoint c : checkpoints){
+				c.reset();
+			}
 		}
-
-		pauseMenu.hover(mouseX, mouseY);
+		
+		if(!warning.isShowing()){
+			pauseMenu.hover(mouseX, mouseY);
+		}
 		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
+		
+		warning.move(camera.getX() + gc.getWidth()/2 - warning.getWidth()/2, camera.getY() + gc.getHeight()/2 - warning.getHeight()/2);
+		b1.hover(mouseX, mouseY);
+		b2.hover(mouseX, mouseY);
 	}
 
 	@Override
@@ -215,26 +220,11 @@ public class Level0 extends Level{
 		x += camera.getX();
 		y += camera.getY();
 		
-		String pauseMenuSelection = pauseMenu.hover(x, y);
-		
-		if(button == 0){
-			if(paused){
-				if(pauseMenuSelection == "mainMenu"){
-					pauseMenu.reset();
-					gc.resume();
-					for(Entity e : world){
-						e.reset();
-					}
-					sbg.enterState(Driver.MAIN_MENU, new FadeOutTransition(), new FadeInTransition());
-				}else if(pauseMenuSelection == "quit"){
-					gc.exit();
-				}
-			}
-		}
+		handlePauseMenu(button, x, y);
 	}
 
 	@Override
-	public void keyPressed(int key, char c){
+	public void keyReleased(int key, char c){
 		if(key == Input.KEY_ESCAPE){
 			if(!paused){
 				pause();
@@ -251,28 +241,5 @@ public class Level0 extends Level{
 		return 6;
 	}
 
-	@Override
-	public void enter(GameContainer gc, StateBasedGame sbg){
-		gc.resume();
-		pauseMenu.hide();
-		gc.setMouseGrabbed(true);
-		paused = false;
-	}
 
-	@Override
-	public void leave(GameContainer gc, StateBasedGame sbg){
-		gc.setMouseGrabbed(false);
-	}
-	
-	public void pause(){
-		gc.pause();
-		gc.setMouseGrabbed(false);
-		paused = true;
-	}
-	
-	public void unpause(){
-		gc.resume();
-		gc.setMouseGrabbed(true);
-		paused = false;
-	}
 }

@@ -105,7 +105,7 @@ public class ResolutionsMenu extends BasicGameState{
 		
 		background = Color.black;
 		
-		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, "Change Resolution", "This will change your resolution are you sure you want to continue?");
+		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, buttonYGap, "Change Resolution", "This will change your resolution are you sure you want to continue?");
 	}
 
 	/**

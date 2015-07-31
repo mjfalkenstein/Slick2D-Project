@@ -62,6 +62,10 @@ public abstract class Level extends BasicGameState{
 	public int getHeight(){
 		return levelHeight;
 	}
+	
+	public ArrayList<Entity> getEntities(){
+		return world;
+	}
 
 	@Override
 	public abstract int getID();

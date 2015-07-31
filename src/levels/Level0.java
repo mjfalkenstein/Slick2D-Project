@@ -81,7 +81,7 @@ public class Level0 extends Level{
 		spikesDown = new SpikesDown(new Rectangle(platform.getCenterX() - 100, platform.getMaxY(), 200, 50), new Vector2f(0, 0));
 		spikesLeft = new SpikesLeft(new Rectangle(bigRightWall.getX() - 50, bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		spikesRight = new SpikesRight(new Rectangle(bigRightWall.getMaxX(), bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
-		door = new Door(new Rectangle(stair3.getMaxX() - 50, stair3.getY() - 100, 50, 100), new Vector2f(0, 0), key1);
+		door = new Door(new Rectangle(stair2.getMaxX() - 50, stair2.getY() - 100, 50, 100), new Vector2f(0, 0), key1);
 		
 		//player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
@@ -90,8 +90,8 @@ public class Level0 extends Level{
 		turret1 = new TurretEnemy(new Circle(600, 200, 25), new Vector2f(0, 0), player);
 		turret2 = new TurretEnemy(new Circle(1000, 200, 25), new Vector2f(0, 0), player);
 
-		checkpoint = new Checkpoint(this, new Rectangle(stair2.getX(), stair2.getY() - 100, stair2.getWidth(), 100), player, getID());
-
+		checkpoint = new Checkpoint(this, new Rectangle(stair3.getX(), stair3.getY() - 100, stair2.getWidth(), 100), player, getID());
+		
 		world.add(player);
 		world.add(ground);
 		world.add(platform);

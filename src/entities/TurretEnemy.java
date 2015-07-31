@@ -25,7 +25,7 @@ public class TurretEnemy extends Entity{
 	float barrelLength = 60;
 	float angle = 0;
 	Entity target;
-	float targetDistance = 400000;
+	float targetDistance = 400;
 	float cooldown = 1000;
 	List<Bullet> bullets;
 

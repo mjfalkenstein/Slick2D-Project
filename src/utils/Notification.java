@@ -13,7 +13,7 @@ import org.newdawn.slick.geom.Rectangle;
  */
 public class Notification {
 
-	int x, y, width, height, lines;
+	int x, y, width, height, lines, buttonGap;
 	String title, text;
 	Rectangle header, body;
 	String[] textWords, headerWords;
@@ -36,12 +36,13 @@ public class Notification {
 	 * @param title - the text to be displayed at the top
 	 * @param text - the text to be displayed in the center
 	 */
-	public Notification(int x, int y, int width, int height, Color bg, Color textColor, SimpleButton b1, SimpleButton b2, String title, String text) {
+	public Notification(int x, int y, int width, int height, Color bg, Color textColor, SimpleButton b1, SimpleButton b2, int buttonGap, String title, String text) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.buttonGap = buttonGap;
 		this.title = title;
 		this.text = text;
 		this.b1 = b1;
@@ -89,7 +90,7 @@ public class Notification {
 			}
 			
 			//drawing the window
-			g.setColor(bg);
+			g.setColor(Color.white);
 			g.setLineWidth(4);
 			g.draw(header);
 			g.draw(body);
@@ -110,11 +111,11 @@ public class Notification {
 			}
 			
 			if(b1 != null){
-				b1.move((int)(body.getX() + 10), (int)(body.getY() + body.getHeight() - b1.getHeight()));
+				b1.move((int)(body.getX() + body.getWidth()/2 + 5), (int)(body.getY() + body.getHeight() - b1.getHeight() - buttonGap));
 				b1.draw(g, bg, textColor);
 			}
 			if(b2 != null){
-				b2.move((int)(body.getX() + body.getWidth()/2 + 10), (int)(body.getY() + body.getHeight() - b2.getHeight()));
+				b2.move((int)(body.getX() + body.getWidth()/2 + 5), (int)(body.getY() + body.getHeight() - b2.getHeight()) - 5);
 				b2.draw(g, bg, textColor);
 			}
 		}
@@ -164,5 +165,15 @@ public class Notification {
 	
 	public int getHeight(){
 		return height;
+	}
+	
+	public void setBody(String s){
+		text = s;
+		textWords = text.split(" ");
+	}
+	
+	public void setHeader(String s){
+		title = s;
+		headerWords = title.split(" ");
 	}
 }

@@ -83,7 +83,7 @@ public class LoadMenu extends BasicGameState {
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
 
-		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, "Change Resolution", "This will change your resolution are you sure you want to continue?");
+		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, buttonYGap, "Load Game", "Are you sure you want to load file: \n" + path);
 	}
 
 	@Override
@@ -152,8 +152,9 @@ public class LoadMenu extends BasicGameState {
 			}
 			for(SimpleButton b : buttons){
 				if(b.hover(x, y) && !warning.isShowing()){
-					warning.show();
 					path = b.getText();
+					warning.setBody("Are you sure you want to load file: \n" + path);
+					warning.show();
 				}
 			}
 			if(back.hover(x, y)){

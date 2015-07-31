@@ -42,13 +42,11 @@ public class Player extends Entity {
 		super(boundingBox, velocity);
 		environmentVelocity = new Vector2f(0, 0);
 		originalHeight = boundingBox.getHeight();
+		inventory = new Inventory(new ArrayList<Item>());
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) {
-		if(inventory == null){
-			inventory = new Inventory(gc, new ArrayList<Item>());
-		}
 
 		handleInputs(gc);
 		
@@ -279,6 +277,9 @@ public class Player extends Entity {
 	}
 
 	public void addItem(Item item) {
+//		if(inventory == null){
+//			inventory = new Inventory(null, null);
+//		}
 		inventory.addItem(item);
 	}
 	

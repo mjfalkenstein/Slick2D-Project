@@ -78,6 +78,6 @@ public class Key extends Item {
 	}
 	
 	public String toString(){
-		return "Key - " + startingX + ", " + startingY + "\n";
+		return "Key " + startingX + " " + startingY + "\n";
 	}
 }

@@ -25,9 +25,9 @@ public class Inventory {
 	 * @param gc - GameContainer
 	 * @param items - list of items already in the inventory
 	 */
-	public Inventory(GameContainer gc, ArrayList<Item> items){
+	public Inventory(ArrayList<Item> items){
 		this.items = items;
-		background = new Rectangle(10, 10, gc.getWidth()-20, 104);
+		background = new Rectangle(10, 10, 1000, 104);
 		x = 0;
 		y = 0;
 	}
@@ -40,6 +40,9 @@ public class Inventory {
 	 */
 	public void update(GameContainer gc, int delta){
 		gc.getInput();
+		background.setLocation(10, 10);
+		background.setWidth(gc.getWidth() - 20);
+		background.setHeight(104);
 		if(gc.getInput().isKeyDown(Input.KEY_Q)){
 			visible = true;
 		}else{

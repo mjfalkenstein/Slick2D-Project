@@ -13,7 +13,6 @@ import java.util.Date;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -50,7 +49,7 @@ public class SaverLoader {
 				+ "levelDims " + level.getWidth() + " " + level.getHeight() + "\n"
 				+ "Player " + player.getX() + " " + player.getY() + "\n"
 				+ player.getInventory()
-				+ "Checkpoint " + checkpoint.getCenterX() + " " + checkpoint.getCenterY() + "\n";
+				+ "Checkpoint " + checkpoint.getCenterX() + " " + checkpoint.getMaxY() + "\n";
 		
 		for(Entity e : level.getEntities()){
 			if( e instanceof Door){
@@ -83,7 +82,6 @@ public class SaverLoader {
 	 * @return - success
 	 */
 	public static boolean loadGame(String path, StateBasedGame sbg){
-		System.out.println("Attempting to load file: " + path);
 		String line;
 		String[] words;
 		Player player = null;
@@ -101,29 +99,40 @@ public class SaverLoader {
 				if(words[0].equals("LevelID")){
 					level = (Level) sbg.getState(Integer.parseInt(words[1]));
 					levelID = Integer.parseInt(words[1]);
-					System.out.println("Loading level with ID: " + levelID);
 					for(Entity e : level.getEntities()){
 						if(e instanceof Player){
-							System.out.println("Creating player");
 							player = (Player)e;
 						}
 					}
 				}
 				else if(words[0].equals("Player")){
-					System.out.printf("Loading player position to: %s, %s\n", words[1], words[2]);
 					player.move(Float.parseFloat(words[1]), Float.parseFloat(words[2]));
 				}
 				else if(words[0].equals("Key")){
-					System.out.println("Player: " + player);
-					System.out.println("Inventory:" + player.getInventory());
-					System.out.printf("Loading key at: %s, %s\n", words[1], words[2]);
 					Circle box = new Circle(Float.parseFloat(words[1]), Float.parseFloat(words[2]), 15);
-					Key key = new Key(box, new Vector2f(0, 0));
-					player.addItem(key);
+					for(Entity e : level.getEntities()){
+						if(e instanceof Key){
+							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
+								e.remove();
+							}
+							if(Float.parseFloat(words[1]) < 0 && Float.parseFloat(words[2]) < 0){
+								e.remove();
+							}
+							
+						}
+					}
+					if(Float.parseFloat(words[1]) > 0 && Float.parseFloat(words[2]) > 0){
+						Key key = new Key(box, new Vector2f(0, 0));
+						player.addItem(key);
+					}
 				}
 				else if(words[0].equals("Checkpoint")){
-					System.out.printf("Loading checkpoint at: %s, %s\n", words[1], words[2]);
-					player.move(Float.parseFloat(words[1]) - player.getWidth()/2, Float.parseFloat(words[2]) - player.getHeight()/2);
+					player.move(Float.parseFloat(words[1]) - player.getWidth()/2, Float.parseFloat(words[2]) - player.getHeight());
+					for(Checkpoint c : level.getCheckpoints()){
+						if(c.getCenterX() == Float.parseFloat(words[1]) && c.getMaxY() == Float.parseFloat(words[2])){
+							c.deactivate();
+						}
+					}
 				}
 				else if(words[0].equals("Door")){
 					for(Entity e : level.getEntities()){
@@ -135,6 +144,13 @@ public class SaverLoader {
 					}
 				}
 			}
+//			for(Entity e : level.getEntities()){
+//				if(e instanceof Item){
+//					if(player.has((Item)e)){
+//						e.remove();
+//					}
+//				}
+//			}
 			bufferedReader.close();
 			if(levelID == -1){
 				throw new IOException("Invalid level ID");

@@ -136,4 +136,8 @@ public abstract class Entity {
 		velocity = new Vector2f(x, y);
 	}
 	
+	public void remove(){
+		move(-1000, -1000);
+	}
+	
 }

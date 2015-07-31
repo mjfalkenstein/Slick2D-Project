@@ -48,7 +48,7 @@ public class Inventory {
 		}else{
 			visible = false;
 		}
-		
+
 		background.setLocation(x + 10, y + 10);
 	}
 
@@ -82,14 +82,15 @@ public class Inventory {
 			items.add(item);
 		}
 	}
-	
+
 	/**
 	 * Removes the given item from the inventory
 	 * 
 	 * @param item - Item to remove
 	 */
 	public void removeItem(Item item){
-		items.remove(item);
+		//items.remove(item);
+		item.remove();
 	}
 
 	/**
@@ -102,7 +103,9 @@ public class Inventory {
 		this.x = x;
 		this.y = y;
 		for(int i = 0; i < items.size(); i++){
-			items.get(i).move(background.getX() + i * items.get(i).maxWidth + items.get(i).maxWidth/2, background.getY() + items.get(i).maxHeight/2);
+			if(items.get(i).getX() > 0 && items.get(i).getY() > 0){
+				items.get(i).move(background.getX() + i * items.get(i).maxWidth + items.get(i).maxWidth/2, background.getY() + items.get(i).maxHeight/2);
+			}
 		}
 	}
 
@@ -122,11 +125,11 @@ public class Inventory {
 	public boolean contains(Item i){
 		return items.contains(i);
 	}
-	
+
 	public boolean isVisible(){
 		return visible;
 	}
-	
+
 	public String toString(){
 		String s = "";
 		for(Item i : items){

@@ -34,10 +34,10 @@ public class Door extends Entity {
 	@Override
 	public void draw(Graphics g) {
 		if(!open){
-			g.setColor(Color.gray.darker());
+			g.setColor(Color.black);
 			g.setLineWidth(3);
 			g.draw(boundingBox);
-			g.setColor(Color.gray);
+			g.setColor(Color.black);
 			g.fill(boundingBox);
 		}else{
 			g.setColor(Color.gray);

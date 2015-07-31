@@ -23,6 +23,7 @@ public abstract class Level extends BasicGameState{
 	protected int levelWidth, levelHeight;
 	
 	protected ArrayList<Entity> world = new ArrayList<Entity>();
+	protected ArrayList<Checkpoint> checkpoints = new ArrayList<Checkpoint>();
 	
 	public Level(Player p, int levelWidth, int levelHeight){
 		player = p;
@@ -65,6 +66,10 @@ public abstract class Level extends BasicGameState{
 	
 	public ArrayList<Entity> getEntities(){
 		return world;
+	}
+	
+	public ArrayList<Checkpoint> getCheckpoints(){
+		return checkpoints;
 	}
 
 	@Override

@@ -115,6 +115,8 @@ public class Level0 extends Level{
 		world.add(follower);
 		world.add(turret1);
 		world.add(turret2);
+		
+		checkpoints.add(checkpoint);
 
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
 
@@ -139,7 +141,9 @@ public class Level0 extends Level{
 		
 		pauseMenu.draw(g);
 		
-		checkpoint.draw(g);
+		for(Checkpoint c : checkpoints){
+			c.draw(g);
+		}
 		
 		if(player.getInventory() != null){
 			player.getInventory().draw(g);
@@ -171,7 +175,9 @@ public class Level0 extends Level{
 				e.update(gc, delta);
 			}
 			
-			checkpoint.collide(gc);
+			for(Checkpoint c : checkpoints){
+				c.collide(gc);
+			}
 			
 			key1.collide(player, gc);
 			key2.collide(player, gc);
@@ -197,7 +203,6 @@ public class Level0 extends Level{
 			for(Entity e : world){
 				e.reset();
 			}
-			// pause();
 		}
 
 		pauseMenu.hover(mouseX, mouseY);
@@ -252,7 +257,6 @@ public class Level0 extends Level{
 		pauseMenu.hide();
 		gc.setMouseGrabbed(true);
 		paused = false;
-		player.reset();
 	}
 
 	@Override

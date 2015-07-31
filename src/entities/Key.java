@@ -78,6 +78,9 @@ public class Key extends Item {
 	}
 	
 	public String toString(){
-		return "Key " + startingX + " " + startingY + "\n";
+		if(x > 0 && y > 0){
+			return "Key " + startingX + " " + startingY + "\n";
+		}
+		return "Key " + x + " " + y + "\n";
 	}
 }

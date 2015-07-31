@@ -66,6 +66,18 @@ public class Checkpoint {
 			}
 		}
 	}
+	
+	public void deactivate(){
+		saved = true;
+	}
+	
+	public float getX(){
+		return boundingBox.getX();
+	}
+	
+	public float getY(){
+		return boundingBox.getY();
+	}
 
 	public float getCenterX() {
 		return boundingBox.getCenterX();
@@ -73,5 +85,13 @@ public class Checkpoint {
 	
 	public float getCenterY(){
 		return boundingBox.getCenterY();
+	}
+
+	public float getMaxY() {
+		return boundingBox.getMaxY();
+	}
+	
+	public float getMaxX() {
+		return boundingBox.getMaxX();
 	}
 }

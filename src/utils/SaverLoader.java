@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.lwjgl.util.vector.Vector2f;
@@ -19,8 +20,12 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import entities.Door;
 import entities.Entity;
+import entities.FollowerEnemy;
+import entities.Friendly;
+import entities.HorizontalOscillatingPlatform;
 import entities.Key;
 import entities.Player;
+import entities.VerticalOscillatingPlatform;
 
 /**
  * This is a utility class used to save and load the game states
@@ -38,6 +43,7 @@ public class SaverLoader {
 	 */
 	public static boolean saveGame(Level level, Player player, Checkpoint checkpoint, int levelID){
 		Date date = new Date();
+		ArrayList<Entity> entities = level.getEntities();
 		
 		levelID = level.getID();
 
@@ -51,9 +57,21 @@ public class SaverLoader {
 				+ player.getInventory()
 				+ "Checkpoint " + checkpoint.getCenterX() + " " + checkpoint.getMaxY() + "\n";
 		
-		for(Entity e : level.getEntities()){
-			if( e instanceof Door){
+		for(Entity e : entities){
+			if(e instanceof Door){
 				data += "Door " + e.getX() + " " + e.getY() + " " + ((Door)e).isOpen() + "\n";
+			}
+			if(e instanceof Friendly){
+				data += "Friendly " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + "\n";
+			}
+			if(e instanceof FollowerEnemy){
+				data += "FollowerEnemy " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + "\n";
+			}
+			if(e instanceof HorizontalOscillatingPlatform){
+				data += "HOZ " + e.getX() + " " + e.getY() + "\n";
+			}
+			if(e instanceof VerticalOscillatingPlatform){
+				data += "VOZ " + e.getX() + " " + e.getY() + "\n";
 			}
 		}
 
@@ -138,19 +156,51 @@ public class SaverLoader {
 					for(Entity e : level.getEntities()){
 						if(e instanceof Door){
 							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
-								((Door)e).open();
+								if(words[3].equals("true")){
+									((Door)e).open();
+								}
+							}
+						}
+					}
+				}
+				else if(words[0].equals("Friendly")){
+					for(Entity e : level.getEntities()){
+						if(e instanceof Friendly){
+							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
+								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
+							}
+						}
+					}
+				}
+				else if(words[0].equals("FollowerEnemy")){
+					for(Entity e : level.getEntities()){
+						if(e instanceof FollowerEnemy){
+							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
+								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
+							}
+						}
+					}
+				}
+				else if(words[0].equals("HOZ")){
+					for(Entity e : level.getEntities()){
+						if(e instanceof HorizontalOscillatingPlatform){
+							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
+								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
+							}
+						}
+					}
+				}
+				else if(words[0].equals("VOZ")){
+					for(Entity e : level.getEntities()){
+						if(e instanceof VerticalOscillatingPlatform){
+							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
+								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
 							}
 						}
 					}
 				}
 			}
-//			for(Entity e : level.getEntities()){
-//				if(e instanceof Item){
-//					if(player.has((Item)e)){
-//						e.remove();
-//					}
-//				}
-//			}
+			
 			bufferedReader.close();
 			if(levelID == -1){
 				throw new IOException("Invalid level ID");

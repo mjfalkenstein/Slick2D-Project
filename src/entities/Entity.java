@@ -139,5 +139,13 @@ public abstract class Entity {
 	public void remove(){
 		move(-1000, -1000);
 	}
+
+	public float getStartingX() {
+		return startingX;
+	}
+	
+	public float getStartingY(){
+		return startingY;
+	}
 	
 }

@@ -23,6 +23,7 @@ import entities.FollowerEnemy;
 import entities.Friendly;
 import entities.HorizontalOscillatingPlatform;
 import entities.Key;
+import entities.SlidingDoor;
 import entities.SolidLaser;
 import entities.SpikesDown;
 import entities.SpikesLeft;
@@ -54,6 +55,7 @@ public class Level0 extends Level{
 	AlternatingLaser aLaser;
 	SolidLaser sLaser;
 	Fan fan;
+	SlidingDoor slidingDoor;
 
 	Circle background;
 
@@ -87,10 +89,11 @@ public class Level0 extends Level{
 		spikesDown = new SpikesDown(new Rectangle(platform.getCenterX() - 100, platform.getMaxY(), 200, 50), new Vector2f(0, 0));
 		spikesLeft = new SpikesLeft(new Rectangle(bigRightWall.getX() - 50, bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		spikesRight = new SpikesRight(new Rectangle(bigRightWall.getMaxX(), bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
-		door = new Door(new Rectangle(stair2.getMaxX() - 50, stair2.getY() - 100, 50, 100), new Vector2f(0, 0), key1);
-		aLaser = new AlternatingLaser(new Rectangle(bigRightWall.getX(), bigRightWall.getMaxY() - 40, 40, 40), new Vector2f(0, 0), platform.getY() - bigRightWall.getMaxY(), AlternatingLaser.SOUTH, 2000, 2000);
-		sLaser = new SolidLaser(new Rectangle(leftWall.getX(), leftWall.getY(), 40, 40), new Vector2f(0, 0), 500, SolidLaser.NORTH);
-		fan = new Fan(new Rectangle(ground.getMaxX() + 100, ground.getY(), 200, 40), new Vector2f(0, 0), 0.03f, 500, Fan.NORTH);
+		door = new Door(new Rectangle(stair2.getMaxX() - 50, stair2.getY() - 100, 50, 100), new Vector2f(0, 0), key2);
+		aLaser = new AlternatingLaser(new Rectangle(bigRightWall.getX(), bigRightWall.getMaxY() - 40, 40, 40), new Vector2f(0, 0), platform.getY() - bigRightWall.getMaxY(), Entity.SOUTH, 2000, 2000);
+		sLaser = new SolidLaser(new Rectangle(leftWall.getX(), leftWall.getY(), 40, 40), new Vector2f(0, 0), 500, Entity.NORTH);
+		fan = new Fan(new Rectangle(ground.getMaxX() + 100, ground.getY(), 200, 40), new Vector2f(0, 0), 0.03f, 500, Entity.NORTH);
+		slidingDoor = new SlidingDoor(new Rectangle(platform.getX() + 50, platform.getMaxY(), 40, ground.getY() - platform.getMaxY()), new Vector2f(0, 0), key1, Entity.SOUTH);
 		
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
 		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 40, 60), new Vector2f(0, 0), s, true);
@@ -121,6 +124,7 @@ public class Level0 extends Level{
 		world.add(aLaser);
 		world.add(sLaser);
 		world.add(fan);
+		world.add(slidingDoor);
 		
 		world.add(friendly);
 		world.add(follower);
@@ -192,8 +196,9 @@ public class Level0 extends Level{
 				//spikesRight.collide(e, gc);
 				//aLaser.collide(e, gc);
 				//sLaser.collide(e, gc);
+
 				fan.collide(e, gc);
-				
+				slidingDoor.collide(e, gc);
 				door.collide(e, gc);
 				
 				e.update(gc, delta);

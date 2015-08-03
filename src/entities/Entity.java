@@ -11,7 +11,12 @@ import org.newdawn.slick.geom.Shape;
  */
 public abstract class Entity {
 	
-	protected float x, y, width, height, startingX, startingY;
+	public static final int NORTH = 0;
+	public static final int SOUTH = 1;
+	public static final int EAST = 2;
+	public static final int WEST = 3;
+	
+	protected float x, y, width, height, startingX, startingY, startingMaxX, startingMaxY;
 	protected Shape boundingBox;
 	protected Vector2f velocity, startingVelocity;
 	protected String spritePath;
@@ -29,6 +34,8 @@ public abstract class Entity {
 		y = boundingBox.getMinY();
 		startingX = x;
 		startingY = y;
+		startingMaxX = boundingBox.getMaxX();
+		startingMaxY = boundingBox.getMaxY();
 		width = boundingBox.getWidth();
 		height = boundingBox.getHeight();
 		this.boundingBox = boundingBox;

@@ -14,11 +14,6 @@ import org.newdawn.slick.geom.Transform;
  */
 public class SolidLaser extends Entity {
 
-	public static final int NORTH = 0;
-	public static final int SOUTH = 1;
-	public static final int EAST = 2;
-	public static final int WEST = 3;
-
 	float laserWidth = 10;
 	float laserLength;
 

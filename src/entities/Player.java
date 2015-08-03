@@ -137,7 +137,8 @@ public class Player extends Entity {
 			//PLATFORMS
 			if(	e instanceof StationaryPlatform || 
 				e instanceof HorizontalOscillatingPlatform || 
-				e instanceof VerticalOscillatingPlatform){
+				e instanceof VerticalOscillatingPlatform ||
+				e instanceof SlidingDoor){
 				
 				//collision occurred on the Y axis (vertically oriented)
 				if(yOverlap < xOverlap){

@@ -12,11 +12,6 @@ import org.newdawn.slick.geom.Shape;
  */
 public class Fan extends Entity{
 
-	public static final int NORTH = 0;
-	public static final int SOUTH = 1;
-	public static final int EAST = 2;
-	public static final int WEST = 3;
-
 	float force, range;
 	int direction;
 

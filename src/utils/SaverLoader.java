@@ -25,6 +25,7 @@ import entities.Friendly;
 import entities.HorizontalOscillatingPlatform;
 import entities.Key;
 import entities.Player;
+import entities.SlidingDoor;
 import entities.VerticalOscillatingPlatform;
 
 /**
@@ -72,6 +73,9 @@ public class SaverLoader {
 			}
 			if(e instanceof VerticalOscillatingPlatform){
 				data += "VOP " + e.getX() + " " + e.getY() + "\n";
+			}
+			if(e instanceof SlidingDoor){
+				data+= "SlidingDoor " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + " " + ((SlidingDoor)e).isOpen() + "\n"; 
 			}
 		}
 
@@ -195,6 +199,18 @@ public class SaverLoader {
 						if(e instanceof VerticalOscillatingPlatform){
 							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
 								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
+							}
+						}
+					}
+				}
+				else if(words[0].equals("SlidingDoor")){
+					for(Entity e : level.getEntities()){
+						if(e instanceof SlidingDoor){
+							System.out.println(e.getX() + " " + e.getY());
+							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
+								if(words[5].equals("true")){
+									((SlidingDoor)e).open();
+								}
 							}
 						}
 					}

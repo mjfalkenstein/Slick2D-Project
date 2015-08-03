@@ -12,6 +12,10 @@ import org.newdawn.slick.state.StateBasedGame;
 import entities.Entity;
 import entities.Player;
 
+/**
+ * A class that handles all level essentials
+ * All over 'Levels' must inherit from this in order to work properly
+ */
 public abstract class Level extends BasicGameState{
 	
 	protected GameContainer gc;
@@ -29,6 +33,14 @@ public abstract class Level extends BasicGameState{
 	protected ArrayList<Entity> world = new ArrayList<Entity>();
 	protected ArrayList<Checkpoint> checkpoints = new ArrayList<Checkpoint>();
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param gc - the GameContainer
+	 * @param p - the Player object for this level
+	 * @param levelWidth - the width of the level
+	 * @param levelHeight - the height of the level
+	 */
 	public Level(GameContainer gc, Player p, int levelWidth, int levelHeight){
 		player = p;
 		this.levelWidth = levelWidth;
@@ -76,13 +88,19 @@ public abstract class Level extends BasicGameState{
 		gc.setMouseGrabbed(false);
 	}
 	
-	public void pause(){
+	/**
+	 * Called to pause the level
+	 */
+	protected void pause(){
 		gc.pause();
 		gc.setMouseGrabbed(false);
 		paused = true;
 	}
 	
-	public void unpause(){
+	/**
+	 * Called to unpause the level
+	 */
+	protected void unpause(){
 		gc.resume();
 		gc.setMouseGrabbed(true);
 		paused = false;
@@ -104,7 +122,14 @@ public abstract class Level extends BasicGameState{
 		return checkpoints;
 	}
 	
-	public void handlePauseMenu(int button, int x, int y){
+	/**
+	 * Handles all inputs for the pause menu
+	 * 
+	 * @param button - the mouse button that was pressed
+	 * @param x - thex coordinate of the mouse
+	 * @param y - the y coordinate of the mouse
+	 */
+	protected void handlePauseMenuInputs(int button, int x, int y){
 		
 		String pauseMenuSelection = pauseMenu.hover(x, y);
 		
@@ -139,6 +164,40 @@ public abstract class Level extends BasicGameState{
 				warning.hide();
 			}
 		}
+	}
+	
+	/**
+	 * Handles much of the autonomous and essential part of the Level
+	 * eg. player death, drawing the pause menu, etc.
+	 * 
+	 * @param delta - time since the last frame
+	 */
+	protected void updateLevelEssentials(int delta){
+		//if the player leaves the screen, it dies
+		if(player.getY() > levelHeight){
+			player.kill();
+		}
+		
+		//if player is dead, reset the level
+		if(player.isDead()){
+			for(Entity e : world){
+				e.reset();
+			}
+			for(Checkpoint c : checkpoints){
+				c.reset();
+			}
+		}
+		
+		player.getInventory().update(gc, delta);
+		
+		if(!warning.isShowing()){
+			pauseMenu.hover(mouseX, mouseY);
+		}
+		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
+		
+		warning.move(camera.getX() + gc.getWidth()/2 - warning.getWidth()/2, camera.getY() + gc.getHeight()/2 - warning.getHeight()/2);
+		b1.hover(mouseX, mouseY);
+		b2.hover(mouseX, mouseY);
 	}
 
 	@Override

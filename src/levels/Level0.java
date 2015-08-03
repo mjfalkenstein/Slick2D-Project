@@ -32,6 +32,9 @@ import entities.Player;
 import entities.TurretEnemy;
 import entities.VerticalOscillatingPlatform;
 
+/**
+ * A simple test level designed to integrate all entities in one environment
+ */
 public class Level0 extends Level{
 	
 	Friendly friendly;
@@ -172,6 +175,10 @@ public class Level0 extends Level{
 				
 				player.collide(e, gc);
 				friendly.collide(e, gc);
+				
+				//leave these commented out if you don't want to die
+				//otherwise, uncomment whichever one you want to test
+				
 				//follower.collide(e, gc);
 				//turret1.collide(e, gc);
 				//turret2.collide(e, gc);
@@ -179,8 +186,8 @@ public class Level0 extends Level{
 				//spikesDown.collide(e, gc);
 				//spikesLeft.collide(e, gc);
 				//spikesRight.collide(e, gc);
-				aLaser.collide(e, gc);
-				sLaser.collide(e, gc);
+				//aLaser.collide(e, gc);
+				//sLaser.collide(e, gc);
 				
 				door.collide(e, gc);
 				
@@ -193,35 +200,11 @@ public class Level0 extends Level{
 			
 			key1.collide(player, gc);
 			key2.collide(player, gc);
-
-			//if the player leaves the screen, it dies
-			if(player.getY() > levelHeight){
-				player.kill();
-			}
 			
 			player.getInventory().move(camera.getX(), camera.getY());
 		}
 		
-		player.getInventory().update(gc, delta);
-		
-		//if the player is dead, pause and reset
-		if(player.isDead()){
-			for(Entity e : world){
-				e.reset();
-			}
-			for(Checkpoint c : checkpoints){
-				c.reset();
-			}
-		}
-		
-		if(!warning.isShowing()){
-			pauseMenu.hover(mouseX, mouseY);
-		}
-		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
-		
-		warning.move(camera.getX() + gc.getWidth()/2 - warning.getWidth()/2, camera.getY() + gc.getHeight()/2 - warning.getHeight()/2);
-		b1.hover(mouseX, mouseY);
-		b2.hover(mouseX, mouseY);
+		updateLevelEssentials(delta);
 	}
 
 	@Override
@@ -230,7 +213,7 @@ public class Level0 extends Level{
 		x += camera.getX();
 		y += camera.getY();
 		
-		handlePauseMenu(button, x, y);
+		handlePauseMenuInputs(button, x, y);
 	}
 
 	@Override

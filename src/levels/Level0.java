@@ -15,12 +15,14 @@ import utils.Camera;
 import utils.Checkpoint;
 import utils.Level;
 import utils.PauseMenu;
+import entities.AlternatingLaser;
 import entities.Door;
 import entities.Entity;
 import entities.FollowerEnemy;
 import entities.Friendly;
 import entities.HorizontalOscillatingPlatform;
 import entities.Key;
+import entities.SolidLaser;
 import entities.SpikesDown;
 import entities.SpikesLeft;
 import entities.SpikesRight;
@@ -45,6 +47,8 @@ public class Level0 extends Level{
 	SpikesRight spikesRight;
 	Door door;
 	Checkpoint checkpoint;
+	AlternatingLaser aLaser;
+	SolidLaser sLaser;
 
 	Circle background;
 
@@ -66,7 +70,7 @@ public class Level0 extends Level{
 		platform = new StationaryPlatform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 40), new Vector2f(0, 0));
 		leftWall = new StationaryPlatform(new Rectangle(50, ground.getY()-400, 40, 400), new Vector2f(0, 0));
 		smallRightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 40, ground.getY() - 50, 40, 50), new Vector2f(0, 0));
-		bigRightWall = new StationaryPlatform(new Rectangle(platform.getMaxX(), 0, 50, 275), new Vector2f(0, 0));
+		bigRightWall = new StationaryPlatform(new Rectangle(platform.getMaxX(), 0, 40, 275), new Vector2f(0, 0));
 		stair1 = new StationaryPlatform(new Rectangle(platform.getX() - 100, platform.getY() + 100, 100, 40), new Vector2f(0, 0));
 		stair2 = new StationaryPlatform(new Rectangle(platform.getMaxX() + 100, platform.getY() - 100, 100, 40), new Vector2f(0, 0));
 		stair3 = new StationaryPlatform(new Rectangle(stair2.getMaxX() + 100, stair2.getY() - 100, 100, 40), new Vector2f(0, 0));
@@ -79,8 +83,9 @@ public class Level0 extends Level{
 		spikesLeft = new SpikesLeft(new Rectangle(bigRightWall.getX() - 50, bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		spikesRight = new SpikesRight(new Rectangle(bigRightWall.getMaxX(), bigRightWall.getY(), 50, bigRightWall.getHeight()), new Vector2f(0, 0));
 		door = new Door(new Rectangle(stair2.getMaxX() - 50, stair2.getY() - 100, 50, 100), new Vector2f(0, 0), key1);
+		aLaser = new AlternatingLaser(new Rectangle(bigRightWall.getX(), bigRightWall.getMaxY() - 40, 40, 40), new Vector2f(0, 0), platform.getY() - bigRightWall.getMaxY(), AlternatingLaser.SOUTH, 2000, 2000);
+		sLaser = new SolidLaser(new Rectangle(leftWall.getX(), leftWall.getY(), 40, 40), new Vector2f(0, 0), 500, SolidLaser.NORTH);
 		
-		//player = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		String s = "This is testing the speech bubble. Hello goodbye a b c 1 2 3 hopefully this works this should be on page 2 by now maybe even page 3 lets try getting onto the third page oh yeah lets go here we come fourth page";
 		friendly = new Friendly(new Rectangle(ground.getX() + 100, ground.getY() - 75, 40, 60), new Vector2f(0, 0), s, true);
 		follower = new FollowerEnemy(new Circle(1000, 300, 15), new Vector2f(0, 0), player);
@@ -107,6 +112,8 @@ public class Level0 extends Level{
 		world.add(spikesLeft);
 		world.add(spikesRight);
 		world.add(door);
+		world.add(aLaser);
+		world.add(sLaser);
 		
 		world.add(friendly);
 		world.add(follower);
@@ -172,6 +179,9 @@ public class Level0 extends Level{
 				//spikesDown.collide(e, gc);
 				//spikesLeft.collide(e, gc);
 				//spikesRight.collide(e, gc);
+				aLaser.collide(e, gc);
+				sLaser.collide(e, gc);
+				
 				door.collide(e, gc);
 				
 				e.update(gc, delta);

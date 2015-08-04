@@ -131,21 +131,10 @@ public class SaverLoader {
 					player.move(Float.parseFloat(words[1]), Float.parseFloat(words[2]));
 				}
 				else if(words[0].equals("Key")){
-					Circle box = new Circle(Float.parseFloat(words[1]), Float.parseFloat(words[2]), 15);
 					for(Entity e : level.getEntities()){
 						if(e instanceof Key){
-							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
-								e.remove();
-							}
-							if(Float.parseFloat(words[1]) < 0 && Float.parseFloat(words[2]) < 0){
-								e.remove();
-							}
 							
 						}
-					}
-					if(Float.parseFloat(words[1]) > 0 && Float.parseFloat(words[2]) > 0){
-						Key key = new Key(box, new Vector2f(0, 0));
-						player.addItem(key);
 					}
 				}
 				else if(words[0].equals("Checkpoint")){

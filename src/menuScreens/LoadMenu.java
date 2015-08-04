@@ -2,6 +2,8 @@ package menuScreens;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -60,6 +62,7 @@ public class LoadMenu extends BasicGameState {
 
 		File folder = new File("savedGames/");
 		File[] listOfFiles = folder.listFiles();
+		Arrays.sort(listOfFiles);
 
 		back = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 

@@ -172,9 +172,6 @@ public class Level0 extends Level{
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		//make sure to add cameraX/cameraY to account for moving camera
-		int mouseX = gc.getInput().getMouseX() + camera.getX();
-		int mouseY = gc.getInput().getMouseY() + camera.getY();
 
 		//make sure to call collide before update
 		if(!paused){

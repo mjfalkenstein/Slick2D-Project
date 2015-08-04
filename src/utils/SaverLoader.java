@@ -12,8 +12,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -45,7 +43,7 @@ public class SaverLoader {
 	public static boolean saveGame(Level level, Player player, Checkpoint checkpoint, int levelID){
 		Date date = new Date();
 		ArrayList<Entity> entities = level.getEntities();
-		
+
 		levelID = level.getID();
 
 		String timestamp = new Timestamp(date.getTime()).toString().replace(' ', '.');
@@ -57,7 +55,7 @@ public class SaverLoader {
 				+ "Player " + player.getX() + " " + player.getY() + "\n"
 				+ player.getInventory()
 				+ "Checkpoint " + checkpoint.getCenterX() + " " + checkpoint.getMaxY() + "\n";
-		
+
 		for(Entity e : entities){
 			if(e instanceof Door){
 				data += "Door " + e.getX() + " " + e.getY() + " " + ((Door)e).isOpen() + "\n";
@@ -107,19 +105,23 @@ public class SaverLoader {
 		String line;
 		String[] words;
 		Player player = null;
-		
+
 		int levelID = -1;
-		
+
 		try {
 			FileReader fileReader = new FileReader(path);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			
+
 			Level level = null;
 
 			while((line = bufferedReader.readLine()) != null) {
 				words = line.split(" ");
 				if(words[0].equals("LevelID")){
-					level = (Level) sbg.getState(Integer.parseInt(words[1]));
+					try{
+						level = (Level) sbg.getState(Integer.parseInt(words[1]));
+					}catch(Exception e){
+						System.err.println("Invalid level ID");
+					}
 					levelID = Integer.parseInt(words[1]);
 					for(Entity e : level.getEntities()){
 						if(e instanceof Player){
@@ -133,7 +135,16 @@ public class SaverLoader {
 				else if(words[0].equals("Key")){
 					for(Entity e : level.getEntities()){
 						if(e instanceof Key){
-							
+							if(Float.parseFloat(words[3]) < 0 && Float.parseFloat(words[4]) < 0){
+								if(e.getStartingX() == Float.parseFloat(words[1]) && e.getStartingY() == Float.parseFloat(words[2])){
+									e.remove();
+								}
+							}
+							else{
+								if(e.getStartingX() == Float.parseFloat(words[1]) && e.getStartingY() == Float.parseFloat(words[2])){
+									player.addItem((Item)e);
+								}
+							}
 						}
 					}
 				}
@@ -205,7 +216,7 @@ public class SaverLoader {
 					}
 				}
 			}
-			
+
 			bufferedReader.close();
 			if(levelID == -1){
 				throw new IOException("Invalid level ID");
@@ -213,11 +224,11 @@ public class SaverLoader {
 			sbg.enterState(levelID, new FadeOutTransition(), new FadeInTransition());
 		}
 		catch(FileNotFoundException e) {
-			System.out.println("Unable to open file: " + path);
+			System.err.println("Unable to open file: " + path);
 			e.printStackTrace();
 		}
 		catch(IOException e) {
-			System.out.println("Error reading file: " + path);
+			System.err.println("Error reading file: " + path);
 			e.printStackTrace();
 		}
 		return true;

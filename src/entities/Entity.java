@@ -108,7 +108,7 @@ public abstract class Entity {
 	}
 
 	public float getX() {
-		return x;
+		return boundingBox.getX();
 	}
 	
 	public float getCenterX(){
@@ -128,7 +128,7 @@ public abstract class Entity {
 	}
 
 	public float getY() {
-		return y;
+		return boundingBox.getY();
 	}
 	
 	public Vector2f getVelocity(){

@@ -11,7 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 public class PauseMenu {
 
 	int x, y, width, height;
-	SimpleButton mainMenu, newGame, loadGame, options, quit;
+	SimpleButton continueButton, mainMenu, newGame, loadGame, options, quit;
 
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonYGap;
 
@@ -43,6 +43,8 @@ public class PauseMenu {
 		buttonYGap = (int)(buttonHeight * 1.2);
 
 		int counter = 0;
+		continueButton = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Continue");
+		counter++;
 		mainMenu = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Main Menu");
 		counter++;
 		newGame = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "New Game");;
@@ -53,7 +55,7 @@ public class PauseMenu {
 		counter++;
 		quit = new SimpleButton(buttonXOffset, y + buttonYOffset + (counter * buttonYGap), buttonWidth, buttonHeight, "Quit");
 		
-		body = new Rectangle(mainMenu.getX() - 10, mainMenu.getY() - g.getFont().getHeight("Paused") -  20, mainMenu.getWidth() + 20, quit.getMaxY() - mainMenu.getY() + g.getFont().getHeight("Paused") + 30);
+		body = new Rectangle(continueButton.getX() - 10, continueButton.getY() - g.getFont().getHeight("Paused") -  20, continueButton.getWidth() + 20, quit.getMaxY() - continueButton.getY() + g.getFont().getHeight("Paused") + 30);
 		x = (int) body.getX();
 		y = (int) body.getY();
 		width = (int) body.getWidth();
@@ -75,8 +77,9 @@ public class PauseMenu {
 			g.fill(body);
 			
 			g.setColor(textColor);
-			g.drawString("Paused", mainMenu.getX() + mainMenu.getWidth()/2 - g.getFont().getWidth("Paused")/2, mainMenu.getY() - g.getFont().getHeight("Paused") - 10);
+			g.drawString("Paused", continueButton.getX() + continueButton.getWidth()/2 - g.getFont().getWidth("Paused")/2, continueButton.getY() - g.getFont().getHeight("Paused") - 10);
 
+			continueButton.draw(g, bg, textColor);
 			mainMenu.draw(g, bg, textColor);
 			newGame.draw(g, bg, textColor);
 			loadGame.draw(g, bg, textColor);
@@ -93,6 +96,8 @@ public class PauseMenu {
 	 */
 	public void move(int x, int y){
 		int counter = 0; 
+		continueButton.move(x, y + buttonYOffset + (counter * buttonYGap));
+		counter++; 
 		mainMenu.move(x, y + buttonYOffset + (counter * buttonYGap));
 		counter++;
 		newGame.move(x, y + buttonYOffset + (counter * buttonYGap));
@@ -103,7 +108,7 @@ public class PauseMenu {
 		counter++;
 		quit.move(x, y + buttonYOffset + (counter * buttonYGap));
 		
-		body.setLocation(mainMenu.getX() - 10, mainMenu.getY() - g.getFont().getHeight("Paused") - 20);
+		body.setLocation(continueButton.getX() - 10, continueButton.getY() - g.getFont().getHeight("Paused") - 20);
 	}
 	
 	/**
@@ -118,6 +123,8 @@ public class PauseMenu {
 		String s = "";
 		if(body.contains(x, y)){
 			s = "body";
+		}if(continueButton.hover(x, y)){
+			s =  "continue";
 		}if(mainMenu.hover(x, y)){
 			s =  "mainMenu";
 		}if(newGame.hover(x, y)){
@@ -136,6 +143,7 @@ public class PauseMenu {
 	 * Instructs the menu to be drawn
 	 */
 	public void show(){
+		continueButton.reset();
 		mainMenu.reset();
 		newGame.reset();
 		loadGame.reset();
@@ -148,6 +156,7 @@ public class PauseMenu {
 	 * Instructs the menu to be hidden
 	 */
 	public void hide(){
+		continueButton.reset();
 		mainMenu.reset();
 		newGame.reset();
 		loadGame.reset();
@@ -160,6 +169,7 @@ public class PauseMenu {
 	 * Resets the menu and all contained buttons
 	 */
 	public void reset(){
+		continueButton.reset();
 		mainMenu.reset();
 		newGame.reset();
 		loadGame.reset();

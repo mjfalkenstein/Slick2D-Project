@@ -22,7 +22,7 @@ public class Player extends Entity {
 	float maxSpeed = 0.42222222f;
 	float gravity = 0.01444444f;
 	float acceleration = 0.00555555f;
-	float jumpSpeed = 0.75f;
+	float jumpSpeed = 0.8f;
 	float originalHeight;
 	boolean crouched = false;
 	boolean onGround = false;

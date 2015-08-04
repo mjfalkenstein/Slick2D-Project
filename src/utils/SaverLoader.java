@@ -46,7 +46,9 @@ public class SaverLoader {
 
 		levelID = level.getID();
 
-		String timestamp = new Timestamp(date.getTime()).toString().replace(' ', '.');
+		String timestamp = new Timestamp(date.getTime()).toString().replace(' ', '_');
+		
+		timestamp = timestamp.substring(0, timestamp.indexOf('.'));
 
 		savePath = "savedGames/" + timestamp + ".sav";
 

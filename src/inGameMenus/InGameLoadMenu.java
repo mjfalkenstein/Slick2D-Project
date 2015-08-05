@@ -91,7 +91,7 @@ public class InGameLoadMenu {
 	public void draw(Graphics g, TrueTypeFont font){
 		if(showing){
 			g.setFont(font);
-			
+
 			Color c = Color.black;
 			c.a = 0.95f;
 			g.setColor(Color.black);
@@ -119,7 +119,7 @@ public class InGameLoadMenu {
 	 */
 	public void update(int cameraX, int cameraY, int mouseX, int mouseY){
 		body.setLocation(cameraX + 20, cameraY + 20);
-		
+
 		int xCounter = 0;
 		int yCounter = 1;
 		int buttonCounter = 0;
@@ -145,38 +145,40 @@ public class InGameLoadMenu {
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
 	}
-	
+
 	/**
 	 * Called upon mouse button release (as opposed to mouse button press)
 	 * 
 	 * Used as an event handler
 	 */
 	public void handleMouseInput(int button, int x, int y){
-		if(button == 0){			
-			if(b2.handleMouseInput(x, y) && warning.isShowing()){
-				warning.hide();
-			}
-			if(b1.handleMouseInput(x, y) && warning.isShowing()){
+		if(showing){
+			if(button == 0){			
+				if(b2.handleMouseInput(x, y) && warning.isShowing()){
+					warning.hide();
+				}
+				if(b1.handleMouseInput(x, y) && warning.isShowing()){
+					for(SimpleButton b : buttons){
+						b.reset();
+						b1.reset();
+						b2.reset();
+					}
+					SaverLoader.loadGame("savedGames/" + path, sbg);
+				}
 				for(SimpleButton b : buttons){
-					b.reset();
-					b1.reset();
-					b2.reset();
+					if(b.handleMouseInput(x, y) && !warning.isShowing()){
+						path = b.getText();
+						warning.setBody("Are you sure you want to load file: \n" + path);
+						warning.show();
+					}
 				}
-				SaverLoader.loadGame("savedGames/" + path, sbg);
-			}
-			for(SimpleButton b : buttons){
-				if(b.handleMouseInput(x, y) && !warning.isShowing()){
-					path = b.getText();
-					warning.setBody("Are you sure you want to load file: \n" + path);
-					warning.show();
+				if(cancel.handleMouseInput(x, y)){
+					for(SimpleButton b : buttons){
+						b.reset();
+					}
+					cancel.reset();
+					hide();
 				}
-			}
-			if(cancel.handleMouseInput(x, y)){
-				for(SimpleButton b : buttons){
-					b.reset();
-				}
-				cancel.reset();
-				hide();
 			}
 		}
 	}

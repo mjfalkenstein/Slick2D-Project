@@ -28,7 +28,7 @@ public class InGameOptionsMenu{
 	RoundedRectangle body;
 
 	boolean showing = false;
-	
+
 	InGameResolutionsMenu resolutionsMenu;
 	InGameSoundMenu soundMenu;
 	InGameVideoMenu videoMenu;
@@ -57,8 +57,9 @@ public class InGameOptionsMenu{
 		buttons.add(videoOptions);
 		buttons.add(gameOptions);
 		buttons.add(cancel);
-		
+
 		soundMenu = new InGameSoundMenu(gc, this);
+		videoMenu = new InGameVideoMenu(gc, this);
 	}
 
 	/**
@@ -67,10 +68,11 @@ public class InGameOptionsMenu{
 	 * Used to draw everything to the screen
 	 */
 	public void draw(Graphics g, TrueTypeFont font){
-		
+
 		if(showing){
-			g.setFont(font);
 			
+			g.setFont(font);
+
 			Color c = Color.black;
 			c.a = 0.95f;
 			g.setColor(Color.black);
@@ -78,7 +80,7 @@ public class InGameOptionsMenu{
 			g.draw(body);
 			g.setColor(c);
 			g.fill(body);
-			
+
 			for(SimpleButton b : buttons){
 				b.draw(g, background, textColor);
 			}
@@ -86,6 +88,7 @@ public class InGameOptionsMenu{
 			g.drawString("Options", body.getX() + buttonXOffset + buttonWidth - g.getFont().getWidth("Options"), body.getY() + buttonYOffset);
 		}
 		soundMenu.draw(g, font);
+		videoMenu.draw(g, font);
 	}
 
 	/**
@@ -95,7 +98,7 @@ public class InGameOptionsMenu{
 	 */
 	public void update(int cameraX, int cameraY, int mouseX, int mouseY) {
 		body.setLocation(cameraX + 20, cameraY + 20);
-		
+
 		int counter = 1;
 
 		buttonWidth = 220;
@@ -109,8 +112,9 @@ public class InGameOptionsMenu{
 			counter++;
 			b.hover(mouseX, mouseY);
 		}
-		
+
 		soundMenu.update(cameraX, cameraY, mouseX, mouseY);
+		videoMenu.update(cameraX, cameraY, mouseX, mouseY);
 	}
 
 	/**
@@ -119,21 +123,23 @@ public class InGameOptionsMenu{
 	 * Used as an event handler
 	 */
 	public void handleMouseInput(int button, int x, int y){
-		if(button == 0){
-			if(cancel.handleMouseInput(x, y)){
-				showing = false;
-			}else if(videoOptions.handleMouseInput(x, y)){
-				hide();
-			}else if(soundOptions.handleMouseInput(x, y)){
-				hide();
-				soundMenu.show();
-			}else if(gameOptions.handleMouseInput(x, y)){
-				//TODO: Implement the game options menu
+		if(showing && !soundMenu.isShowing() && !videoMenu.isShowing()){
+			if(button == 0){
+				if(cancel.handleMouseInput(x, y)){
+					showing = false;
+				}else if(videoOptions.handleMouseInput(x, y)){
+					hide();
+					videoMenu.show();
+				}else if(soundOptions.handleMouseInput(x, y)){
+					hide();
+					soundMenu.show();
+				}else if(gameOptions.handleMouseInput(x, y)){
+					//TODO: Implement the game options menu
+				}
 			}
 		}
-		if(soundMenu.isShowing()){
-			soundMenu.handleMouseInput(button, x, y);
-		}
+		soundMenu.handleMouseInput(button, x, y);
+		videoMenu.handleMouseInput(button, x, y);
 	}
 
 	public void show(){
@@ -149,8 +155,14 @@ public class InGameOptionsMenu{
 		}
 		showing = false;
 	}
+	
+	public void remove(){
+		hide();
+		soundMenu.hide();
+		videoMenu.hide();
+	}
 
 	public boolean isShowing(){
-		return showing || soundMenu.isShowing();
+		return showing || soundMenu.isShowing() || videoMenu.isShowing();
 	}
 }

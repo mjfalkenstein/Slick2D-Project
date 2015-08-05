@@ -203,4 +203,8 @@ public class PauseMenu {
 		return (int) body.getHeight();
 	}
 
+	public boolean isShowing() {
+		return showing;
+	}
+
 }

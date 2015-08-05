@@ -24,7 +24,7 @@ import entities.Player;
 
 /**
  * A class that handles all level essentials
- * All over 'Levels' must inherit from this in order to work properly
+ * All other 'Levels' must inherit from this in order to work properly
  */
 public abstract class Level extends BasicGameState{
 
@@ -61,7 +61,7 @@ public abstract class Level extends BasicGameState{
 	 * @param levelHeight - the height of the level
 	 */
 	public Level(GameContainer gc, Player p, int levelWidth, int levelHeight){
-		
+
 		//loading the font
 		try{
 			InputStream is = ResourceLoader.getResourceAsStream("HappyKiller.ttf");
@@ -71,7 +71,7 @@ public abstract class Level extends BasicGameState{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		player = p;
 		this.levelWidth = levelWidth;
 		this.levelHeight = levelHeight;
@@ -96,8 +96,8 @@ public abstract class Level extends BasicGameState{
 		loadMenu = new InGameLoadMenu(gc);
 
 		optionsMenu = new InGameOptionsMenu(gc);
-		
-		
+
+
 	}
 
 	@Override
@@ -243,6 +243,7 @@ public abstract class Level extends BasicGameState{
 			loadMenu.handleMouseInput(button, x, y);
 			optionsMenu.handleMouseInput(button, x, y);
 		}
+		pauseMenuSelection = "";
 	}
 
 	/**
@@ -329,6 +330,7 @@ public abstract class Level extends BasicGameState{
 			c.reset();
 		}
 		pauseMenu.reset();
+		optionsMenu.remove();
 		warning.hide();
 		unpause();
 	}

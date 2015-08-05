@@ -30,7 +30,7 @@ public class InGameSoundMenu{
 	boolean showing = false;
 
 	float masterVolume, sfxVolume, musicVolume;
-	
+
 	InGameOptionsMenu options;
 
 	/**
@@ -40,7 +40,7 @@ public class InGameSoundMenu{
 	 */
 	public InGameSoundMenu(GameContainer gc, InGameOptionsMenu options){
 		this.options = options;
-		
+
 		buttonWidth = 220;
 		buttonHeight = 30;
 		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
@@ -83,13 +83,13 @@ public class InGameSoundMenu{
 			g.fill(body);
 
 			g.setFont(font);
-			
+
 			g.setColor(textColor);
 			g.drawString("Master Volume: " + (int)(master.getValue() * 100) + "%", master.getX(), master.getY()-g.getFont().getLineHeight());
 			g.drawString("SFX Volume: " + (int)(sfx.getValue() * 100) + "%", sfx.getX(), sfx.getY()-g.getFont().getLineHeight());
 			g.drawString("Music Volume: " + (int)(music.getValue() * 100) + "%", music.getX(), music.getY()-g.getFont().getLineHeight());
 
-			g.drawString("Sound Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Sound Options"), buttonYOffset);
+			g.drawString("Sound Options", (int)body.getX() + buttonXOffset + buttonWidth - g.getFont().getWidth("Sound Options"), (int)body.getY() + buttonYOffset);
 
 			for(SlideBar b : bars){
 				b.draw(g);
@@ -105,18 +105,19 @@ public class InGameSoundMenu{
 	 * Used to update all necessary data, ie mouse position
 	 */
 	public void update(int cameraX, int cameraY, int mouseX, int mouseY){
-		
+		body.setLocation(cameraX + 20, cameraY + 20);
+
 		int counter = 1;
 
 		for(SlideBar b : bars){
-			b.move(buttonXOffset - (barWidth - buttonWidth), barYOffset + (counter * (barGap + barHeight)));
+			b.move((int)body.getX() + buttonXOffset - (barWidth - buttonWidth), (int)body.getY() + barYOffset + (counter * (barGap + barHeight)));
 			if(b.getValue() > 0.99){
 				b.setValue(1);
 			}
 			counter++;
 		}
 
-		cancel.move(buttonXOffset, buttonYOffset + (4 * buttonYGap));
+		cancel.move((int)body.getX() + buttonXOffset, (int)body.getY() + buttonYOffset + (4 * buttonYGap));
 		cancel.hover(mouseX, mouseY);
 	}
 
@@ -126,16 +127,18 @@ public class InGameSoundMenu{
 	 * Used as an event handler
 	 */
 	public void handleMouseInput(int button, int x, int y){
-		if(button == 0){
-			if(cancel.handleMouseInput(x, y)){
-				cancel.reset();
-				hide();
-			}else if(master.hover(x, y)){
-				masterVolume = master.getValue();
-			}else if(sfx.hover(x, y)){
-				sfxVolume = sfx.getValue();
-			}else if(music.hover(x, y)){
-				musicVolume = music.getValue();
+		if(showing && !options.showing){
+			if(button == 0){
+				if(cancel.handleMouseInput(x, y)){
+					cancel.reset();
+					hide();
+				}else if(master.hover(x, y)){
+					masterVolume = master.getValue();
+				}else if(sfx.hover(x, y)){
+					sfxVolume = sfx.getValue();
+				}else if(music.hover(x, y)){
+					musicVolume = music.getValue();
+				}
 			}
 		}
 	}

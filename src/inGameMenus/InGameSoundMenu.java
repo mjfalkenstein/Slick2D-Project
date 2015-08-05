@@ -104,8 +104,11 @@ public class InGameSoundMenu{
 	 * 
 	 * Used to update all necessary data, ie mouse position
 	 */
-	public void update(int cameraX, int cameraY, int mouseX, int mouseY){
+	public void update(int cameraX, int cameraY, int mouseX, int mouseY, GameContainer gc){
+
 		body.setLocation(cameraX + 20, cameraY + 20);
+		body.setHeight(gc.getHeight() - 40);
+		body.setWidth(gc.getWidth() - 40);
 
 		int counter = 1;
 

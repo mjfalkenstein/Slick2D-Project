@@ -39,6 +39,7 @@ public abstract class Level extends BasicGameState{
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonXGap, buttonYGap;
 	protected Notification warning;
 	protected SimpleButton b1, b2;
+	
 	protected InGameLoadMenu loadMenu; 
 	protected InGameOptionsMenu optionsMenu;
 
@@ -284,8 +285,8 @@ public abstract class Level extends BasicGameState{
 
 		player.getInventory().move(camera.getX(), camera.getY());
 
-		loadMenu.update(camera.getX(), camera.getY(), mouseX, mouseY);
-		optionsMenu.update(camera.getX(), camera.getY(), mouseX, mouseY);
+		loadMenu.update(camera.getX(), camera.getY(), mouseX, mouseY, gc);
+		optionsMenu.update(camera.getX(), camera.getY(), mouseX, mouseY, gc);
 	}
 
 	/**

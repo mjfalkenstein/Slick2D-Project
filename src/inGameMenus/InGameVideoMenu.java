@@ -37,6 +37,8 @@ public class InGameVideoMenu{
 	float fontSize = 24f;
 	
 	int counter = 5;
+	
+	InGameResolutionsMenu resolutionsMenu;
 
 	public InGameVideoMenu(GameContainer gc, InGameOptionsMenu options){
 		this.options = options;
@@ -59,6 +61,8 @@ public class InGameVideoMenu{
 		buttons.add(cancel);
 
 		body = new RoundedRectangle(20, 20, gc.getWidth() - 40, gc.getHeight() - 40, 10);
+
+		resolutionsMenu = new InGameResolutionsMenu(gc, this);
 	}
 
 	/**
@@ -68,7 +72,7 @@ public class InGameVideoMenu{
 	 */
 	public void draw(Graphics g, TrueTypeFont font){
 
-		if(isShowing()){
+		if(showing){
 			g.setFont(font);
 
 			Color c = Color.black;
@@ -81,8 +85,9 @@ public class InGameVideoMenu{
 			for(SimpleButton b : buttons){
 				b.draw(g, background, textColor);
 			}
-			g.drawString("Video Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Video Options"), buttonYOffset);
+			g.drawString("Video Options", (int)body.getX() + buttonXOffset + buttonWidth - g.getFont().getWidth("Video Options"), (int)body.getY() + buttonYOffset);
 		}
+		resolutionsMenu.draw(g, font);
 	}
 
 	/**
@@ -90,9 +95,11 @@ public class InGameVideoMenu{
 	 * 
 	 * Used to update all necessary data, ie mouse position
 	 */
-	public void update(int cameraX, int cameraY, int mouseX, int mouseY){
+	public void update(int cameraX, int cameraY, int mouseX, int mouseY, GameContainer gc){
 		counter--;
 		body.setLocation(cameraX + 20, cameraY + 20);
+		body.setHeight(gc.getHeight() - 40);
+		body.setWidth(gc.getWidth() - 40);
 		int counter = 1;
 
 		buttonWidth = 220;
@@ -106,6 +113,8 @@ public class InGameVideoMenu{
 			counter++;
 			b.hover(mouseX, mouseY);
 		}
+		
+		resolutionsMenu.update(cameraX, cameraY, mouseX, mouseY, gc);
 	}
 
 	/**
@@ -120,6 +129,7 @@ public class InGameVideoMenu{
 					for(SimpleButton b : buttons){
 						b.reset();
 					}
+					options.show();
 					hide();
 				}else if(toggleFPS.handleMouseInput(x, y)){
 					gc.setShowFPS(!gc.isShowingFPS());
@@ -133,9 +143,13 @@ public class InGameVideoMenu{
 					for(SimpleButton b : buttons){
 						b.reset();
 					}
+					hide();
+					options.hide();
+					resolutionsMenu.show();
 				}
 			}
 		}
+		resolutionsMenu.handleMouseInput(button, x, y);
 	}
 
 	public void show(){
@@ -145,12 +159,11 @@ public class InGameVideoMenu{
 	}
 
 	public void hide(){
-		options.show();
 		showing = false;
 	}
 
 	public boolean isShowing(){
-		return showing;
+		return showing || resolutionsMenu.isShowing();
 	}
 
 }

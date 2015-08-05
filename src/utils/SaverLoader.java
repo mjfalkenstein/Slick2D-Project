@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import entities.Door;
 import entities.Entity;
@@ -54,7 +52,6 @@ public class SaverLoader {
 
 		data =	"LevelID " + level.getID() + "\n" 
 				+ "levelDims " + level.getWidth() + " " + level.getHeight() + "\n"
-				+ "Player " + player.getX() + " " + player.getY() + "\n"
 				+ player.getInventory()
 				+ "Checkpoint " + checkpoint.getCenterX() + " " + checkpoint.getMaxY() + "\n";
 
@@ -87,10 +84,10 @@ public class SaverLoader {
 			bw.close();
 			out.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.err.println("Could not find file: " + savePath);
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Error reading file: " + savePath);
 			return false;
 		}
 		return true;
@@ -107,6 +104,8 @@ public class SaverLoader {
 		String line;
 		String[] words;
 		Player player = null;
+		float playerX = 0;
+		float playerY = 0;
 
 		int levelID = -1;
 
@@ -131,9 +130,6 @@ public class SaverLoader {
 						}
 					}
 				}
-				else if(words[0].equals("Player")){
-					player.move(Float.parseFloat(words[1]), Float.parseFloat(words[2]));
-				}
 				else if(words[0].equals("Key")){
 					for(Entity e : level.getEntities()){
 						if(e instanceof Key){
@@ -151,7 +147,8 @@ public class SaverLoader {
 					}
 				}
 				else if(words[0].equals("Checkpoint")){
-					player.move(Float.parseFloat(words[1]) - player.getWidth()/2, Float.parseFloat(words[2]) - player.getHeight());
+					playerX = Float.parseFloat(words[1]) - player.getWidth()/2;
+					playerY = Float.parseFloat(words[2]) - player.getHeight();
 					for(Checkpoint c : level.getCheckpoints()){
 						if(c.getCenterX() == Float.parseFloat(words[1]) && c.getMaxY() == Float.parseFloat(words[2])){
 							c.deactivate();
@@ -208,7 +205,6 @@ public class SaverLoader {
 				else if(words[0].equals("SlidingDoor")){
 					for(Entity e : level.getEntities()){
 						if(e instanceof SlidingDoor){
-							System.out.println(e.getX() + " " + e.getY());
 							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
 								if(words[5].equals("true")){
 									((SlidingDoor)e).open();
@@ -223,7 +219,10 @@ public class SaverLoader {
 			if(levelID == -1){
 				throw new IOException("Invalid level ID");
 			}
-			sbg.enterState(levelID, new FadeOutTransition(), new FadeInTransition());
+			player.move(playerX, playerY);
+			sbg.enterState(levelID);
+			level.unpause();
+			player.setVelocity(0, 0);
 		}
 		catch(FileNotFoundException e) {
 			System.err.println("Unable to open file: " + path);

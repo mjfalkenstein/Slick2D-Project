@@ -32,6 +32,7 @@ public abstract class Level extends BasicGameState{
 	int buttonWidth, buttonHeight, buttonXOffset, buttonYOffset, buttonXGap, buttonYGap;
 	protected Notification warning;
 	protected SimpleButton b1, b2;
+	protected InGameLoadMenu loadMenu; 
 
 	boolean goToMainMenu = false;
 	boolean newGame = false;
@@ -86,6 +87,7 @@ public abstract class Level extends BasicGameState{
 	public void enter(GameContainer gc, StateBasedGame sbg){
 		gc.resume();
 		pauseMenu.hide();
+		loadMenu.hide();
 		gc.setMouseGrabbed(true);
 		paused = false;
 		goToMainMenu = false;
@@ -113,6 +115,8 @@ public abstract class Level extends BasicGameState{
 	protected void unpause(){
 		gc.resume();
 		gc.setMouseGrabbed(true);
+		pauseMenu.hide();
+		loadMenu.hide();
 		paused = false;
 	}
 
@@ -159,9 +163,10 @@ public abstract class Level extends BasicGameState{
 					warning.show();
 					newGame = true;
 				}else if(pauseMenuSelection == "loadGame"){
-					warning.setHeader("Load a Previous Save");
-					warning.setBody("Are you sure you want to load a Previous Save? Unsaved progress will be lost.");
-					warning.show();
+//					warning.setHeader("Load a Previous Save");
+//					warning.setBody("Are you sure you want to load a Previous Save? Unsaved progress will be lost.");
+//					warning.show();
+					loadMenu.show();
 				}else if(pauseMenuSelection == "options"){
 
 				}else if(pauseMenuSelection == "quit"){
@@ -205,6 +210,7 @@ public abstract class Level extends BasicGameState{
 				}
 			}
 		}
+		loadMenu.mouseReleased(button, x, y);
 	}
 
 	/**
@@ -214,24 +220,19 @@ public abstract class Level extends BasicGameState{
 	 * @param delta - time since the last frame
 	 */
 	protected void updateLevelEssentials(int mouseX, int mouseY, int delta){
-		//if the player leaves the screen, it dies
-		if(player.getY() > levelHeight){
+		//if the player leaves the level bounds, it dies
+		if(player.getY() > levelHeight || player.getX() > levelWidth){
 			player.kill();
 		}
 
 		//if player is dead, reset the level
 		if(player.isDead()){
-			for(Entity e : world){
-				e.reset();
-			}
-			for(Checkpoint c : checkpoints){
-				c.reset();
-			}
+			reset();
 		}
 
 		player.getInventory().update(gc, delta);
 
-		if(!warning.isShowing()){
+		if(!warning.isShowing() && !loadMenu.isShowing()){
 			pauseMenu.hover(mouseX, mouseY);
 		}
 		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
@@ -239,6 +240,27 @@ public abstract class Level extends BasicGameState{
 		warning.move(camera.getX() + gc.getWidth()/2 - warning.getWidth()/2, camera.getY() + gc.getHeight()/2 - warning.getHeight()/2);
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
+		
+		for(Checkpoint c : checkpoints){
+			c.collide(gc);
+		}
+		
+		player.getInventory().move(camera.getX(), camera.getY());
+	}
+	
+	/**
+	 * Helper function that resets everything in the level to its original state
+	 */
+	protected void reset(){
+		for(Entity e : world){
+			e.reset();
+		}
+		for(Checkpoint c : checkpoints){
+			c.reset();
+		}
+		pauseMenu.reset();
+		warning.hide();
+		unpause();
 	}
 
 	@Override

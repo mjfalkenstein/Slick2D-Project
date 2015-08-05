@@ -13,6 +13,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import utils.BackgroundBarsAnimation;
 import utils.Camera;
 import utils.Checkpoint;
+import utils.InGameLoadMenu;
 import utils.Level;
 import utils.PauseMenu;
 import entities.AlternatingLaser;
@@ -138,6 +139,8 @@ public class Level0 extends Level{
 		camera = new Camera(gc, levelWidth, levelHeight);
 
 		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
+		
+		loadMenu = new InGameLoadMenu(gc, sbg);
 	}
 
 	@Override
@@ -154,8 +157,6 @@ public class Level0 extends Level{
 			e.draw(g);
 		}
 		
-		pauseMenu.draw(g);
-		
 		for(Checkpoint c : checkpoints){
 			c.draw(g);
 		}
@@ -164,10 +165,14 @@ public class Level0 extends Level{
 			player.getInventory().draw(g);
 		}
 		
+		pauseMenu.draw(g);
+		
 		warning.draw(g);
 		warning.move(gc.getWidth()/2 - warning.getWidth()/2, gc.getHeight()/2 - warning.getHeight()/2);
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
+		
+		loadMenu.draw(g);
 	}
 
 	@Override
@@ -204,17 +209,13 @@ public class Level0 extends Level{
 				e.update(gc, delta);
 			}
 			
-			for(Checkpoint c : checkpoints){
-				c.collide(gc);
-			}
-			
 			key1.collide(player, gc);
 			key2.collide(player, gc);
-			
-			player.getInventory().move(camera.getX(), camera.getY());
 		}
 		
 		updateLevelEssentials(mouseX, mouseY, delta);
+		
+		loadMenu.update(gc, camera.getX(), camera.getY());
 	}
 
 	@Override

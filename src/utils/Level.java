@@ -181,7 +181,10 @@ public abstract class Level extends BasicGameState{
 		String pauseMenuSelection = pauseMenu.handleMouseInput(x, y);
 
 		if(button == 0){
-			if(paused){
+			if(paused && 
+			   !warning.isShowing() && 
+			   !loadMenu.isShowing() && 
+			   !optionsMenu.isShowing()){
 				if(pauseMenuSelection == "continue"){
 					unpause();
 					pauseMenu.hide();
@@ -205,8 +208,6 @@ public abstract class Level extends BasicGameState{
 					warning.show();
 					quit = true;
 				}
-			}else{
-				warning.hide();
 			}
 			if(warning.isShowing()){
 				if(b1.handleMouseInput(x, y)){
@@ -331,7 +332,7 @@ public abstract class Level extends BasicGameState{
 			c.reset();
 		}
 		pauseMenu.reset();
-		optionsMenu.remove();
+		optionsMenu.hide();
 		warning.hide();
 		unpause();
 	}

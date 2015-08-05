@@ -61,7 +61,7 @@ public class InGameSoundMenu{
 		bars.add(sfx);
 		bars.add(music);
 
-		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
+		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 
 		body = new RoundedRectangle(20, 20, gc.getWidth() - 40, gc.getHeight() - 40, 10);
 	}

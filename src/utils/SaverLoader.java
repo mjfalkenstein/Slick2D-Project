@@ -12,6 +12,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Door;
@@ -32,13 +35,14 @@ public class SaverLoader {
 	static String savePath, data;
 	static int levelWidth, levelHeight;
 	int levelID;
+	GameContainer gc;
 
 	/**
 	 * Save the game state
 	 * 
 	 * @return - success
 	 */
-	public static boolean saveGame(Level level, Player player, Checkpoint checkpoint, int levelID){
+	public static boolean saveGame(GameContainer gc, Level level, Player player, Checkpoint checkpoint, int levelID){
 		Date date = new Date();
 		ArrayList<Entity> entities = level.getEntities();
 
@@ -50,7 +54,8 @@ public class SaverLoader {
 
 		savePath = "savedGames/" + timestamp + ".sav";
 
-		data =	"LevelID " + level.getID() + "\n" 
+		data =	"GC " + gc.getWidth() + " " + gc.getHeight() + " " + gc.isFullscreen() + " " + gc.isShowingFPS() + "\n"
+				+ "LevelID " + level.getID() + "\n" 
 				+ "levelDims " + level.getWidth() + " " + level.getHeight() + "\n"
 				+ player.getInventory()
 				+ "Checkpoint " + checkpoint.getCenterX() + " " + checkpoint.getMaxY() + "\n";
@@ -99,8 +104,9 @@ public class SaverLoader {
 	 * @param path - the file path to the save game
 	 * @param sbg - the statebasedgame as it exists before loading
 	 * @return - success
+	 * @throws SlickException 
 	 */
-	public static boolean loadGame(String path, StateBasedGame sbg){
+	public static boolean loadGame(GameContainer gc, String path, StateBasedGame sbg){
 		String line;
 		String[] words;
 		Player player = null;
@@ -117,6 +123,7 @@ public class SaverLoader {
 
 			while((line = bufferedReader.readLine()) != null) {
 				words = line.split(" ");
+
 				if(words[0].equals("LevelID")){
 					try{
 						level = (Level) sbg.getState(Integer.parseInt(words[1]));
@@ -224,6 +231,47 @@ public class SaverLoader {
 			level.unpause();
 			player.setVelocity(0, 0);
 		}
+		catch(FileNotFoundException e) {
+			System.err.println("Unable to open file: " + path);
+			e.printStackTrace();
+		}
+		catch(IOException e) {
+			System.err.println("Error reading file: " + path);
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	public static boolean loadSettings(GameContainer gc, String path) throws SlickException{
+		String line;
+		String[] words;
+
+
+		try {
+			FileReader fileReader = new FileReader(path);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			while((line = bufferedReader.readLine()) != null) {
+				words = line.split(" ");
+				
+				if(words[0].equals("GC")){
+					if(words[3].equals("true")){
+						((AppGameContainer) gc).setDisplayMode(Integer.parseInt(words[1]), Integer.parseInt(words[2]), true);
+					}else{
+						((AppGameContainer) gc).setDisplayMode(Integer.parseInt(words[1]), Integer.parseInt(words[2]), false);
+					}
+					if(words[4].equals("true")){
+						((AppGameContainer) gc).setShowFPS(true);
+					}else{
+						((AppGameContainer) gc).setShowFPS(false);
+					}
+					
+				}
+			}
+			
+			bufferedReader.close();
+		}		
+		
 		catch(FileNotFoundException e) {
 			System.err.println("Unable to open file: " + path);
 			e.printStackTrace();

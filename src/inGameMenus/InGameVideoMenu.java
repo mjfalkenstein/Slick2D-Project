@@ -53,7 +53,7 @@ public class InGameVideoMenu{
 		toggleFPS = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Toggle FPS");
 		toggleFullscreen = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Toggle Fullscreen");
 		resolutions = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Set Resolution");
-		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
+		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 
 		buttons.add(toggleFPS);
 		buttons.add(toggleFullscreen);

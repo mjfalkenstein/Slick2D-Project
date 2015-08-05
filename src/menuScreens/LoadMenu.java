@@ -33,6 +33,7 @@ public class LoadMenu extends BasicGameState {
 
 	int mouseX, mouseY;
 
+	GameContainer gc;
 	StateBasedGame sbg;
 
 	TrueTypeFont font;
@@ -42,7 +43,7 @@ public class LoadMenu extends BasicGameState {
 
 	Notification warning;
 	SimpleButton b1, b2;
-	
+
 	String path;
 
 	public LoadMenu(MainMenu mainMenu){
@@ -51,6 +52,7 @@ public class LoadMenu extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
+		this.gc = gc;
 		this.sbg = sbg;
 
 		buttonWidth = 220;
@@ -80,9 +82,9 @@ public class LoadMenu extends BasicGameState {
 				buttons.add(new SimpleButton(0, 0, buttonWidth, buttonHeight, listOfFiles[i].getName()));
 			} 
 		}
-		
+
 		background = mainMenu.background;
-		
+
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
 
@@ -151,7 +153,7 @@ public class LoadMenu extends BasicGameState {
 					b1.reset();
 					b2.reset();
 				}
-				SaverLoader.loadGame("savedGames/" + path, sbg);
+				SaverLoader.loadGame(gc, "savedGames/" + path, sbg);
 			}
 			for(SimpleButton b : buttons){
 				if(b.handleMouseInput(x, y) && !warning.isShowing()){

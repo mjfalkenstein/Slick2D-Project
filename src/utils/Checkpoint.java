@@ -62,7 +62,7 @@ public class Checkpoint {
 		//if both axes overlap, there is a collision
 		if(xOverlap > 0 && yOverlap > 0){
 			if(!saved){
-				saved = SaverLoader.saveGame(level, player, this, levelID);
+				saved = SaverLoader.saveGame(gc, level, player, this, levelID);
 			}
 		}
 	}

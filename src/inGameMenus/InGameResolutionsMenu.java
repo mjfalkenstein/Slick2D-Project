@@ -58,7 +58,7 @@ public class InGameResolutionsMenu{
 		buttonYGap = (int)(gc.getHeight() * 0.075f);
 		buttonXGap = (int)(gc.getWidth() * 0.2);
 
-		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
+		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 
 		//generating list of supported resolutions and adding them to the list of buttons
 		try{

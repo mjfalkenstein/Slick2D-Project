@@ -27,6 +27,7 @@ public class InGameLoadMenu {
 	Color textColor = Color.lightGray;
 	Color background = Color.black;
 
+	GameContainer gc;
 	StateBasedGame sbg;
 
 	SimpleButton cancel;
@@ -46,6 +47,7 @@ public class InGameLoadMenu {
 	 * @param gc - the GameContainer
 	 */
 	public InGameLoadMenu(GameContainer gc){
+		this.gc = gc;
 
 		buttonWidth = 220;
 		buttonHeight = 30;
@@ -166,7 +168,7 @@ public class InGameLoadMenu {
 						b1.reset();
 						b2.reset();
 					}
-					SaverLoader.loadGame("savedGames/" + path, sbg);
+					SaverLoader.loadGame(gc, "savedGames/" + path, sbg);
 				}
 				for(SimpleButton b : buttons){
 					if(b.handleMouseInput(x, y) && !warning.isShowing()){

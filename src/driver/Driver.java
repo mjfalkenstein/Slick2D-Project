@@ -1,5 +1,8 @@
 package driver;
 
+import java.io.File;
+import java.util.Arrays;
+
 import levels.Level0;
 import menuScreens.LoadMenu;
 import menuScreens.MainMenu;
@@ -16,6 +19,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.state.StateBasedGame;
 
+import utils.SaverLoader;
 import entities.Player;
 
 /**
@@ -96,10 +100,15 @@ public class Driver extends StateBasedGame{
 		app.setMaximumLogicUpdateInterval(16);
 		try{
 			app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
-			//app.setDisplayMode(640, 480, false);
 		}catch(SlickException e){
 			app.setDisplayMode(1280, 800, true);
 		}
+		
+		File folder = new File("savedGames/");
+		File[] listOfFiles = folder.listFiles();
+		Arrays.sort(listOfFiles);
+		SaverLoader.loadSettings(app, "savedGames/" + listOfFiles[listOfFiles.length - 1].getName());
+		
 		app.start();
 		app.getGraphics().setAntiAlias(true);
 	}

@@ -50,7 +50,7 @@ public class InGameOptionsMenu{
 		soundOptions = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Sound Options");
 		videoOptions = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Video Options");
 		gameOptions = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Game Options");
-		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
+		cancel = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Close");
 
 		buttons.add(soundOptions);
 		buttons.add(videoOptions);

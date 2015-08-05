@@ -130,19 +130,19 @@ public class MainMenu extends BasicGameState {
 	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
-			if(quit.hover(x, y)){
+			if(quit.handleMouseInput(x, y)){
 				gc.exit();
-			}else if(options.hover(x, y)){
+			}else if(options.handleMouseInput(x, y)){
 				for(SimpleButton b2 : buttons){
 					b2.reset();
 				}
 				sbg.enterState(Driver.OPTIONS_MENU);
-			}else if(newGame.hover(x, y)){
+			}else if(newGame.handleMouseInput(x, y)){
 				for(SimpleButton b2 : buttons){
 					b2.reset();
 				}
 				sbg.enterState(Driver.LEVEL_0, new FadeOutTransition(), new FadeInTransition());
-			}else if(loadGame.hover(x, y)){
+			}else if(loadGame.handleMouseInput(x, y)){
 				for(SimpleButton b2 : buttons){
 					b2.reset();
 				}

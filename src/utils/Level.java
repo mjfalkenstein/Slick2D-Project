@@ -1,15 +1,22 @@
 package utils;
 
+import inGameMenus.InGameLoadMenu;
+import inGameMenus.InGameOptionsMenu;
+
+import java.awt.Font;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.ResourceLoader;
 
 import driver.Driver;
 import entities.Entity;
@@ -42,6 +49,9 @@ public abstract class Level extends BasicGameState{
 	protected ArrayList<Entity> world = new ArrayList<Entity>();
 	protected ArrayList<Checkpoint> checkpoints = new ArrayList<Checkpoint>();
 
+	TrueTypeFont font;
+	float fontSize = 12f;
+
 	/**
 	 * Constructor
 	 * 
@@ -51,6 +61,17 @@ public abstract class Level extends BasicGameState{
 	 * @param levelHeight - the height of the level
 	 */
 	public Level(GameContainer gc, Player p, int levelWidth, int levelHeight){
+		
+		//loading the font
+		try{
+			InputStream is = ResourceLoader.getResourceAsStream("HappyKiller.ttf");
+			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
+			awtFont = awtFont.deriveFont(fontSize);
+			font = new TrueTypeFont(awtFont, false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		player = p;
 		this.levelWidth = levelWidth;
 		this.levelHeight = levelHeight;
@@ -72,9 +93,11 @@ public abstract class Level extends BasicGameState{
 
 		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
 
-		loadMenu = new InGameLoadMenu(gc, sbg);
+		loadMenu = new InGameLoadMenu(gc);
 
-		optionsMenu = new InGameOptionsMenu(gc, sbg);
+		optionsMenu = new InGameOptionsMenu(gc);
+		
+		
 	}
 
 	@Override
@@ -154,7 +177,7 @@ public abstract class Level extends BasicGameState{
 	 */
 	protected void handlePauseMenuInputs(int button, int x, int y){
 
-		String pauseMenuSelection = pauseMenu.hover(x, y);
+		String pauseMenuSelection = pauseMenu.handleMouseInput(x, y);
 
 		if(button == 0){
 			if(paused){
@@ -185,7 +208,7 @@ public abstract class Level extends BasicGameState{
 				warning.hide();
 			}
 			if(warning.isShowing()){
-				if(b1.hover(x, y)){
+				if(b1.handleMouseInput(x, y)){
 					if(goToMainMenu){
 						gc.resume();
 						pauseMenu.reset();
@@ -211,7 +234,7 @@ public abstract class Level extends BasicGameState{
 						}
 						gc.exit();
 					}
-				}else if(b2.hover(x, y)){
+				}else if(b2.handleMouseInput(x, y)){
 					warning.hide();
 				}
 			}
@@ -284,15 +307,15 @@ public abstract class Level extends BasicGameState{
 			player.getInventory().draw(g);
 		}
 
-		pauseMenu.draw(g);
+		pauseMenu.draw(g, font);
 
-		warning.draw(g);
+		warning.draw(g, font);
 		warning.move(gc.getWidth()/2 - warning.getWidth()/2, gc.getHeight()/2 - warning.getHeight()/2);
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
 
-		loadMenu.draw(g);
-		optionsMenu.draw(g);
+		loadMenu.draw(g, font);
+		optionsMenu.draw(g, font);
 	}
 
 	/**

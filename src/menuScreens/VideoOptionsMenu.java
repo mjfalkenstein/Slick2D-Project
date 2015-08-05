@@ -122,20 +122,20 @@ public class VideoOptionsMenu extends BasicGameState{
 	 */
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
-			if(back.hover(x, y)){
+			if(back.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}
 				sbg.enterState(Driver.OPTIONS_MENU);
-			}else if(toggleFPS.hover(x, y)){
+			}else if(toggleFPS.handleMouseInput(x, y)){
 				gc.setShowFPS(!gc.isShowingFPS());
-			}else if(toggleFullscreen.hover(x, y)){
+			}else if(toggleFullscreen.handleMouseInput(x, y)){
 				try {
 					gc.setFullscreen(!gc.isFullscreen());
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}
-			}else if(resolutions.hover(x, y)){
+			}else if(resolutions.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}

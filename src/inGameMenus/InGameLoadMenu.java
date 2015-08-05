@@ -1,4 +1,4 @@
-package utils;
+package inGameMenus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -43,10 +44,8 @@ public class InGameLoadMenu {
 	 * Constructor 
 	 * 
 	 * @param gc - the GameContainer
-	 * @param sbg - the StateBasedGame
 	 */
-	public InGameLoadMenu(GameContainer gc, StateBasedGame sbg){
-		this.sbg = sbg;
+	public InGameLoadMenu(GameContainer gc){
 
 		buttonWidth = 220;
 		buttonHeight = 30;
@@ -89,8 +88,10 @@ public class InGameLoadMenu {
 	 * 
 	 * Used to draw everything to the screen
 	 */
-	public void draw(Graphics g){
+	public void draw(Graphics g, TrueTypeFont font){
 		if(showing){
+			g.setFont(font);
+			
 			Color c = Color.black;
 			c.a = 0.95f;
 			g.setColor(Color.black);
@@ -107,7 +108,7 @@ public class InGameLoadMenu {
 
 			g.drawString("Load Game", (int)body.getX() + buttonXOffset + buttonWidth - g.getFont().getWidth("Load Game"), (int)body.getY() + buttonYOffset);
 
-			warning.draw(g);
+			warning.draw(g, font);
 		}
 	}
 
@@ -152,10 +153,10 @@ public class InGameLoadMenu {
 	 */
 	public void handleMouseInput(int button, int x, int y){
 		if(button == 0){			
-			if(b2.hover(x, y) && warning.isShowing()){
+			if(b2.handleMouseInput(x, y) && warning.isShowing()){
 				warning.hide();
 			}
-			if(b1.hover(x, y) && warning.isShowing()){
+			if(b1.handleMouseInput(x, y) && warning.isShowing()){
 				for(SimpleButton b : buttons){
 					b.reset();
 					b1.reset();
@@ -164,13 +165,13 @@ public class InGameLoadMenu {
 				SaverLoader.loadGame("savedGames/" + path, sbg);
 			}
 			for(SimpleButton b : buttons){
-				if(b.hover(x, y) && !warning.isShowing()){
+				if(b.handleMouseInput(x, y) && !warning.isShowing()){
 					path = b.getText();
 					warning.setBody("Are you sure you want to load file: \n" + path);
 					warning.show();
 				}
 			}
-			if(cancel.hover(x, y)){
+			if(cancel.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}

@@ -1,12 +1,12 @@
-package utils;
+package inGameMenus;
 
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.RoundedRectangle;
-import org.newdawn.slick.state.StateBasedGame;
 
 import utils.SimpleButton;
 
@@ -25,21 +25,20 @@ public class InGameOptionsMenu{
 	Color textColor = Color.lightGray;
 	Color background = Color.black;
 
-	StateBasedGame sbg;
-	float fontSize = 24f;
-
 	RoundedRectangle body;
 
 	boolean showing = false;
+	
+	InGameResolutionsMenu resolutionsMenu;
+	InGameSoundMenu soundMenu;
+	InGameVideoMenu videoMenu;
 
 	/**
 	 * Constructor 
 	 * 
 	 * @param gc - the GameContainer
-	 * @param sbg - the StateBasedGame
 	 */
-	public InGameOptionsMenu(GameContainer gc, StateBasedGame sbg){
-		this.sbg = sbg;
+	public InGameOptionsMenu(GameContainer gc){
 
 		buttonWidth = 220;
 		buttonHeight = 30;
@@ -58,6 +57,8 @@ public class InGameOptionsMenu{
 		buttons.add(videoOptions);
 		buttons.add(gameOptions);
 		buttons.add(cancel);
+		
+		soundMenu = new InGameSoundMenu(gc, this);
 	}
 
 	/**
@@ -65,8 +66,11 @@ public class InGameOptionsMenu{
 	 * 
 	 * Used to draw everything to the screen
 	 */
-	public void draw(Graphics g){
+	public void draw(Graphics g, TrueTypeFont font){
+		
 		if(showing){
+			g.setFont(font);
+			
 			Color c = Color.black;
 			c.a = 0.95f;
 			g.setColor(Color.black);
@@ -81,6 +85,7 @@ public class InGameOptionsMenu{
 
 			g.drawString("Options", body.getX() + buttonXOffset + buttonWidth - g.getFont().getWidth("Options"), body.getY() + buttonYOffset);
 		}
+		soundMenu.draw(g, font);
 	}
 
 	/**
@@ -104,6 +109,8 @@ public class InGameOptionsMenu{
 			counter++;
 			b.hover(mouseX, mouseY);
 		}
+		
+		soundMenu.update(cameraX, cameraY, mouseX, mouseY);
 	}
 
 	/**
@@ -113,34 +120,37 @@ public class InGameOptionsMenu{
 	 */
 	public void handleMouseInput(int button, int x, int y){
 		if(button == 0){
-			if(cancel.hover(x, y)){
-				for(SimpleButton b : buttons){
-					b.reset();
-				}
+			if(cancel.handleMouseInput(x, y)){
 				showing = false;
-			}else if(videoOptions.hover(x, y)){
-				for(SimpleButton b : buttons){
-					b.reset();
-				}
-				//
-			}else if(soundOptions.hover(x, y)){
-				for(SimpleButton b : buttons){
-					b.reset();
-				}
-				//
+			}else if(videoOptions.handleMouseInput(x, y)){
+				hide();
+			}else if(soundOptions.handleMouseInput(x, y)){
+				hide();
+				soundMenu.show();
+			}else if(gameOptions.handleMouseInput(x, y)){
+				//TODO: Implement the game options menu
 			}
+		}
+		if(soundMenu.isShowing()){
+			soundMenu.handleMouseInput(button, x, y);
 		}
 	}
 
 	public void show(){
+		for(SimpleButton b : buttons){
+			b.reset();
+		}
 		showing = true;
 	}
 
 	public void hide(){
+		for(SimpleButton b : buttons){
+			b.reset();
+		}
 		showing = false;
 	}
 
 	public boolean isShowing(){
-		return showing;
+		return showing || soundMenu.isShowing();
 	}
 }

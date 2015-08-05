@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 
 /**
@@ -64,8 +65,10 @@ public class Notification {
 	 * 
 	 * @param g - Graphics context
 	 */
-	public void draw(Graphics g){
+	public void draw(Graphics g, TrueTypeFont font){
 		if(showing){
+			
+			g.setFont(font);
 			
 			//splitting the body text into separate lines depending on the width of the indow
 			text = "";

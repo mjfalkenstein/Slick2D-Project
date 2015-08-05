@@ -120,7 +120,7 @@ public class ResolutionsMenu extends BasicGameState{
 
 		g.drawString("Select Resolution", buttonXOffset + buttonWidth - g.getFont().getWidth("Select Resolution"), buttonYOffset);
 		
-		warning.draw(g);
+		warning.draw(g, mainMenu.font);
 	}
 
 	@Override
@@ -157,10 +157,10 @@ public class ResolutionsMenu extends BasicGameState{
 	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
-			if(b2.hover(x, y) && warning.isShowing()){
+			if(b2.handleMouseInput(x, y) && warning.isShowing()){
 				warning.hide();
 			}
-			if(b1.hover(x, y) && warning.isShowing()){
+			if(b1.handleMouseInput(x, y) && warning.isShowing()){
 				String dimensions[] = res.split(" x ");
 				for(SimpleButton resButton : buttons){
 					resButton.reset();
@@ -177,7 +177,7 @@ public class ResolutionsMenu extends BasicGameState{
 					//      from a list of supported resolutions, but you never know
 				}
 			}
-			if(back.hover(x, y)){
+			if(back.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}
@@ -185,7 +185,7 @@ public class ResolutionsMenu extends BasicGameState{
 				sbg.enterState(Driver.VIDEO_OPTIONS_MENU);
 			}
 			for(SimpleButton b : buttons){
-				if(b.hover(x, y) && !warning.isShowing()){
+				if(b.handleMouseInput(x, y) && !warning.isShowing()){
 					warning.show();
 					res = b.getText();
 				}

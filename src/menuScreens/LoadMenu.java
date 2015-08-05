@@ -105,7 +105,7 @@ public class LoadMenu extends BasicGameState {
 
 		g.drawString("Load Game", buttonXOffset + buttonWidth - g.getFont().getWidth("Load Game"), buttonYOffset);
 
-		warning.draw(g);
+		warning.draw(g, mainMenu.font);
 	}
 
 	@Override
@@ -142,10 +142,10 @@ public class LoadMenu extends BasicGameState {
 	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){			
-			if(b2.hover(x, y) && warning.isShowing()){
+			if(b2.handleMouseInput(x, y) && warning.isShowing()){
 				warning.hide();
 			}
-			if(b1.hover(x, y) && warning.isShowing()){
+			if(b1.handleMouseInput(x, y) && warning.isShowing()){
 				for(SimpleButton b : buttons){
 					b.reset();
 					b1.reset();
@@ -154,13 +154,13 @@ public class LoadMenu extends BasicGameState {
 				SaverLoader.loadGame("savedGames/" + path, sbg);
 			}
 			for(SimpleButton b : buttons){
-				if(b.hover(x, y) && !warning.isShowing()){
+				if(b.handleMouseInput(x, y) && !warning.isShowing()){
 					path = b.getText();
 					warning.setBody("Are you sure you want to load file: \n" + path);
 					warning.show();
 				}
 			}
-			if(back.hover(x, y)){
+			if(back.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}

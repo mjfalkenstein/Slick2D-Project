@@ -11,13 +11,13 @@ import org.newdawn.slick.geom.Rectangle;
  * button functionality is handled outside this class
  */
 public class SimpleButton {
-	
+
 	//The text to be displayed on the button
 	private String text;
-	
+
 	//The various rectangles that make up the button
 	private Rectangle body, highlight, top, bottom;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -34,7 +34,7 @@ public class SimpleButton {
 		bottom    = new Rectangle(x, y, width, 2);
 		highlight = new Rectangle(x + body.getWidth()/2, y, 0, height - 2);
 	}
-	
+
 	/**
 	 * This function is used to draw everything that needs to be drawn, called every frame
 	 * 
@@ -52,38 +52,39 @@ public class SimpleButton {
 		}else if(highlight.getWidth() < 0){
 			highlight.setWidth(0);
 		}
-		
+
 		g.setColor(textColor.brighter());
 		g.fill(highlight);
 		g.fill(top);
 		g.fill(bottom);
-		
+
 		g.setColor(textColor);
 		g.drawString(text, body.getX() + body.getWidth()/2 - g.getFont().getWidth(text)/2, body.getY() + body.getHeight()/2 - g.getFont().getHeight(text)/2);
 	}
-	
+
 	/**
 	 * Determines whether or not the given coordinates are on the button
 	 * If they are, play the highlight animation
 	 * 
 	 * @param x - x-coordinate of the mouse
 	 * @param y - y-coordinate of the mouse
-	 * 
-	 * @return - whether or not (x,y) is contained in the button's space
 	 */
-	public boolean hover(int x, int y){
+	public void hover(int x, int y){
 		if(body.contains(x,y)){
-			if(highlight.getWidth() < body.getWidth() - 2){
+			if(highlight.getWidth() <= body.getWidth() - 2){
 				highlight.setLocation(body.getX(), highlight.getY());
 				highlight.setWidth(body.getWidth());
 			}
-			return true;
+		}else{
+			if(highlight.getWidth() >= 0){
+				highlight.setLocation(highlight.getX() + 2, highlight.getY());
+				highlight.setWidth(highlight.getWidth() - 4);
+			}
 		}
-		if(highlight.getWidth() > 0){
-			highlight.setLocation(highlight.getX() + 2, highlight.getY());
-			highlight.setWidth(highlight.getWidth() - 4);
-		}
-		return false;
+	}
+
+	public boolean handleMouseInput(int x, int y){
+		return body.contains(x, y);
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class SimpleButton {
 		if(highlight.getWidth() <= 0)
 			highlight.setLocation(body.getX() + body.getWidth()/2, y);
 	}
-	
+
 	/**
 	 * Called upon leaving a screen to reset the highlight animation
 	 */
@@ -119,27 +120,27 @@ public class SimpleButton {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	public float getHeight(){
 		return body.getHeight();
 	}
-	
+
 	public float getWidth(){
 		return body.getWidth();
 	}
-	
+
 	public float getX(){
 		return body.getX();
 	}
-	
+
 	public float getY(){
 		return body.getY();
 	}
-	
+
 	public float getMaxX(){
 		return body.getMaxX();
 	}
-	
+
 	public float getMaxY(){
 		return body.getMaxY();
 	}

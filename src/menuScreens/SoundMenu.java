@@ -118,7 +118,7 @@ public class SoundMenu extends BasicGameState{
 	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
-			if(back.hover(x, y)){
+			if(back.handleMouseInput(x, y)){
 				back.reset();
 				sbg.enterState(Driver.OPTIONS_MENU);
 			}else if(master.hover(x, y)){

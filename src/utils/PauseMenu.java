@@ -3,6 +3,7 @@ package utils;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 
 /**
@@ -67,8 +68,10 @@ public class PauseMenu {
 	 * 
 	 * @param g - the Graphics context
 	 */
-	public void draw(Graphics g){
+	public void draw(Graphics g, TrueTypeFont font){
 		if(showing){
+			g.setFont(font);
+			
 			g.setColor(bg);
 			g.setLineWidth(4);
 			g.draw(body);
@@ -119,24 +122,39 @@ public class PauseMenu {
 	 * 
 	 * @return - string indicative of where the moues is located
 	 */
-	public String hover(int x, int y){
+	public String handleMouseInput(int x, int y){
 		String s = "";
 		if(body.contains(x, y)){
 			s = "body";
-		}if(continueButton.hover(x, y)){
+		}if(continueButton.handleMouseInput(x, y)){
 			s =  "continue";
-		}if(mainMenu.hover(x, y)){
+		}if(mainMenu.handleMouseInput(x, y)){
 			s =  "mainMenu";
-		}if(newGame.hover(x, y)){
+		}if(newGame.handleMouseInput(x, y)){
 			s = "newGame";
-		}if(loadGame.hover(x, y)){
+		}if(loadGame.handleMouseInput(x, y)){
 			s =  "loadGame";
-		}if(options.hover(x, y)){
+		}if(options.handleMouseInput(x, y)){
 			s =  "options";
-		}if(quit.hover(x, y)){
+		}if(quit.handleMouseInput(x, y)){
 			s =  "quit";
 		}
 		return s;
+	}
+	
+	/**
+	 * Used to update the highlights in the buttons
+	 * 
+	 * @param x - mouseX
+	 * @param y - mouseY
+	 */
+	public void hover(int x, int y){
+		continueButton.hover(x, y);
+		mainMenu.hover(x, y);
+		newGame.hover(x, y);
+		loadGame.hover(x, y);
+		options.hover(x, y);
+		quit.hover(x, y);
 	}
 	
 	/**

@@ -103,17 +103,17 @@ public class OptionsMenu extends BasicGameState{
 	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
-			if(back.hover(x, y)){
+			if(back.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}
 				sbg.enterState(Driver.MAIN_MENU);
-			}else if(videoOptions.hover(x, y)){
+			}else if(videoOptions.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}
 				sbg.enterState(Driver.VIDEO_OPTIONS_MENU);
-			}else if(soundOptions.hover(x, y)){
+			}else if(soundOptions.handleMouseInput(x, y)){
 				for(SimpleButton b : buttons){
 					b.reset();
 				}

@@ -44,11 +44,7 @@ public class OptionsMenu extends BasicGameState{
 		this.mainMenu = mainMenu;
 	}
 
-	/**
-	 * Called on program start-up
-	 * 
-	 * Used to initialize all necessary data for the screen to run
-	 */
+	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
 		this.sbg = sbg;
 		 
@@ -69,11 +65,7 @@ public class OptionsMenu extends BasicGameState{
 		buttons.add(back);
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to draw everything to the screen
-	 */
+	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		mainMenu.backgroundAnimation.draw(g);
 
@@ -88,11 +80,7 @@ public class OptionsMenu extends BasicGameState{
 		g.drawString("Options", buttonXOffset + buttonWidth - g.getFont().getWidth("Options"), buttonYOffset);
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to update all necessary data, ie mouse position
-	 */
+	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		int counter = 1;
 		
@@ -112,11 +100,7 @@ public class OptionsMenu extends BasicGameState{
 		}
 	}
 	
-	/**
-	 * Called upon mouse button release (as opposed to mouse button press)
-	 * 
-	 * Used as an event handler
-	 */
+	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
 			if(back.hover(x, y)){
@@ -138,9 +122,7 @@ public class OptionsMenu extends BasicGameState{
 		}
 	}
 
-	/**
-	 * The unique ID for this screen, must be different for all over BasicGameStates
-	 */
+	@Override
 	public int getID() {
 		return Driver.OPTIONS_MENU;
 	}

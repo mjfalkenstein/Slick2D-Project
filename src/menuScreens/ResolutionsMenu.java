@@ -60,11 +60,7 @@ public class ResolutionsMenu extends BasicGameState{
 		this.mainMenu = mainMenu;
 	}
 
-	/**
-	 * Called on program start-up
-	 * 
-	 * Used to initialize all necessary data for the screen to run
-	 */
+	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
 		this.sbg = sbg;
 
@@ -108,11 +104,7 @@ public class ResolutionsMenu extends BasicGameState{
 		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, buttonYGap, "Change Resolution", "This will change your resolution are you sure you want to continue?");
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to draw everything to the screen
-	 */
+	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		mainMenu.backgroundAnimation.draw(g);
 		
@@ -131,12 +123,7 @@ public class ResolutionsMenu extends BasicGameState{
 		warning.draw(g);
 	}
 
-	/**
-	 * Called once every frame
-	 * 		return Driver.SOUND_MENU;
-
-	 * Used to update all necessary data, ie mouse position
-	 */
+	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		int xCounter = 0;
 		int yCounter = 1;
@@ -167,11 +154,7 @@ public class ResolutionsMenu extends BasicGameState{
 		b2.hover(mouseX, mouseY);
 	}
 
-	/**
-	 * Called upon mouse button release (as opposed to mouse button press)
-	 * 
-	 * Used as an event handler
-	 */
+	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
 			if(b2.hover(x, y) && warning.isShowing()){
@@ -210,9 +193,7 @@ public class ResolutionsMenu extends BasicGameState{
 		}
 	}
 
-	/**
-	 * The unique ID for this screen, must be different for all over BasicGameStates
-	 */
+	@Override
 	public int getID() {
 		return Driver.RESOLUTIONS_MENU;
 	}

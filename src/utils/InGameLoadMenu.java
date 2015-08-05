@@ -7,8 +7,6 @@ import java.util.Arrays;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -28,12 +26,7 @@ public class InGameLoadMenu {
 	Color textColor = Color.lightGray;
 	Color background = Color.black;
 
-	int mouseX, mouseY;
-
 	StateBasedGame sbg;
-
-	TrueTypeFont font;
-	float fontSize = 24f;
 
 	SimpleButton cancel;
 
@@ -46,7 +39,13 @@ public class InGameLoadMenu {
 
 	boolean showing = false;
 
-	public InGameLoadMenu(GameContainer gc, StateBasedGame sbg)throws SlickException {
+	/**
+	 * Constructor 
+	 * 
+	 * @param gc - the GameContainer
+	 * @param sbg - the StateBasedGame
+	 */
+	public InGameLoadMenu(GameContainer gc, StateBasedGame sbg){
 		this.sbg = sbg;
 
 		buttonWidth = 220;
@@ -82,9 +81,14 @@ public class InGameLoadMenu {
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
 
-		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, buttonYGap, "Load Game", "Are you sure you want to load file: \n" + path);
+		warning = new Notification(0, 0, (int)body.getWidth()/3, (int)body.getHeight()/3, background, textColor, b1, b2, buttonYGap, "Load Game", "Are you sure you want to load file: \n" + path);
 	}
 
+	/**
+	 * Called once every frame
+	 * 
+	 * Used to draw everything to the screen
+	 */
 	public void draw(Graphics g){
 		if(showing){
 			Color c = Color.black;
@@ -107,20 +111,22 @@ public class InGameLoadMenu {
 		}
 	}
 
-	public void update(GameContainer gc, int x, int y) throws SlickException {
-		body.setLocation(x + 20, y + 20);
+	/**
+	 * Called once every frame
+	 * 
+	 * Used to update all necessary data, ie mouse position
+	 */
+	public void update(int cameraX, int cameraY, int mouseX, int mouseY){
+		body.setLocation(cameraX + 20, cameraY + 20);
 		
 		int xCounter = 0;
 		int yCounter = 1;
 		int buttonCounter = 0;
 
-		buttonXOffset = (int)(gc.getWidth() * 0.9f - 200);
-		buttonYOffset = (int)(gc.getHeight() * 0.5f);
-		buttonYGap = (int)(gc.getHeight() * 0.075f);
-		buttonXGap = (int)(gc.getWidth() * 0.2);
-
-		mouseX = gc.getInput().getMouseX() + x;
-		mouseY = gc.getInput().getMouseY() + y;
+		buttonXOffset = (int)(body.getWidth() * 0.9f - 200);
+		buttonYOffset = (int)(body.getHeight() * 0.5f);
+		buttonYGap = (int)(body.getHeight() * 0.075f);
+		buttonXGap = (int)(body.getWidth() * 0.2);
 
 		for(xCounter = 0; xCounter <= 1; xCounter++){
 			for(yCounter = 1; yCounter <= 3; yCounter++){
@@ -134,12 +140,17 @@ public class InGameLoadMenu {
 		cancel.move((int)body.getX() + buttonXOffset, (int)body.getY() + buttonYOffset + (yCounter * buttonYGap));
 		cancel.hover(mouseX, mouseY);
 
-		warning.move((int)body.getX() + gc.getWidth()/2 - warning.getWidth()/2, (int)body.getY() + gc.getHeight()/2 - warning.getHeight()/2);
+		warning.move((int)(body.getX() + body.getWidth()/2 - warning.getWidth()/2), (int)(body.getY() + body.getHeight()/2 - warning.getHeight()/2));
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
 	}
-
-	public void mouseReleased(int button, int x, int y){
+	
+	/**
+	 * Called upon mouse button release (as opposed to mouse button press)
+	 * 
+	 * Used as an event handler
+	 */
+	public void handleMouseInput(int button, int x, int y){
 		if(button == 0){			
 			if(b2.hover(x, y) && warning.isShowing()){
 				warning.hide();

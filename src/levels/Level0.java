@@ -11,11 +11,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 import utils.BackgroundBarsAnimation;
-import utils.Camera;
 import utils.Checkpoint;
-import utils.InGameLoadMenu;
 import utils.Level;
-import utils.PauseMenu;
 import entities.AlternatingLaser;
 import entities.Door;
 import entities.Entity;
@@ -135,44 +132,17 @@ public class Level0 extends Level{
 		checkpoints.add(checkpoint);
 
 		background = new Circle(gc.getWidth()/2, gc.getHeight()*3, gc.getHeight()*2.5f);
-
-		camera = new Camera(gc, levelWidth, levelHeight);
-
-		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
-		
-		loadMenu = new InGameLoadMenu(gc, sbg);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		camera.translate(gc, g, player);
-
 		g.setBackground(sky);
 		g.setColor(Color.decode("#99FF33"));
 		g.fill(background);
 
 		backgroundAnimation.draw(g);
-
-		for(Entity e : world){
-			e.draw(g);
-		}
 		
-		for(Checkpoint c : checkpoints){
-			c.draw(g);
-		}
-		
-		if(player.getInventory() != null){
-			player.getInventory().draw(g);
-		}
-		
-		pauseMenu.draw(g);
-		
-		warning.draw(g);
-		warning.move(gc.getWidth()/2 - warning.getWidth()/2, gc.getHeight()/2 - warning.getHeight()/2);
-		b1.hover(mouseX, mouseY);
-		b2.hover(mouseX, mouseY);
-		
-		loadMenu.draw(g);
+		drawLevelEssentials(g);
 	}
 
 	@Override
@@ -214,8 +184,6 @@ public class Level0 extends Level{
 		}
 		
 		updateLevelEssentials(mouseX, mouseY, delta);
-		
-		loadMenu.update(gc, camera.getX(), camera.getY());
 	}
 
 	@Override

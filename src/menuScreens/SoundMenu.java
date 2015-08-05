@@ -46,11 +46,7 @@ public class SoundMenu extends BasicGameState{
 		this.mainMenu = mainMenu;
 	}
 
-	/**
-	 * Called on program start-up
-	 * 
-	 * Used to initialize all necessary data for the screen to run
-	 */
+	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
 		this.gc = gc;
 		this.sbg = sbg;
@@ -78,11 +74,7 @@ public class SoundMenu extends BasicGameState{
 		back = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Back");
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to draw everything to the screen
-	 */
+	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
 		mainMenu.backgroundAnimation.draw(g);
 
@@ -104,11 +96,7 @@ public class SoundMenu extends BasicGameState{
 		back.draw(g, background, textColor);
 	}
 
-	/**
-	 * Called once every frame
-	 * 
-	 * Used to update all necessary data, ie mouse positionbarXOffset
-	 */
+	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		int counter = 1;
 		
@@ -127,11 +115,7 @@ public class SoundMenu extends BasicGameState{
 		back.hover(mouseX, mouseY);
 	}
 	
-	/**
-	 * Called upon mouse button release (as opposed to mouse button press)
-	 * 
-	 * Used as an event handler
-	 */
+	@Override
 	public void mouseReleased(int button, int x, int y){
 		if(button == 0){
 			if(back.hover(x, y)){
@@ -147,9 +131,7 @@ public class SoundMenu extends BasicGameState{
 		}
 	}
 
-	/**
-	 * The unique ID for this screen, must be different for all over BasicGameStates
-	 */
+	@Override
 	public int getID() {
 		return Driver.SOUND_MENU;
 	}

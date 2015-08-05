@@ -33,6 +33,7 @@ public abstract class Level extends BasicGameState{
 	protected Notification warning;
 	protected SimpleButton b1, b2;
 	protected InGameLoadMenu loadMenu; 
+	protected InGameOptionsMenu optionsMenu;
 
 	boolean goToMainMenu = false;
 	boolean newGame = false;
@@ -66,6 +67,14 @@ public abstract class Level extends BasicGameState{
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
 		warning = new Notification(0, 0, gc.getWidth()/3, gc.getHeight()/3, background, textColor, b1, b2, buttonYGap, "Start New Game","Are you sure you want to start a new game? Unsaved progress will be lost.");
+
+		camera = new Camera(gc, levelWidth, levelHeight);
+
+		pauseMenu = new PauseMenu(gc, gc.getGraphics(), Color.black, Color.lightGray);
+
+		loadMenu = new InGameLoadMenu(gc, sbg);
+
+		optionsMenu = new InGameOptionsMenu(gc, sbg);
 	}
 
 	@Override
@@ -163,12 +172,9 @@ public abstract class Level extends BasicGameState{
 					warning.show();
 					newGame = true;
 				}else if(pauseMenuSelection == "loadGame"){
-//					warning.setHeader("Load a Previous Save");
-//					warning.setBody("Are you sure you want to load a Previous Save? Unsaved progress will be lost.");
-//					warning.show();
 					loadMenu.show();
 				}else if(pauseMenuSelection == "options"){
-
+					optionsMenu.show();
 				}else if(pauseMenuSelection == "quit"){
 					warning.setHeader("Quit to desktop");
 					warning.setBody("Are you sure you want to quit to your desktop? Unsaved progress will be lost.");
@@ -210,7 +216,10 @@ public abstract class Level extends BasicGameState{
 				}
 			}
 		}
-		loadMenu.mouseReleased(button, x, y);
+		if(paused){
+			loadMenu.handleMouseInput(button, x, y);
+			optionsMenu.handleMouseInput(button, x, y);
+		}
 	}
 
 	/**
@@ -229,10 +238,14 @@ public abstract class Level extends BasicGameState{
 		if(player.isDead()){
 			reset();
 		}
+		if(!paused){
+			player.getInventory().update(gc, delta);
+		}
 
-		player.getInventory().update(gc, delta);
+		if(	!warning.isShowing() && 
+			!loadMenu.isShowing() && 
+			!optionsMenu.isShowing()){
 
-		if(!warning.isShowing() && !loadMenu.isShowing()){
 			pauseMenu.hover(mouseX, mouseY);
 		}
 		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
@@ -240,14 +253,48 @@ public abstract class Level extends BasicGameState{
 		warning.move(camera.getX() + gc.getWidth()/2 - warning.getWidth()/2, camera.getY() + gc.getHeight()/2 - warning.getHeight()/2);
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
-		
+
 		for(Checkpoint c : checkpoints){
 			c.collide(gc);
 		}
-		
+
 		player.getInventory().move(camera.getX(), camera.getY());
+
+		loadMenu.update(camera.getX(), camera.getY(), mouseX, mouseY);
+		optionsMenu.update(camera.getX(), camera.getY(), mouseX, mouseY);
 	}
-	
+
+	/**
+	 * Called to draw all of the "essentials" that every level needs
+	 * 
+	 * @param g - the Graphics context
+	 */
+	protected void drawLevelEssentials(Graphics g){
+		camera.translate(gc, g, player);
+
+		for(Entity e : world){
+			e.draw(g);
+		}
+
+		for(Checkpoint c : checkpoints){
+			c.draw(g);
+		}
+
+		if(player.getInventory() != null){
+			player.getInventory().draw(g);
+		}
+
+		pauseMenu.draw(g);
+
+		warning.draw(g);
+		warning.move(gc.getWidth()/2 - warning.getWidth()/2, gc.getHeight()/2 - warning.getHeight()/2);
+		b1.hover(mouseX, mouseY);
+		b2.hover(mouseX, mouseY);
+
+		loadMenu.draw(g);
+		optionsMenu.draw(g);
+	}
+
 	/**
 	 * Helper function that resets everything in the level to its original state
 	 */

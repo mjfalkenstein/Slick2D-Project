@@ -114,11 +114,11 @@ public class Notification {
 			}
 			
 			if(b1 != null){
-				b1.move((int)(body.getX() + body.getWidth()/2 + 5), (int)(body.getY() + body.getHeight() - b1.getHeight() - buttonGap));
+				b1.move((int)(body.getMaxX() - b1.getWidth() - 5), (int)(body.getY() + body.getHeight() - b1.getHeight() - buttonGap));
 				b1.draw(g, bg, textColor);
 			}
 			if(b2 != null){
-				b2.move((int)(body.getX() + body.getWidth()/2 + 5), (int)(body.getY() + body.getHeight() - b2.getHeight()) - 5);
+				b2.move((int)(body.getMaxX() - b1.getWidth() - 5), (int)(body.getY() + body.getHeight() - b2.getHeight()) - 5);
 				b2.draw(g, bg, textColor);
 			}
 		}

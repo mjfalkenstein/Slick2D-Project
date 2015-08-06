@@ -107,7 +107,10 @@ public class Driver extends StateBasedGame{
 		File folder = new File("savedGames/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles);
-		SaverLoader.loadSettings(app, "savedGames/" + listOfFiles[listOfFiles.length - 1].getName());
+		
+		if(listOfFiles.length > 0){
+			SaverLoader.loadSettings(app, "savedGames/" + listOfFiles[listOfFiles.length - 1].getName());
+		}
 		
 		app.start();
 		app.getGraphics().setAntiAlias(true);

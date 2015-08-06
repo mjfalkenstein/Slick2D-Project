@@ -62,6 +62,7 @@ public class ResolutionsMenu extends BasicGameState{
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)throws SlickException {
+		this.gc = gc;
 		this.sbg = sbg;
 
 		buttonWidth = 220;
@@ -172,9 +173,7 @@ public class ResolutionsMenu extends BasicGameState{
 					mainMenu.backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 					warning.hide();
 				} catch (Exception e) {
-					//TODO: Add an error window saying that it was unable to switch resolutions
-					//      In theory, this will never happen since it buttons are generated
-					//      from a list of supported resolutions, but you never know
+					e.printStackTrace();
 				}
 			}
 			if(back.handleMouseInput(x, y)){

@@ -1,6 +1,7 @@
 package menuScreens;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.Color;
@@ -14,6 +15,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.lwjgl.opengl.Display;
 
 import driver.Driver;
+import utils.ButtonComparator;
 import utils.Notification;
 import utils.SimpleButton;
 import utils.BackgroundBarsAnimation;
@@ -97,6 +99,8 @@ public class ResolutionsMenu extends BasicGameState{
 			buttons.subList(buttons.size() - 5, buttons.size());
 		}
 		
+		Collections.sort(buttons, new ButtonComparator());
+		
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");
 		
@@ -142,7 +146,9 @@ public class ResolutionsMenu extends BasicGameState{
 			for(yCounter = 1; yCounter <= 3; yCounter++){
 				if(buttonCounter < buttons.size()){
 					buttons.get(buttonCounter).move(buttonXOffset - (xCounter * (buttonXGap + 100)), buttonYOffset + (yCounter * buttonYGap));
-					buttons.get(buttonCounter).hover(mouseX, mouseY);
+					if(!warning.isShowing()){
+						buttons.get(buttonCounter).hover(mouseX, mouseY);
+					}
 				}
 				buttonCounter++;
 			}

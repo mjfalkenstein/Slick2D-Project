@@ -10,7 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
  * 
  * button functionality is handled outside this class
  */
-public class SimpleButton {
+public class SimpleButton{
 
 	//The text to be displayed on the button
 	private String text;

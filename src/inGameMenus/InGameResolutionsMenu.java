@@ -1,6 +1,7 @@
 package inGameMenus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.Color;
@@ -11,6 +12,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.lwjgl.opengl.Display;
 
+import utils.ButtonComparator;
 import utils.Notification;
 import utils.SimpleButton;
 
@@ -82,6 +84,8 @@ public class InGameResolutionsMenu{
 		if(buttons.size() > 6){
 			buttons.subList(buttons.size() - 5, buttons.size());
 		}
+		
+		Collections.sort(buttons, new ButtonComparator());
 
 		b1 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Confirm");
 		b2 = new SimpleButton(0, 0, buttonWidth, buttonHeight, "Cancel");

@@ -11,6 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import driver.Driver;
+import utils.SaverLoader;
 import utils.SimpleButton;
 
 /**
@@ -129,9 +130,11 @@ public class VideoOptionsMenu extends BasicGameState{
 				sbg.enterState(Driver.OPTIONS_MENU);
 			}else if(toggleFPS.handleMouseInput(x, y)){
 				gc.setShowFPS(!gc.isShowingFPS());
+				SaverLoader.saveSettings(gc);
 			}else if(toggleFullscreen.handleMouseInput(x, y)){
 				try {
 					gc.setFullscreen(!gc.isFullscreen());
+					SaverLoader.saveSettings(gc);
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}

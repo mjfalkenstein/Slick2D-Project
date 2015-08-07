@@ -14,6 +14,7 @@ import org.lwjgl.opengl.Display;
 
 import utils.ButtonComparator;
 import utils.Notification;
+import utils.SaverLoader;
 import utils.SimpleButton;
 
 /**
@@ -188,6 +189,7 @@ public class InGameResolutionsMenu{
 					}
 					try { 
 						((AppGameContainer) gc).setDisplayMode(Integer.parseInt(dimensions[0]), Integer.parseInt(dimensions[1]), gc.isFullscreen());
+						SaverLoader.saveSettings(gc);
 						warning.hide();
 					} catch (Exception e) {
 						 warning.setHeader("Error");

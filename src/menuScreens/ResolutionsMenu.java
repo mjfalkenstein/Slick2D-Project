@@ -17,6 +17,7 @@ import org.lwjgl.opengl.Display;
 import driver.Driver;
 import utils.ButtonComparator;
 import utils.Notification;
+import utils.SaverLoader;
 import utils.SimpleButton;
 import utils.BackgroundBarsAnimation;
 
@@ -176,6 +177,7 @@ public class ResolutionsMenu extends BasicGameState{
 				}
 				try { 
 					((AppGameContainer) gc).setDisplayMode(Integer.parseInt(dimensions[0]), Integer.parseInt(dimensions[1]), gc.isFullscreen());
+					SaverLoader.saveSettings(gc);
 					mainMenu.backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 					warning.hide();
 				} catch (Exception e) {

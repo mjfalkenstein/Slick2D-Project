@@ -75,7 +75,9 @@ public class InGameLoadMenu {
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				buttons.add(new SimpleButton(0, 0, buttonWidth, buttonHeight, listOfFiles[i].getName()));
+				if(listOfFiles[i].getName().contains(".sav")){
+					buttons.add(new SimpleButton(0, 0, buttonWidth, buttonHeight, listOfFiles[i].getName()));
+				}
 			} 
 		}
 

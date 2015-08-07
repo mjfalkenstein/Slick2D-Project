@@ -242,10 +242,54 @@ public class SaverLoader {
 		return true;
 	}
 	
-	public static boolean loadSettings(GameContainer gc, String path) throws SlickException{
+	/**
+	 * Save the settings of the game container
+	 * 
+	 * @param gc - the current game container
+	 * @return - whether saving was successful or not
+	 */
+	public static boolean saveSettings(GameContainer gc){
+		Date date = new Date();
+
+		String timestamp = new Timestamp(date.getTime()).toString().replace(' ', '_');
+		
+		timestamp = timestamp.substring(0, timestamp.indexOf('.'));
+
+		savePath = "config/config.cfg";
+
+		data =	"GC " + gc.getWidth() + " " + gc.getHeight() + " " + gc.isFullscreen() + " " + gc.isShowingFPS() + "\n";
+				
+		try {
+			File file = new File(savePath);
+			FileOutputStream out = new FileOutputStream(file);
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
+			bw.write(data);
+			bw.close();
+			out.close();
+		} catch (FileNotFoundException e) {
+			System.err.println("Could not find file: " + savePath);
+			return false;
+		} catch (IOException e) {
+			System.err.println("Error reading file: " + savePath);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Load the settings for the game container from an old session
+	 * 
+	 * @param gc - the current game container
+	 * @param path - the path of the file we're reading
+	 * 
+	 * @return - whether loading was successful or not
+	 * @throws SlickException
+	 */
+	public static boolean loadSettings(GameContainer gc) throws SlickException{
 		String line;
 		String[] words;
-
+		
+		String path = "config/config.cfg";
 
 		try {
 			FileReader fileReader = new FileReader(path);

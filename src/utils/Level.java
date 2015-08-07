@@ -4,8 +4,10 @@ import inGameMenus.InGameLoadMenu;
 import inGameMenus.InGameOptionsMenu;
 
 import java.awt.Font;
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -260,9 +262,22 @@ public abstract class Level extends BasicGameState{
 			player.kill();
 		}
 
-		//if player is dead, reset the level
+		//if player is dead, reload the most recent save
 		if(player.isDead()){
-			reset();
+			
+			File folder = new File("savedGames/");
+			File[] listOfFiles = folder.listFiles();
+			Arrays.sort(listOfFiles);
+			
+			System.out.println("player is dead");
+			
+			if(listOfFiles.length > 0){
+				if(listOfFiles[listOfFiles.length - 1].getName().contains(".sav")){
+					System.out.println("loading: " + listOfFiles[listOfFiles.length - 1].getName());
+					SaverLoader.loadGame(gc, "savedGames/" + listOfFiles[listOfFiles.length - 1].getName(), sbg);
+				}
+			}
+			player.revive();
 		}
 		if(!paused){
 			player.getInventory().update(gc, delta);

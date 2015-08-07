@@ -273,6 +273,10 @@ public class Player extends Entity {
 		dead = true;
 	}
 	
+	public void revive(){
+		dead = false;
+	}
+	
 	public boolean isDead(){
 		return dead;
 	}

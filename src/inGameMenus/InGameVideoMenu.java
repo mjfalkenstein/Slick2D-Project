@@ -9,6 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.RoundedRectangle;
 
+import utils.SaverLoader;
 import utils.SimpleButton;
 
 /**
@@ -133,9 +134,11 @@ public class InGameVideoMenu{
 					hide();
 				}else if(toggleFPS.handleMouseInput(x, y)){
 					gc.setShowFPS(!gc.isShowingFPS());
+					SaverLoader.saveSettings(gc);
 				}else if(toggleFullscreen.handleMouseInput(x, y)){
 					try {
 						gc.setFullscreen(!gc.isFullscreen());
+						SaverLoader.saveSettings(gc);
 					} catch (SlickException e) {
 						e.printStackTrace();
 					}

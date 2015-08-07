@@ -1,8 +1,5 @@
 package driver;
 
-import java.io.File;
-import java.util.Arrays;
-
 import levels.Level0;
 import menuScreens.LoadMenu;
 import menuScreens.MainMenu;
@@ -26,10 +23,10 @@ import entities.Player;
  * The main driver class, initializes all the game states and handles the initial display mode
  */
 public class Driver extends StateBasedGame{
-	
+
 	StateBasedGame game;
 	GameContainer gc;
-	
+
 	//Constant state values for each of the screens in the game
 	public static final int MAIN_MENU         	 	= 0;
 	public static final int OPTIONS_MENU 			= 1;
@@ -47,7 +44,7 @@ public class Driver extends StateBasedGame{
 	public Driver(String name) {
 		super(name);
 	}
-	
+
 	/**
 	 * Called at program startup
 	 * 
@@ -76,10 +73,10 @@ public class Driver extends StateBasedGame{
 		addState(new SoundMenu(mainMenu));
 		Player p = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
 		addState(new Level0(gc, p, 2000, 1000));
-		
+
 		enterState(MAIN_MENU); 
 	}
-	
+
 	/**
 	 * Called at program startup 
 	 * 
@@ -103,15 +100,9 @@ public class Driver extends StateBasedGame{
 		}catch(SlickException e){
 			app.setDisplayMode(1280, 800, true);
 		}
-		
-		File folder = new File("savedGames/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles);
-		
-		if(listOfFiles.length > 0){
-			SaverLoader.loadSettings(app, "savedGames/" + listOfFiles[listOfFiles.length - 1].getName());
-		}
-		
+
+		SaverLoader.loadSettings(app);
+
 		app.start();
 		app.getGraphics().setAntiAlias(true);
 	}

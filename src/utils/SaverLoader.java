@@ -53,6 +53,8 @@ public class SaverLoader {
 		timestamp = timestamp.substring(0, timestamp.indexOf('.'));
 
 		savePath = "savedGames/" + timestamp + ".sav";
+		
+		savePath = savePath.replace(":", "_");
 
 		data =	"GC " + gc.getWidth() + " " + gc.getHeight() + " " + gc.isFullscreen() + " " + gc.isShowingFPS() + "\n"
 				+ "LevelID " + level.getID() + "\n" 
@@ -90,9 +92,13 @@ public class SaverLoader {
 			out.close();
 		} catch (FileNotFoundException e) {
 			System.err.println("Could not find file: " + savePath);
+			e.printStackTrace();
+			System.exit(0);
 			return false;
 		} catch (IOException e) {
 			System.err.println("Error reading file: " + savePath);
+			e.printStackTrace();
+			System.exit(0);
 			return false;
 		}
 		return true;
@@ -261,6 +267,9 @@ public class SaverLoader {
 				
 		try {
 			File file = new File(savePath);
+			if(!file.exists()){
+				file.mkdir();
+			}
 			FileOutputStream out = new FileOutputStream(file);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
 			bw.write(data);
@@ -292,6 +301,15 @@ public class SaverLoader {
 		String path = "config/config.cfg";
 
 		try {
+			File file = new File("config");
+			if(!file.exists()){
+				file.mkdir();
+			}
+			file = new File(path);
+			if(!file.exists()){
+				file.createNewFile();
+				saveSettings(gc);
+			}
 			FileReader fileReader = new FileReader(path);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 

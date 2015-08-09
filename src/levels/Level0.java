@@ -71,8 +71,8 @@ public class Level0 extends Level{
 		
 		backgroundAnimation = new BackgroundBarsAnimation(gc, Color.white);
 
-		ground = new StationaryPlatform(new Rectangle(50, gc.getHeight() * 9/10, gc.getWidth() - 100, 40), new Vector2f(0, 0));
-		platform = new StationaryPlatform(new Rectangle(gc.getWidth()/2 - 50, gc.getHeight()/2 + 100, gc.getWidth()/2, 40), new Vector2f(0, 0));
+		ground = new StationaryPlatform(new Rectangle(50, 700, 1250, 40), new Vector2f(0, 0));
+		platform = new StationaryPlatform(new Rectangle(650, 480, 650, 40), new Vector2f(0, 0));
 		leftWall = new StationaryPlatform(new Rectangle(50, ground.getY()-400, 40, 400), new Vector2f(0, 0));
 		smallRightWall = new StationaryPlatform(new Rectangle(ground.getX() + ground.getWidth() - 40, ground.getY() - 25, 40, 25), new Vector2f(0, 0));
 		bigRightWall = new StationaryPlatform(new Rectangle(platform.getMaxX(), 0, 40, 275), new Vector2f(0, 0));

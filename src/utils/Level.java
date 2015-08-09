@@ -9,6 +9,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -54,6 +58,7 @@ public abstract class Level extends BasicGameState{
 
 	TrueTypeFont font;
 	float fontSize = 12f;
+	private Cursor emptyCursor, visibleCursor;
 
 	/**
 	 * Constructor
@@ -64,10 +69,11 @@ public abstract class Level extends BasicGameState{
 	 * @param levelHeight - the height of the level
 	 */
 	public Level(GameContainer gc, Player p, int levelWidth, int levelHeight){
-
+		visibleCursor = Mouse.getNativeCursor();
+		
 		//loading the font
 		try{
-			InputStream is = ResourceLoader.getResourceAsStream("HappyKiller.ttf");
+			InputStream is = ResourceLoader.getResourceAsStream("Resources/HappyKiller.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
 			awtFont = awtFont.deriveFont(fontSize);
 			font = new TrueTypeFont(awtFont, false);
@@ -123,7 +129,12 @@ public abstract class Level extends BasicGameState{
 		gc.resume();
 		pauseMenu.hide();
 		loadMenu.hide();
-		gc.setMouseGrabbed(true);
+		try {
+			emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
+			Mouse.setNativeCursor(emptyCursor);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 		paused = false;
 		goToMainMenu = false;
 		quit = false;
@@ -132,7 +143,11 @@ public abstract class Level extends BasicGameState{
 
 	@Override
 	public void leave(GameContainer gc, StateBasedGame sbg){
-		gc.setMouseGrabbed(false);
+		try {
+			Mouse.setNativeCursor(visibleCursor);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -140,7 +155,11 @@ public abstract class Level extends BasicGameState{
 	 */
 	protected void pause(){
 		gc.pause();
-		gc.setMouseGrabbed(false);
+		try {
+			Mouse.setNativeCursor(visibleCursor);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 		paused = true;
 	}
 
@@ -149,7 +168,12 @@ public abstract class Level extends BasicGameState{
 	 */
 	protected void unpause(){
 		gc.resume();
-		gc.setMouseGrabbed(true);
+		try {
+			emptyCursor = new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
+			Mouse.setNativeCursor(emptyCursor);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 		pauseMenu.hide();
 		loadMenu.hide();
 		paused = false;
@@ -269,11 +293,8 @@ public abstract class Level extends BasicGameState{
 			File[] listOfFiles = folder.listFiles();
 			Arrays.sort(listOfFiles);
 			
-			System.out.println("player is dead");
-			
 			if(listOfFiles.length > 0){
 				if(listOfFiles[listOfFiles.length - 1].getName().contains(".sav")){
-					System.out.println("loading: " + listOfFiles[listOfFiles.length - 1].getName());
 					SaverLoader.loadGame(gc, "savedGames/" + listOfFiles[listOfFiles.length - 1].getName(), sbg);
 				}
 			}
@@ -289,7 +310,7 @@ public abstract class Level extends BasicGameState{
 
 			pauseMenu.hover(mouseX, mouseY);
 		}
-		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight()/2);
+		pauseMenu.move(camera.getX() + gc.getWidth()/2 - pauseMenu.getWidth()/2, camera.getY() + gc.getHeight()/2 - pauseMenu.getHeight());
 
 		warning.move(camera.getX() + gc.getWidth()/2 - warning.getWidth()/2, camera.getY() + gc.getHeight()/2 - warning.getHeight()/2);
 		b1.hover(mouseX, mouseY);

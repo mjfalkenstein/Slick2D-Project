@@ -1,3 +1,4 @@
 /*.log
 /savedGames/*.sav
 /config/*.cfg
+.classpath

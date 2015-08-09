@@ -57,7 +57,7 @@ public class MainMenu extends BasicGameState {
 
 		//loading the font
 		try{
-			InputStream is = ResourceLoader.getResourceAsStream("HappyKiller.ttf");
+			InputStream is = ResourceLoader.getResourceAsStream("Resources/HappyKiller.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
 			awtFont = awtFont.deriveFont(fontSize);
 			font = new TrueTypeFont(awtFont, false);

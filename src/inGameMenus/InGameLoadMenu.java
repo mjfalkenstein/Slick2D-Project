@@ -59,6 +59,9 @@ public class InGameLoadMenu {
 		body = new RoundedRectangle(20, 20, gc.getWidth() - 40, gc.getHeight() - 40, 10);
 
 		File folder = new File("savedGames/");
+		if(!folder.exists()){
+			folder.mkdir();
+		}
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles);
 

@@ -241,25 +241,16 @@ public abstract class Level extends BasicGameState{
 						gc.resume();
 						pauseMenu.reset();
 						warning.hide();
-						for(Entity e : world){
-							e.reset();
-						}
 						sbg.enterState(Driver.MAIN_MENU, new FadeOutTransition(), new FadeInTransition());
 					}else if(newGame){
 						gc.resume();
 						pauseMenu.reset();
 						warning.hide();
-						for(Entity e : world){
-							e.reset();
-						}
 						sbg.enterState(Driver.LEVEL_0, new FadeOutTransition(), new FadeInTransition());
 					}else if(quit){
 						gc.resume();
 						pauseMenu.reset();
 						warning.hide();
-						for(Entity e : world){
-							e.reset();
-						}
 						gc.exit();
 					}
 				}else if(b2.handleMouseInput(x, y)){
@@ -316,10 +307,6 @@ public abstract class Level extends BasicGameState{
 		b1.hover(mouseX, mouseY);
 		b2.hover(mouseX, mouseY);
 
-		for(Checkpoint c : checkpoints){
-			c.collide(gc);
-		}
-
 		player.getInventory().move(camera.getX(), camera.getY());
 
 		loadMenu.update(camera.getX(), camera.getY(), mouseX, mouseY, gc);
@@ -361,9 +348,6 @@ public abstract class Level extends BasicGameState{
 	 * Helper function that resets everything in the level to its original state
 	 */
 	protected void reset(){
-		for(Entity e : world){
-			e.reset();
-		}
 		for(Checkpoint c : checkpoints){
 			c.reset();
 		}

@@ -1,19 +1,14 @@
 package entities;
 
-import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Shape;
 
 public class Door extends Entity {
 
 	boolean open = false;
-	Key key;
 
-	public Door(Shape boundingBox, Vector2f velocity, Key key) {
-		super(boundingBox, velocity);
-		this.key = key;
+	public Door(int x, int y, float width, float height) {
+		super(x, y, width, height);
 	}
 
 	@Override
@@ -27,42 +22,8 @@ public class Door extends Entity {
 	}
 
 	@Override
-	public void rotate(float degrees) {
-		//Do nothing, the door shouldn't rotate
-	}
-
-	@Override
 	public void draw(Graphics g) {
-		if(!open){
-			g.setColor(Color.black);
-			g.setLineWidth(3);
-			g.draw(boundingBox);
-			g.setColor(Color.black);
-			g.fill(boundingBox);
-		}else{
-			g.setColor(Color.gray);
-			g.setLineWidth(3);
-			g.draw(boundingBox);
-			g.setColor(Color.gray.brighter());
-			g.fill(boundingBox);
-		}
-	}
-
-	@Override
-	public void collide(Entity e, GameContainer gc) {
-		if(e instanceof Player){
-			if(boundingBox.intersects(e.getBoundingBox())){
-				if(((Player) e).has(key)){
-					open = true;
-					((Player) e).getInventory().removeItem(key);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void reset() {
-		open = false;
+		
 	}
 	
 	public void open(){

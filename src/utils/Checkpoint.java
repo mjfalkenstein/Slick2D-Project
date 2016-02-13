@@ -47,25 +47,6 @@ public class Checkpoint {
 			g.draw(boundingBox);
 		}
 	}
-
-	/**
-	 * Checking if the player has entered the area
-	 * 
-	 * @param gc - GameContainer
-	 */
-	public void collide(GameContainer gc){
-		//calculating the overlap of the Player and the entity on each of the axes
-		//whichever overlap is smaller indicates the axis on which the collision occurred
-		float yOverlap = (boundingBox.getHeight()/2 + player.getBoundingBox().getHeight()/2) - Math.abs((boundingBox.getCenterY() - player.getBoundingBox().getCenterY()));
-		float xOverlap = (boundingBox.getWidth()/2 + player.getBoundingBox().getWidth()/2 - Math.abs((boundingBox.getCenterX() - player.getBoundingBox().getCenterX())));
-
-		//if both axes overlap, there is a collision
-		if(xOverlap > 0 && yOverlap > 0){
-			if(!saved){
-				saved = SaverLoader.saveGame(gc, level, player, this, levelID);
-			}
-		}
-	}
 	
 	public void deactivate(){
 		saved = true;

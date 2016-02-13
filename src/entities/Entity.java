@@ -1,10 +1,10 @@
 package entities;
 
-import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Shape;
+
+import utils.Direction;
 
 /**
  * This class represents anything that can act as a solid object on the screen
@@ -17,10 +17,10 @@ public abstract class Entity {
 	public static final int WEST = 3;
 	
 	protected float x, y, width, height, startingX, startingY, startingMaxX, startingMaxY;
-	protected Shape boundingBox;
-	protected Vector2f velocity, startingVelocity;
 	protected String spritePath;
 	protected SpriteSheet sprites;
+	boolean visible;
+	Direction direction;
 	
 	/**
 	 * Constructor
@@ -28,19 +28,13 @@ public abstract class Entity {
 	 * @param boundingBox - a Rectangle representing the borders of the Entity
 	 * @param velocity - the initial velocity
 	 */
-	public Entity(Shape boundingBox, Vector2f velocity) {
+	public Entity(int x, int y, float width, float height) {
 		super();
-		x = boundingBox.getMinX();
-		y = boundingBox.getMinY();
-		startingX = x;
-		startingY = y;
-		startingMaxX = boundingBox.getMaxX();
-		startingMaxY = boundingBox.getMaxY();
-		width = boundingBox.getWidth();
-		height = boundingBox.getHeight();
-		this.boundingBox = boundingBox;
-		this.velocity = velocity;
-		startingVelocity = velocity;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		visible = true;
 	}
 	
 	/**
@@ -64,7 +58,9 @@ public abstract class Entity {
 	 * 
 	 * @param degrees - rotation
 	 */
-	public abstract void rotate(float degrees);
+	public void rotate(Direction d){
+		direction = d;
+	}
 	
 	/**
 	 * Draws the entity to the given Graphics context
@@ -72,24 +68,6 @@ public abstract class Entity {
 	 * @param g - Graphics
 	 */
 	public abstract void draw(Graphics g);
-
-	/**
-	 * returns true if this entity has collided with the given 
-	 * 
-	 * @param e - Entity we're checking the collision for
-	 * @param gc - GameContainer
-	 * 
-	 */
-	public abstract void collide(Entity e, GameContainer gc);
-	
-	/**
-	 * Resets the Entity to its original position, velocity, and states
-	 */
-	public abstract void reset();
-	
-	public Shape getBoundingBox(){
-		return boundingBox;
-	}
 	
 	public float getWidth() {
 		return width;
@@ -108,43 +86,19 @@ public abstract class Entity {
 	}
 
 	public float getX() {
-		return boundingBox.getX();
-	}
-	
-	public float getCenterX(){
-		return boundingBox.getCenterX();
-	}
-	
-	public float getCenterY(){
-		return boundingBox.getCenterY();
-	}
-	
-	public float getMaxX(){
-		return boundingBox.getMaxX();
-	}
-	
-	public float getMaxY(){
-		return boundingBox.getMaxY();
+		return x;
 	}
 
 	public float getY() {
-		return boundingBox.getY();
+		return y;
 	}
 	
-	public Vector2f getVelocity(){
-		return velocity;
+	public void hide(){
+		visible = false;
 	}
 	
-	public void setVelocity(Vector2f velocity){
-		this.velocity = velocity;
-	}
-	
-	public void setVelocity(float x, float y){
-		velocity = new Vector2f(x, y);
-	}
-	
-	public void remove(){
-		move(-1000, -1000);
+	public void show(){
+		visible = true;
 	}
 
 	public float getStartingX() {

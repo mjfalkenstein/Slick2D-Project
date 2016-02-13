@@ -19,13 +19,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Door;
 import entities.Entity;
-import entities.FollowerEnemy;
 import entities.Friendly;
-import entities.HorizontalOscillatingPlatform;
-import entities.Key;
 import entities.Player;
-import entities.SlidingDoor;
-import entities.VerticalOscillatingPlatform;
 
 /**
  * This is a utility class used to save and load the game states
@@ -68,18 +63,6 @@ public class SaverLoader {
 			}
 			if(e instanceof Friendly){
 				data += "Friendly " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + "\n";
-			}
-			if(e instanceof FollowerEnemy){
-				data += "FollowerEnemy " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + "\n";
-			}
-			if(e instanceof HorizontalOscillatingPlatform){
-				data += "HOP " + e.getX() + " " + e.getY() + "\n";
-			}
-			if(e instanceof VerticalOscillatingPlatform){
-				data += "VOP " + e.getX() + " " + e.getY() + "\n";
-			}
-			if(e instanceof SlidingDoor){
-				data+= "SlidingDoor " + e.getStartingX() + " " + e.getStartingY() + " " + e.getX() + " " + e.getY() + " " + ((SlidingDoor)e).isOpen() + "\n"; 
 			}
 		}
 
@@ -143,22 +126,6 @@ public class SaverLoader {
 						}
 					}
 				}
-				else if(words[0].equals("Key")){
-					for(Entity e : level.getEntities()){
-						if(e instanceof Key){
-							if(Float.parseFloat(words[3]) < 0 && Float.parseFloat(words[4]) < 0){
-								if(e.getStartingX() == Float.parseFloat(words[1]) && e.getStartingY() == Float.parseFloat(words[2])){
-									e.remove();
-								}
-							}
-							else{
-								if(e.getStartingX() == Float.parseFloat(words[1]) && e.getStartingY() == Float.parseFloat(words[2])){
-									player.addItem((Item)e);
-								}
-							}
-						}
-					}
-				}
 				else if(words[0].equals("Checkpoint")){
 					playerX = Float.parseFloat(words[1]) - player.getWidth()/2;
 					playerY = Float.parseFloat(words[2]) - player.getHeight();
@@ -188,44 +155,6 @@ public class SaverLoader {
 						}
 					}
 				}
-				else if(words[0].equals("FollowerEnemy")){
-					for(Entity e : level.getEntities()){
-						if(e instanceof FollowerEnemy){
-							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
-								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
-							}
-						}
-					}
-				}
-				else if(words[0].equals("HOP")){
-					for(Entity e : level.getEntities()){
-						if(e instanceof HorizontalOscillatingPlatform){
-							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
-								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
-							}
-						}
-					}
-				}
-				else if(words[0].equals("VOP")){
-					for(Entity e : level.getEntities()){
-						if(e instanceof VerticalOscillatingPlatform){
-							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
-								e.move(Float.parseFloat(words[3]), Float.parseFloat(words[4]));
-							}
-						}
-					}
-				}
-				else if(words[0].equals("SlidingDoor")){
-					for(Entity e : level.getEntities()){
-						if(e instanceof SlidingDoor){
-							if(e.getX() == Float.parseFloat(words[1]) && e.getY() == Float.parseFloat(words[2])){
-								if(words[5].equals("true")){
-									((SlidingDoor)e).open();
-								}
-							}
-						}
-					}
-				}
 			}
 
 			bufferedReader.close();
@@ -235,7 +164,6 @@ public class SaverLoader {
 			player.move(playerX, playerY);
 			sbg.enterState(levelID);
 			level.unpause();
-			player.setVelocity(0, 0);
 		}
 		catch(FileNotFoundException e) {
 			System.err.println("Unable to open file: " + path);

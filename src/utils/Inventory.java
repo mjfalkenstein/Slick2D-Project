@@ -90,7 +90,7 @@ public class Inventory {
 	 */
 	public void removeItem(Item item){
 		//items.remove(item);
-		item.remove();
+		items.remove(item);
 	}
 
 	/**

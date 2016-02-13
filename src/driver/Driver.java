@@ -71,7 +71,8 @@ public class Driver extends StateBasedGame{
 		addState(new VideoOptionsMenu(mainMenu));
 		addState(new ResolutionsMenu(mainMenu));
 		addState(new SoundMenu(mainMenu));
-		Player p = new Player(new Rectangle(120, 100, 40, 60), new Vector2f(0, 0));
+		
+		Player p = new Player(0, 0, 50, 50);
 		addState(new Level0(gc, p, 3000, 1200));
 
 		enterState(MAIN_MENU); 
